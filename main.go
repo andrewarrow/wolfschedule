@@ -9,10 +9,13 @@ import (
 )
 
 func main() {
-	ParseData("2020.txt")
-	ParseData("2021.txt")
-	ParseData("2022.txt")
+	//ParseData("2020.txt")
+	//ParseData("2021.txt")
+	//ParseData("2022.txt")
+	ParseData("demo.txt")
 }
+
+var special = "01/02/2006 15:04"
 
 func ParseData(f string) {
 	b, _ := ioutil.ReadFile(f)
@@ -25,15 +28,29 @@ func ParseData(f string) {
 		newMoon := tokens[0] + " " + tokens[1]
 		fullMoon := tokens[2] + " " + tokens[3]
 
-		newDate, _ := time.Parse("01/02/2006 15:04", newMoon)
-		fullDate, _ := time.Parse("01/02/2006 15:04", fullMoon)
+		newDate, _ := time.Parse(special, newMoon)
+		fullDate, _ := time.Parse(special, fullMoon)
 
-		fmt.Println(newDate, fullDate)
-		delta := fullDate.Unix() - newDate.Unix()
-		deltaString := fmt.Sprintf("%d", delta)
-		fmt.Println(newDate.Unix(), fullDate.Unix(), delta,
-			AsciiByteToBase9(deltaString))
+		handleMonth(int(newDate.Month()), newDate.Day(), fullDate.Day())
+		//delta := fullDate.Unix() - newDate.Unix()
+		//deltaString := fmt.Sprintf("%d", delta)
+		//fmt.Println(newDate.Unix(), fullDate.Unix(), delta,
+		//AsciiByteToBase9(deltaString))
 
+	}
+}
+
+func handleMonth(m, d1, d2 int) {
+	day1, _ := time.Parse(special, fmt.Sprintf("%02d/01/2021 00:00", m))
+	//moon1, _ := time.Parse(special, fmt.Sprintf("%02d/%02d/2021 00:00", m, d1))
+	//moon2, _ := time.Parse(special, fmt.Sprintf("%02d/%02d/2021 00:00", m, d1))
+
+	for {
+		fmt.Println(day1)
+		day1 = day1.AddDate(0, 0, 1)
+		if int(day1.Month()) != m {
+			break
+		}
 	}
 }
 func AsciiByteToBase9(a string) byte {
