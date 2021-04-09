@@ -9,6 +9,7 @@ import (
 )
 
 func main() {
+	ParseData("2020.txt")
 	ParseData("2021.txt")
 	ParseData("2022.txt")
 }
