@@ -10,9 +10,9 @@ import (
 
 func main() {
 	//ParseData("2020.txt")
-	//ParseData("2021.txt")
+	ParseData("2021.txt")
 	//ParseData("2022.txt")
-	ParseData("demo.txt")
+	//ParseData("demo.txt")
 }
 
 var special = "01/02/2006 15:04"
@@ -38,6 +38,7 @@ func ParseData(f string) {
 		//AsciiByteToBase9(deltaString))
 
 	}
+	fmt.Println("")
 }
 
 func handleMonth(m, d1, d2 int) {
@@ -45,13 +46,20 @@ func handleMonth(m, d1, d2 int) {
 	//moon1, _ := time.Parse(special, fmt.Sprintf("%02d/%02d/2021 00:00", m, d1))
 	//moon2, _ := time.Parse(special, fmt.Sprintf("%02d/%02d/2021 00:00", m, d1))
 
+	fmt.Printf("\n\n% 2d\n\n", day1.Month())
 	for {
-		fmt.Println(day1)
+		fmt.Printf("% 2d", day1.Day())
+		if fmt.Sprintf("%v", day1.Weekday()) == "Saturday" {
+			fmt.Println("")
+		}
+		//fmt.Println(day1, day1.Weekday())
 		day1 = day1.AddDate(0, 0, 1)
 		if int(day1.Month()) != m {
 			break
 		}
 	}
+	fmt.Println("")
+
 }
 func AsciiByteToBase9(a string) byte {
 
