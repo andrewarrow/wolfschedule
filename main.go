@@ -9,7 +9,12 @@ import (
 )
 
 func main() {
-	b, _ := ioutil.ReadFile("2021.txt")
+	ParseData("2021.txt")
+	ParseData("2022.txt")
+}
+
+func ParseData(f string) {
+	b, _ := ioutil.ReadFile(f)
 	s := string(b)
 	for _, line := range strings.Split(s, "\n") {
 		tokens := strings.Split(line, " ")
@@ -30,7 +35,6 @@ func main() {
 
 	}
 }
-
 func AsciiByteToBase9(a string) byte {
 
 	sum := byte(0)
