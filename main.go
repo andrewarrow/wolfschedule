@@ -3,19 +3,33 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"math/rand"
+	"os"
 	"strconv"
 	"strings"
 	"time"
 )
 
-func main() {
-	//ParseData("2020.txt")
-	ParseData("2021.txt")
-	//ParseData("2022.txt")
-	//ParseData("demo.txt")
+var special = "01/02/2006 15:04"
+
+func PrintHelp() {
+	fmt.Println("")
 }
 
-var special = "01/02/2006 15:04"
+func main() {
+	rand.Seed(time.Now().UnixNano())
+
+	if len(os.Args) == 1 {
+		PrintHelp()
+		return
+	}
+	command := os.Args[1]
+
+	if command == "parse" {
+		ParseData("2021.txt")
+	} else if command == "taken" {
+	}
+}
 
 func ParseData(f string) {
 	b, _ := ioutil.ReadFile(f)
@@ -58,8 +72,8 @@ func handleMonth(m, d1, d2 int) {
 		} else if d1-3 == day1.Day() {
 			fmt.Printf("% 2d!", day1.Day())
 		} else if d2 == day1.Day() {
-			fmt.Println("")
 			fmt.Printf("% 2d!!!!", day1.Day())
+			fmt.Println("")
 		} else if d2-1 == day1.Day() {
 			fmt.Printf("% 2d!!!", day1.Day())
 		} else if d2-2 == day1.Day() {
