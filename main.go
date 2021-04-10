@@ -16,13 +16,6 @@ func PrintHelp() {
 	fmt.Println("")
 }
 
-type Month struct {
-	Event1  int
-	Event2  int
-	Name    string
-	EndDate int
-}
-
 func main() {
 	rand.Seed(time.Now().UnixNano())
 
@@ -33,16 +26,21 @@ func main() {
 	command := os.Args[1]
 
 	if command == "parse" {
-		ParseData("2021.txt")
+		months := ParseData("2021.txt")
+		for _, m := range months {
+			fmt.Println(m.String())
+		}
 	} else if command == "html" {
-		MakeHtml("2021.txt")
+		months := ParseData("2021.txt")
+		MakeHtml(months)
 	}
 }
 
-func ParseData(f string) {
+func ParseData(f string) []Month {
 	b, _ := ioutil.ReadFile(f)
 	s := string(b)
 	months := []Month{}
+	ped := 0
 	for _, line := range strings.Split(s, "\n") {
 		tokens := strings.Split(line, " ")
 		if len(tokens) < 4 {
@@ -54,7 +52,8 @@ func ParseData(f string) {
 		newDate, _ := time.Parse(special, newMoon)
 		fullDate, _ := time.Parse(special, fullMoon)
 
-		m := handleMonth(int(newDate.Month()), newDate.Day(), fullDate.Day())
+		m := handleMonth(int(newDate.Month()), newDate.Day(), fullDate.Day(), ped)
+		ped += m.EndDate
 		months = append(months, m)
 		//delta := fullDate.Unix() - newDate.Unix()
 		//deltaString := fmt.Sprintf("%d", delta)
@@ -62,17 +61,16 @@ func ParseData(f string) {
 		//AsciiByteToBase9(deltaString))
 
 	}
-	for _, m := range months {
-		fmt.Println(m)
-	}
+	return months
 }
 
-func handleMonth(m, d1, d2 int) Month {
+func handleMonth(m, d1, d2, ped int) Month {
 	day1, _ := time.Parse(special, fmt.Sprintf("%02d/01/2021 00:00", m))
 	//moon1, _ := time.Parse(special, fmt.Sprintf("%02d/%02d/2021 00:00", m, d1))
 	//moon2, _ := time.Parse(special, fmt.Sprintf("%02d/%02d/2021 00:00", m, d1))
 
 	mm := Month{}
+	mm.PrevEndDate = ped
 	mm.Name = fmt.Sprintf("% 2d", day1.Month())
 	for {
 		day1 = day1.AddDate(0, 0, 1)
