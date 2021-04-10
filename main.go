@@ -48,10 +48,30 @@ func handleMonth(m, d1, d2 int) {
 
 	fmt.Printf("\n\n% 2d\n\n", day1.Month())
 	for {
-		fmt.Printf("% 2d", day1.Day())
-		if fmt.Sprintf("%v", day1.Weekday()) == "Saturday" {
+		if d1 == day1.Day() {
+			fmt.Printf("% 2d!!!!", day1.Day())
 			fmt.Println("")
+		} else if d1-1 == day1.Day() {
+			fmt.Printf("% 2d!!!", day1.Day())
+		} else if d1-2 == day1.Day() {
+			fmt.Printf("% 2d!!", day1.Day())
+		} else if d1-3 == day1.Day() {
+			fmt.Printf("% 2d!", day1.Day())
+		} else if d2 == day1.Day() {
+			fmt.Println("")
+			fmt.Printf("% 2d!!!!", day1.Day())
+		} else if d2-1 == day1.Day() {
+			fmt.Printf("% 2d!!!", day1.Day())
+		} else if d2-2 == day1.Day() {
+			fmt.Printf("% 2d!!", day1.Day())
+		} else if d2-3 == day1.Day() {
+			fmt.Printf("% 2d!", day1.Day())
+		} else {
+			fmt.Printf("% 2d", day1.Day())
 		}
+		//if fmt.Sprintf("%v", day1.Weekday()) == "Saturday" {
+		//	fmt.Println("")
+		//}
 		//fmt.Println(day1, day1.Weekday())
 		day1 = day1.AddDate(0, 0, 1)
 		if int(day1.Month()) != m {
