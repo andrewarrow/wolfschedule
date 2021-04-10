@@ -41,6 +41,18 @@ func (m *Month) HTML() string {
 	for {
 		if m.Event1 == day {
 			buff = append(buff, fmt.Sprintf("<span style='color: red;'>%02d</span>&nbsp;", day))
+		} else if m.Event2-1 == day {
+
+			buff = append(buff, fmt.Sprintf("<span>%02d</span></span>&nbsp;", day))
+		} else if m.Event2-2 == day {
+
+			buff = append(buff, fmt.Sprintf("<span style='border: 1px solid black;'><span>%02d</span>&nbsp;", day))
+		} else if m.Event2+1 == day {
+
+			buff = append(buff, fmt.Sprintf("<span style='color: cyan;'>%02d</span>&nbsp;", day))
+		} else if m.Event2+2 == day {
+
+			buff = append(buff, fmt.Sprintf("<span style='color: cyan;'>%02d</span>&nbsp;", day))
 		} else if m.Event2 == day {
 			buff = append(buff, fmt.Sprintf("<span style='color: red;'>%02d</span>&nbsp;", day))
 		} else {
