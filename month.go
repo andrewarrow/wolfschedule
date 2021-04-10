@@ -39,14 +39,12 @@ func (m *Month) HTML() string {
 
 	day := 1
 	for {
-		if m.Today == day {
-			buff = append(buff, fmt.Sprintf("<span style='color: cyan; font-weight: bold;'>%d</span>&nbsp;", day))
-		} else if m.Event1 == day {
-			buff = append(buff, fmt.Sprintf("<span style='color: red;'>[%d]</span>&nbsp;", day))
+		if m.Event1 == day {
+			buff = append(buff, fmt.Sprintf("<span style='color: red;'>%02d</span>&nbsp;", day))
 		} else if m.Event2 == day {
-			buff = append(buff, fmt.Sprintf("<span style='color: red;'>[%d]</span>&nbsp;", day))
+			buff = append(buff, fmt.Sprintf("<span style='color: red;'>%02d</span>&nbsp;", day))
 		} else {
-			buff = append(buff, fmt.Sprintf("<span>%d</span>&nbsp;", day))
+			buff = append(buff, fmt.Sprintf("<span>%02d</span>&nbsp;", day))
 		}
 		if day == m.EndDate {
 			break
