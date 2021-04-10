@@ -11,6 +11,7 @@ type Month struct {
 	Name        string
 	EndDate     int
 	PrevEndDate int
+	Today       int
 }
 
 func (m *Month) String() string {
@@ -24,6 +25,28 @@ func (m *Month) String() string {
 			buff = append(buff, "  ")
 		} else {
 			buff = append(buff, fmt.Sprintf("%d ", day))
+		}
+		if day == m.EndDate {
+			break
+		}
+		day++
+	}
+
+	return strings.Join(buff, "")
+}
+func (m *Month) HTML() string {
+	buff := []string{}
+
+	day := 1
+	for {
+		if m.Today == day {
+			buff = append(buff, fmt.Sprintf("<span style='color: cyan; font-weight: bold;'>%d</span>&nbsp;", day))
+		} else if m.Event1 == day {
+			buff = append(buff, fmt.Sprintf("<span style='color: red;'>[%d]</span>&nbsp;", day))
+		} else if m.Event2 == day {
+			buff = append(buff, fmt.Sprintf("<span style='color: red;'>[%d]</span>&nbsp;", day))
+		} else {
+			buff = append(buff, fmt.Sprintf("<span>%d</span>&nbsp;", day))
 		}
 		if day == m.EndDate {
 			break

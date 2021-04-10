@@ -51,8 +51,10 @@ func ParseData(f string) []Month {
 
 		newDate, _ := time.Parse(special, newMoon)
 		fullDate, _ := time.Parse(special, fullMoon)
+		today := time.Now()
 
-		m := handleMonth(int(newDate.Month()), newDate.Day(), fullDate.Day(), ped)
+		m := handleMonth(int(newDate.Month()), newDate.Day(), fullDate.Day(), ped,
+			int(today.Month()), today.Day())
 		ped += m.EndDate
 		months = append(months, m)
 		//delta := fullDate.Unix() - newDate.Unix()
@@ -64,7 +66,7 @@ func ParseData(f string) []Month {
 	return months
 }
 
-func handleMonth(m, d1, d2, ped int) Month {
+func handleMonth(m, d1, d2, ped, todayMonth, todayDay int) Month {
 	day1, _ := time.Parse(special, fmt.Sprintf("%02d/01/2021 00:00", m))
 	//moon1, _ := time.Parse(special, fmt.Sprintf("%02d/%02d/2021 00:00", m, d1))
 	//moon2, _ := time.Parse(special, fmt.Sprintf("%02d/%02d/2021 00:00", m, d1))
@@ -78,6 +80,9 @@ func handleMonth(m, d1, d2, ped int) Month {
 			break
 		}
 		mm.EndDate = day1.Day()
+		if int(day1.Month()) == todayMonth && day1.Day() == todayDay {
+			mm.Today = todayDay
+		}
 	}
 	mm.Event1 = d1
 	mm.Event2 = d2
