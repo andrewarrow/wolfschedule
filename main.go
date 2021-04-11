@@ -27,15 +27,11 @@ func PrintHelp() {
 }
 
 func GetAll() []Month {
-	months2020 := ParseData("2020.txt")
-	months2021 := ParseData("2021.txt")
-	months2022 := ParseData("2022.txt")
-	months2023 := ParseData("2023.txt")
 	all := []Month{}
-	all = append(all, months2020...)
-	all = append(all, months2021...)
-	all = append(all, months2022...)
-	all = append(all, months2023...)
+	for i := 2003; i < 2031; i++ {
+		months := ParseData(fmt.Sprintf("%d.txt", i))
+		all = append(all, months...)
+	}
 	return all
 }
 
