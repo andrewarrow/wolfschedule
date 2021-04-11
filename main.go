@@ -74,13 +74,11 @@ func ParseData(f string) []Month {
 	b, _ := ioutil.ReadFile(f)
 	s := string(b)
 	months := []Month{}
-	ped := 0
 	for _, line := range strings.Split(s, "\n") {
 		tokens := strings.Split(line, " ")
 		if len(tokens) < 4 {
 			break
 		}
-		today := time.Now()
 		var m Month
 		if len(tokens) == 7 && tokens[6] == "blue" {
 			newMoon := tokens[0] + " " + tokens[1]
@@ -95,10 +93,7 @@ func ParseData(f string) []Month {
 			fullMoon := tokens[2] + " " + tokens[3]
 			newDate, _ := time.Parse(special, newMoon)
 			fullDate, _ := time.Parse(special, fullMoon)
-
-			m = handleMonth2(int(newDate.Month()), newDate.Day(), fullDate.Day(), ped,
-				int(today.Month()), today.Day())
-			ped += m.EndDate
+			m = handleMonth(&newDate, &fullDate, nil)
 		}
 		months = append(months, m)
 		//delta := fullDate.Unix() - newDate.Unix()
