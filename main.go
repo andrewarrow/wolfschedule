@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"math/rand"
 	"os"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -59,27 +60,35 @@ func main() {
 	}
 
 	if command == "parse" {
-		times := []int64{}
+		times := []float64{}
 		for _, m := range GetAll() {
-			fmt.Println(m.Event1Unix, m.Event2Unix, m.Event3Unix)
-			times = append([]int64{m.Event1Unix}, times...)
-			times = append([]int64{m.Event2Unix}, times...)
+			//fmt.Println(m.Event1Unix, m.Event2Unix, m.Event3Unix)
+			if m.Event1Unix > 0 {
+				times = append([]float64{float64(m.Event1Unix)}, times...)
+			}
+			if m.Event2Unix > 0 {
+				times = append([]float64{float64(m.Event2Unix)}, times...)
+			}
 			if m.Event3Unix > 0 {
-				times = append([]int64{m.Event3Unix}, times...)
+				times = append([]float64{float64(m.Event3Unix)}, times...)
 			}
 		}
+		sort.Float64s(times)
 		prevTime := int64(0)
 		for _, t := range times {
 			if prevTime > 0 {
-				delta := t - prevTime
+				delta := int64(t) - prevTime
+				//fmt.Println(int64(t), prevTime, delta)
 				if delta < 0 {
-					delta = delta * -1
+					delta = prevTime - int64(t)
+					//fmt.Println("-1", t, prevTime, delta)
 				}
-				deltaString := fmt.Sprintf("%d", delta)
-				digit := AsciiByteToBase9(deltaString)
-				fmt.Println(digit)
+				fmt.Println(delta / 3600)
+				//deltaString := fmt.Sprintf("%d", delta)
+				//digit := AsciiByteToBase9(deltaString)
+				//fmt.Println(deltaString)
 			}
-			prevTime = t
+			prevTime = int64(t)
 		}
 	} else if command == "next" {
 		all := GetAll()
@@ -107,6 +116,8 @@ func main() {
 
 func ParseData(f string) []Month {
 	timeZone, _ := time.LoadLocation("America/Phoenix")
+
+	months = []Month{}
 
 	b, _ := ioutil.ReadFile(f)
 	s := string(b)
