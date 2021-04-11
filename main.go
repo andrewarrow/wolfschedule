@@ -40,6 +40,15 @@ func main() {
 		for _, m := range months {
 			fmt.Println(m.String())
 		}
+	} else if command == "today" {
+		months := ParseData("2021.txt")
+		today := time.Now()
+		for _, m := range months {
+			if fmt.Sprintf("% 2d", today.Month()) != m.Name {
+				continue
+			}
+			fmt.Println(m.StringForToday(today))
+		}
 	} else if command == "help" {
 		PrintHelp()
 	} else if command == "html" {

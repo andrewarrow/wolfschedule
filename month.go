@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"strings"
+	"time"
 )
 
 type Month struct {
@@ -14,6 +15,34 @@ type Month struct {
 	Today       int
 }
 
+func (m *Month) StringForToday(today time.Time) string {
+	buff := []string{}
+
+	day := 1
+	for {
+		if day == today.Day() {
+			buff = append(buff, "_")
+		}
+		if m.Event1 == day {
+			buff = append(buff, fmt.Sprintf("%02d", day))
+			buff = append(buff, "\n")
+		} else if m.Event2 == day {
+			buff = append(buff, fmt.Sprintf("%02d", day))
+			buff = append(buff, "\n")
+		} else {
+			buff = append(buff, fmt.Sprintf("%02d", day))
+		}
+		if day == today.Day() {
+			buff = append(buff, "_")
+		}
+		if day == m.EndDate {
+			break
+		}
+		day++
+	}
+
+	return strings.Join(buff, " ")
+}
 func (m *Month) String() string {
 	buff := []string{}
 
