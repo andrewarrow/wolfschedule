@@ -69,6 +69,16 @@ func (m *Month) String() string {
 			buff = append(buff, " ")
 		} else if m.Event2+2 == day {
 			buff = append(buff, " ")
+		} else if m.Event3 == day {
+			buff = append(buff, fmt.Sprintf("%02d ", day))
+		} else if m.Event3-1 == day {
+			buff = append(buff, " ")
+		} else if m.Event3-2 == day {
+			buff = append(buff, " ")
+		} else if m.Event3 > 0 && m.Event3+1 == day {
+			buff = append(buff, " ")
+		} else if m.Event3 > 0 && m.Event3+2 == day {
+			buff = append(buff, " ")
 		} else {
 			buff = append(buff, fmt.Sprintf("%02d ", day))
 		}
