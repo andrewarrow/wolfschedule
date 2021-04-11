@@ -45,7 +45,8 @@ func GetAll() []Month {
 	prev := int64(0)
 	for _, t := range things {
 		if prev > 0 {
-			fmt.Println(t.Text, t.Val, (t.Val-prev)/3600)
+			delta := t.Val - prev
+			fmt.Printf("%d    %35s    %.2f\n", delta, t.Text, float64(delta)/86400.0)
 		}
 		prev = t.Val
 	}
