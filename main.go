@@ -18,11 +18,13 @@ func PrintHelp() {
 	fmt.Println("")
 	fmt.Println("wolfschedule help      # this menu")
 	fmt.Println("wolfschedule today     # show me just enough for today")
+	fmt.Println("wolfschedule           # --year=x")
 	fmt.Println("")
 }
 
 func main() {
 	rand.Seed(time.Now().UnixNano())
+	argMap := argsToMap()
 
 	if len(os.Args) == 1 {
 		PrintHelp()
@@ -35,6 +37,14 @@ func main() {
 	}
 	command := os.Args[1]
 
+	if argMap["year"] != "" {
+		months := ParseData(argMap["year"] + ".txt")
+		for _, m := range months {
+			fmt.Println(m.String())
+		}
+		return
+	}
+
 	if command == "parse" {
 		months := ParseData("2021.txt")
 		for _, m := range months {
@@ -43,6 +53,7 @@ func main() {
 	} else if command == "today" {
 		months := ParseData("2021.txt")
 		today := time.Now()
+		fmt.Println(today.Month())
 		for _, m := range months {
 			if fmt.Sprintf("% 2d", today.Month()) != m.Name {
 				continue
