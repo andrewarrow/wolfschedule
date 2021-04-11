@@ -20,11 +20,27 @@ func (m *Month) String() string {
 	day := 1
 	for {
 		if m.Event1 == day {
-			buff = append(buff, "  ")
+			buff = append(buff, fmt.Sprintf("%02d ", day))
+		} else if m.Event1-1 == day {
+			buff = append(buff, " ")
+		} else if m.Event1-2 == day {
+			buff = append(buff, " ")
+		} else if m.Event1+1 == day {
+			buff = append(buff, " ")
+		} else if m.Event1+2 == day {
+			buff = append(buff, " ")
 		} else if m.Event2 == day {
-			buff = append(buff, "  ")
+			buff = append(buff, fmt.Sprintf("%02d ", day))
+		} else if m.Event2-1 == day {
+			buff = append(buff, " ")
+		} else if m.Event2-2 == day {
+			buff = append(buff, " ")
+		} else if m.Event2+1 == day {
+			buff = append(buff, " ")
+		} else if m.Event2+2 == day {
+			buff = append(buff, " ")
 		} else {
-			buff = append(buff, fmt.Sprintf("%d ", day))
+			buff = append(buff, fmt.Sprintf("%02d ", day))
 		}
 		if day == m.EndDate {
 			break

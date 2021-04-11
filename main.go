@@ -14,6 +14,11 @@ var special = "01/02/2006 15:04"
 
 func PrintHelp() {
 	fmt.Println("")
+	fmt.Println("By Default, it will display the current year, full year view.")
+	fmt.Println("")
+	fmt.Println("wolfschedule help      # this menu")
+	fmt.Println("wolfschedule today     # show me just enough for today")
+	fmt.Println("")
 }
 
 func main() {
@@ -21,6 +26,11 @@ func main() {
 
 	if len(os.Args) == 1 {
 		PrintHelp()
+		months := ParseData("2021.txt")
+		for _, m := range months {
+			fmt.Println(m.String())
+		}
+		fmt.Println("")
 		return
 	}
 	command := os.Args[1]
@@ -30,6 +40,8 @@ func main() {
 		for _, m := range months {
 			fmt.Println(m.String())
 		}
+	} else if command == "help" {
+		PrintHelp()
 	} else if command == "html" {
 		months := ParseData("2021.txt")
 		MakeHtml(months)
