@@ -42,9 +42,6 @@ func main() {
 	if argMap["year"] != "" {
 		months := ParseData(argMap["year"] + ".txt")
 		for _, m := range months {
-			fmt.Println(m)
-		}
-		for _, m := range months {
 			fmt.Println(m.String())
 		}
 		return
