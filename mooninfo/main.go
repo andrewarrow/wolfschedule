@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
 	"strings"
 )
 
@@ -21,7 +22,7 @@ func main() {
 				tokens = strings.Split(m, "<")
 				md := tokens[0]
 				tokens = strings.Split(t, "<")
-				fmt.Println(md, tokens[0])
+				fmt.Println(os.Args[1], md, tokens[0])
 			}
 		}
 	}

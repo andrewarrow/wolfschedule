@@ -11,6 +11,8 @@ import (
 )
 
 var special = "01/02/2006 15:04"
+var curMonth = Month{}
+var months = []Month{}
 
 func PrintHelp() {
 	fmt.Println("")
@@ -90,38 +92,92 @@ func main() {
 }
 
 func ParseData(f string) []Month {
+	timeZone, _ := time.LoadLocation("America/Phoenix")
+
 	b, _ := ioutil.ReadFile(f)
 	s := string(b)
-	months := []Month{}
+	prevMonth := 0
+	curMonth = Month{}
+	monthInt := 0
+	year := ""
 	for _, line := range strings.Split(s, "\n") {
+		//2022 February 16 16:59 UTC
 		tokens := strings.Split(line, " ")
 		if len(tokens) < 4 {
 			break
 		}
-		var m Month
-		if len(tokens) == 7 && tokens[6] == "blue" {
-			newMoon := tokens[0] + " " + tokens[1]
-			fullMoon := tokens[2] + " " + tokens[3]
-			newMoon2 := tokens[4] + " " + tokens[5]
-			newDate, _ := time.Parse(special, newMoon)
-			fullDate, _ := time.Parse(special, fullMoon)
-			newDate2, _ := time.Parse(special, newMoon2)
-			m = handleMonth(&newDate, &fullDate, &newDate2)
-		} else {
-			newMoon := tokens[0] + " " + tokens[1]
-			fullMoon := tokens[2] + " " + tokens[3]
-			newDate, _ := time.Parse(special, newMoon)
-			fullDate, _ := time.Parse(special, fullMoon)
-			m = handleMonth(&newDate, &fullDate, nil)
+		year = tokens[0]
+		yearInt, _ := strconv.Atoi(year)
+		month := tokens[1]
+		if month == "January" {
+			monthInt = 1
+		} else if month == "February" {
+			monthInt = 2
+		} else if month == "March" {
+			monthInt = 3
+		} else if month == "April" {
+			monthInt = 4
+		} else if month == "May" {
+			monthInt = 5
+		} else if month == "June" {
+			monthInt = 6
+		} else if month == "July" {
+			monthInt = 7
+		} else if month == "August" {
+			monthInt = 8
+		} else if month == "September" {
+			monthInt = 9
+		} else if month == "October" {
+			monthInt = 10
+		} else if month == "November" {
+			monthInt = 11
+		} else if month == "December" {
+			monthInt = 12
 		}
-		months = append(months, m)
-		//delta := fullDate.Unix() - newDate.Unix()
-		//deltaString := fmt.Sprintf("%d", delta)
-		//fmt.Println(newDate.Unix(), fullDate.Unix(), delta,
-		//AsciiByteToBase9(deltaString))
+		day := tokens[2]
+		fmt.Println("day", day)
+		dayInt, _ := strconv.Atoi(day)
+		hourMin := tokens[3]
+		tokens = strings.Split(hourMin, ":")
+		hour := tokens[0]
+		hourInt, _ := strconv.Atoi(hour)
+		min := tokens[1]
+		minInt, _ := strconv.Atoi(min)
 
+		eventDate := time.Date(yearInt, time.Month(monthInt), dayInt, hourInt, minInt, 0, 0, timeZone)
+		if curMonth.Event1 == 0 {
+			curMonth.Event1 = dayInt
+			curMonth.Event1Unix = eventDate.Unix()
+		} else if curMonth.Event2 == 0 {
+			curMonth.Event2 = dayInt
+			curMonth.Event2Unix = eventDate.Unix()
+		} else if curMonth.Event3 == 0 {
+			curMonth.Event3 = dayInt
+			curMonth.Event3Unix = eventDate.Unix()
+		}
+
+		if prevMonth > 0 && prevMonth != monthInt {
+			MakeDaysAnd(monthInt, year)
+			curMonth = Month{}
+		}
+
+		prevMonth = monthInt
 	}
+	MakeDaysAnd(monthInt, year)
 	return months
+}
+
+func MakeDaysAnd(monthInt int, year string) {
+	day1, _ := time.Parse(special, fmt.Sprintf("%02d/01/%s 00:00", monthInt, year))
+	curMonth.Name = fmt.Sprintf("% 2d", day1.Month())
+	for {
+		day1 = day1.AddDate(0, 0, 1)
+		if int(day1.Month()) != monthInt {
+			break
+		}
+		curMonth.EndDate = day1.Day()
+	}
+	months = append(months, curMonth)
 }
 
 func handleMonth(newDate, fullDate, newDate2 *time.Time) Month {
