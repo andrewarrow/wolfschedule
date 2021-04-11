@@ -49,8 +49,26 @@ func main() {
 		months2021 := ParseData("2021.txt")
 		months2022 := ParseData("2022.txt")
 		both := append(months2021, months2022...)
+		times := []int64{}
 		for _, m := range both {
-			fmt.Println(m.Event1, m.Event2, m.Event3)
+			fmt.Println(m.Event1Unix, m.Event2Unix, m.Event3Unix)
+			times = append(times, m.Event1Unix, m.Event2Unix)
+			if m.Event3Unix > 0 {
+				times = append(times, m.Event3Unix)
+			}
+		}
+		prevTime := int64(0)
+		for _, t := range times {
+			if prevTime > 0 {
+				delta := t - prevTime
+				if delta < 0 {
+					delta = delta * -1
+				}
+				deltaString := fmt.Sprintf("%d", delta)
+				digit := AsciiByteToBase9(deltaString)
+				fmt.Println(digit)
+			}
+			prevTime = t
 		}
 	} else if command == "today" {
 		months := ParseData("2021.txt")
@@ -128,69 +146,6 @@ func handleMonth(newDate, fullDate, newDate2 *time.Time) Month {
 	return mm
 }
 
-func handleMonth2(m, d1, d2, ped, todayMonth, todayDay int) Month {
-	day1, _ := time.Parse(special, fmt.Sprintf("%02d/01/2021 00:00", m))
-	//moon1, _ := time.Parse(special, fmt.Sprintf("%02d/%02d/2021 00:00", m, d1))
-	//moon2, _ := time.Parse(special, fmt.Sprintf("%02d/%02d/2021 00:00", m, d1))
-
-	mm := Month{}
-	mm.PrevEndDate = ped
-	mm.Name = fmt.Sprintf("% 2d", day1.Month())
-	for {
-		day1 = day1.AddDate(0, 0, 1)
-		if int(day1.Month()) != m {
-			break
-		}
-		mm.EndDate = day1.Day()
-		if int(day1.Month()) == todayMonth && day1.Day() == todayDay {
-			mm.Today = todayDay
-		}
-	}
-	mm.Event1 = d1
-	mm.Event2 = d2
-	return mm
-}
-
-func oldHandleMonth(m, d1, d2 int) {
-	day1, _ := time.Parse(special, fmt.Sprintf("%02d/01/2021 00:00", m))
-	//moon1, _ := time.Parse(special, fmt.Sprintf("%02d/%02d/2021 00:00", m, d1))
-	//moon2, _ := time.Parse(special, fmt.Sprintf("%02d/%02d/2021 00:00", m, d1))
-
-	fmt.Printf("\n\n% 2d\n\n", day1.Month())
-	for {
-		if d1 == day1.Day() {
-			fmt.Printf("% 2d!!!!", day1.Day())
-			fmt.Println("")
-		} else if d1-1 == day1.Day() {
-			fmt.Printf("% 2d!!!", day1.Day())
-		} else if d1-2 == day1.Day() {
-			fmt.Printf("% 2d!!", day1.Day())
-		} else if d1-3 == day1.Day() {
-			fmt.Printf("% 2d!", day1.Day())
-		} else if d2 == day1.Day() {
-			fmt.Printf("% 2d!!!!", day1.Day())
-			fmt.Println("")
-		} else if d2-1 == day1.Day() {
-			fmt.Printf("% 2d!!!", day1.Day())
-		} else if d2-2 == day1.Day() {
-			fmt.Printf("% 2d!!", day1.Day())
-		} else if d2-3 == day1.Day() {
-			fmt.Printf("% 2d!", day1.Day())
-		} else {
-			fmt.Printf("% 2d", day1.Day())
-		}
-		//if fmt.Sprintf("%v", day1.Weekday()) == "Saturday" {
-		//	fmt.Println("")
-		//}
-		//fmt.Println(day1, day1.Weekday())
-		day1 = day1.AddDate(0, 0, 1)
-		if int(day1.Month()) != m {
-			break
-		}
-	}
-	fmt.Println("")
-
-}
 func AsciiByteToBase9(a string) byte {
 
 	sum := byte(0)
