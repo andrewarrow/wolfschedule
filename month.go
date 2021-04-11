@@ -10,6 +10,9 @@ type Month struct {
 	Event1      int
 	Event2      int
 	Event3      int
+	Event1Unix  int64
+	Event2Unix  int64
+	Event3Unix  int64
 	Name        string
 	EndDate     int
 	PrevEndDate int

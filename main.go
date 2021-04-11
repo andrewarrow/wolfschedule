@@ -46,9 +46,11 @@ func main() {
 	}
 
 	if command == "parse" {
-		months := ParseData("2021.txt")
-		for _, m := range months {
-			fmt.Println(m.String())
+		months2021 := ParseData("2021.txt")
+		months2022 := ParseData("2022.txt")
+		both := append(months2021, months2022...)
+		for _, m := range both {
+			fmt.Println(m.Event1, m.Event2, m.Event3)
 		}
 	} else if command == "today" {
 		months := ParseData("2021.txt")
@@ -87,16 +89,14 @@ func ParseData(f string) []Month {
 			newDate, _ := time.Parse(special, newMoon)
 			fullDate, _ := time.Parse(special, fullMoon)
 			newDate2, _ := time.Parse(special, newMoon2)
-			m = handleMonth(int(newDate.Month()), newDate.Day(), fullDate.Day(), ped,
-				int(today.Month()), today.Day())
-			m.Event3 = newDate2.Day()
+			m = handleMonth(&newDate, &fullDate, &newDate2)
 		} else {
 			newMoon := tokens[0] + " " + tokens[1]
 			fullMoon := tokens[2] + " " + tokens[3]
 			newDate, _ := time.Parse(special, newMoon)
 			fullDate, _ := time.Parse(special, fullMoon)
 
-			m = handleMonth(int(newDate.Month()), newDate.Day(), fullDate.Day(), ped,
+			m = handleMonth2(int(newDate.Month()), newDate.Day(), fullDate.Day(), ped,
 				int(today.Month()), today.Day())
 			ped += m.EndDate
 		}
@@ -110,7 +110,30 @@ func ParseData(f string) []Month {
 	return months
 }
 
-func handleMonth(m, d1, d2, ped, todayMonth, todayDay int) Month {
+func handleMonth(newDate, fullDate, newDate2 *time.Time) Month {
+	mm := Month{}
+	m := int(newDate.Month())
+	mm.Event1 = newDate.Day()
+	mm.Event1Unix = newDate.Unix()
+	mm.Event2 = fullDate.Day()
+	mm.Event2Unix = fullDate.Unix()
+	if newDate2 != nil {
+		mm.Event3 = newDate2.Day()
+		mm.Event3Unix = newDate2.Unix()
+	}
+	day1, _ := time.Parse(special, fmt.Sprintf("%02d/01/2021 00:00", m))
+	mm.Name = fmt.Sprintf("% 2d", day1.Month())
+	for {
+		day1 = day1.AddDate(0, 0, 1)
+		if int(day1.Month()) != m {
+			break
+		}
+		mm.EndDate = day1.Day()
+	}
+	return mm
+}
+
+func handleMonth2(m, d1, d2, ped, todayMonth, todayDay int) Month {
 	day1, _ := time.Parse(special, fmt.Sprintf("%02d/01/2021 00:00", m))
 	//moon1, _ := time.Parse(special, fmt.Sprintf("%02d/%02d/2021 00:00", m, d1))
 	//moon2, _ := time.Parse(special, fmt.Sprintf("%02d/%02d/2021 00:00", m, d1))
