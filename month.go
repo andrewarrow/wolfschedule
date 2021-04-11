@@ -9,6 +9,7 @@ import (
 type Month struct {
 	Event1      int
 	Event2      int
+	Event3      int
 	Name        string
 	EndDate     int
 	PrevEndDate int

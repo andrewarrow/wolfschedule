@@ -78,16 +78,28 @@ func ParseData(f string) []Month {
 		if len(tokens) < 4 {
 			break
 		}
-		newMoon := tokens[0] + " " + tokens[1]
-		fullMoon := tokens[2] + " " + tokens[3]
-
-		newDate, _ := time.Parse(special, newMoon)
-		fullDate, _ := time.Parse(special, fullMoon)
 		today := time.Now()
+		var m Month
+		if len(tokens) == 7 && tokens[6] == "blue" {
+			newMoon := tokens[0] + " " + tokens[1]
+			fullMoon := tokens[2] + " " + tokens[3]
+			newMoon2 := tokens[4] + " " + tokens[5]
+			newDate, _ := time.Parse(special, newMoon)
+			fullDate, _ := time.Parse(special, fullMoon)
+			newDate2, _ := time.Parse(special, newMoon2)
+			m = handleMonth(int(newDate.Month()), newDate.Day(), fullDate.Day(), ped,
+				int(today.Month()), today.Day())
+			m.Event3 = newDate2.Day()
+		} else {
+			newMoon := tokens[0] + " " + tokens[1]
+			fullMoon := tokens[2] + " " + tokens[3]
+			newDate, _ := time.Parse(special, newMoon)
+			fullDate, _ := time.Parse(special, fullMoon)
 
-		m := handleMonth(int(newDate.Month()), newDate.Day(), fullDate.Day(), ped,
-			int(today.Month()), today.Day())
-		ped += m.EndDate
+			m = handleMonth(int(newDate.Month()), newDate.Day(), fullDate.Day(), ped,
+				int(today.Month()), today.Day())
+			ped += m.EndDate
+		}
 		months = append(months, m)
 		//delta := fullDate.Unix() - newDate.Unix()
 		//deltaString := fmt.Sprintf("%d", delta)
