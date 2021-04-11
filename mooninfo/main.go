@@ -15,9 +15,14 @@ func main() {
 			//for _, t := range tokens {
 			//	fmt.Println(t)
 			//}
-			fmt.Println(tokens[1])
-			fmt.Println(tokens[2])
+			m := tokens[1]
+			t := tokens[2]
+			if len(m) < 50 {
+				tokens = strings.Split(m, "<")
+				md := tokens[0]
+				tokens = strings.Split(t, "<")
+				fmt.Println(md, tokens[0])
+			}
 		}
 	}
-	fmt.Println("vim-go", len(b))
 }
