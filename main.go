@@ -52,9 +52,10 @@ func main() {
 		times := []int64{}
 		for _, m := range both {
 			fmt.Println(m.Event1Unix, m.Event2Unix, m.Event3Unix)
-			times = append(times, m.Event1Unix, m.Event2Unix)
+			times = append([]int64{m.Event1Unix}, times...)
+			times = append([]int64{m.Event2Unix}, times...)
 			if m.Event3Unix > 0 {
-				times = append(times, m.Event3Unix)
+				times = append([]int64{m.Event3Unix}, times...)
 			}
 		}
 		prevTime := int64(0)
