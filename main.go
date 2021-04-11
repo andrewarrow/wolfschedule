@@ -48,11 +48,17 @@ func main() {
 	}
 
 	if command == "parse" {
+		months2020 := ParseData("2020.txt")
 		months2021 := ParseData("2021.txt")
 		months2022 := ParseData("2022.txt")
-		both := append(months2021, months2022...)
+		months2023 := ParseData("2023.txt")
+		all := []Month{}
+		all = append(all, months2020...)
+		all = append(all, months2021...)
+		all = append(all, months2022...)
+		all = append(all, months2023...)
 		times := []int64{}
-		for _, m := range both {
+		for _, m := range all {
 			fmt.Println(m.Event1Unix, m.Event2Unix, m.Event3Unix)
 			times = append([]int64{m.Event1Unix}, times...)
 			times = append([]int64{m.Event2Unix}, times...)
