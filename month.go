@@ -30,6 +30,9 @@ func (m *Month) StringForToday(today time.Time) string {
 		} else if m.Event2 == day {
 			buff = append(buff, fmt.Sprintf("%02d", day))
 			buff = append(buff, "\n")
+		} else if m.Event3 == day {
+			buff = append(buff, fmt.Sprintf("%02d", day))
+			buff = append(buff, "\n")
 		} else {
 			buff = append(buff, fmt.Sprintf("%02d", day))
 		}
