@@ -14,6 +14,12 @@ import (
 var special = "01/02/2006 15:04"
 var curMonth = Month{}
 var months = []Month{}
+var things = []Thing{}
+
+type Thing struct {
+	Text string
+	Val  int64
+}
 
 func PrintHelp() {
 	fmt.Println("")
@@ -32,6 +38,16 @@ func GetAll() []Month {
 	for i := 2003; i < 2031; i++ {
 		months := ParseData(fmt.Sprintf("%d.txt", i))
 		all = append(all, months...)
+	}
+	sort.SliceStable(things, func(i, j int) bool {
+		return things[i].Val < things[j].Val
+	})
+	prev := int64(0)
+	for _, t := range things {
+		if prev > 0 {
+			fmt.Println(t.Text, t.Val, (t.Val-prev)/3600)
+		}
+		prev = t.Val
 	}
 	return all
 }
@@ -114,7 +130,7 @@ func main() {
 	}
 }
 
-func ParseData(f string) []Month {
+func ParseData2(f string) []Month {
 	timeZone, _ := time.LoadLocation("America/Phoenix")
 
 	months = []Month{}
@@ -163,6 +179,67 @@ func ParseData(f string) []Month {
 			}
 		}
 		MakeDaysAnd(monthInt, year)
+	}
+	return months
+}
+func ParseData(f string) []Month {
+	timeZone, _ := time.LoadLocation("America/Phoenix")
+
+	months = []Month{}
+
+	b, _ := ioutil.ReadFile(f)
+	s := string(b)
+	monthInt := 0
+	year := ""
+	for _, line := range strings.Split(s, "\n") {
+		//2022 February 16 16:59 UTC
+		tokens := strings.Split(line, " ")
+		if len(tokens) < 4 {
+			break
+		}
+		year = tokens[0]
+		yearInt, _ := strconv.Atoi(year)
+		month := tokens[1]
+		if month == "January" {
+			monthInt = 1
+		} else if month == "February" {
+			monthInt = 2
+		} else if month == "March" {
+			monthInt = 3
+		} else if month == "April" {
+			monthInt = 4
+		} else if month == "May" {
+			monthInt = 5
+		} else if month == "June" {
+			monthInt = 6
+		} else if month == "July" {
+			monthInt = 7
+		} else if month == "August" {
+			monthInt = 8
+		} else if month == "September" {
+			monthInt = 9
+		} else if month == "October" {
+			monthInt = 10
+		} else if month == "November" {
+			monthInt = 11
+		} else if month == "December" {
+			monthInt = 12
+		}
+		day := tokens[2]
+		dayInt, _ := strconv.Atoi(day)
+		hourMin := tokens[3]
+		tokens = strings.Split(hourMin, ":")
+		hour := tokens[0]
+		hourInt, _ := strconv.Atoi(hour)
+		min := tokens[1]
+		minInt, _ := strconv.Atoi(min)
+
+		eventDate := time.Date(yearInt, time.Month(monthInt), dayInt, hourInt, minInt, 0, 0, timeZone)
+		//fmt.Println(line, eventDate.Unix())
+		thing := Thing{}
+		thing.Text = line
+		thing.Val = eventDate.Unix()
+		things = append(things, thing)
 	}
 	return months
 }
