@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/binary"
 	"fmt"
 	"io/ioutil"
 	"math/rand"
@@ -48,8 +49,15 @@ func GetAll() []Month {
 			delta := t.Val - prev
 			deltaString := fmt.Sprintf("%d", delta)
 			last := deltaString[1 : len(deltaString)-1]
+			lastInt, _ := strconv.Atoi(last)
+
+			bs := make([]byte, 4)
+			binary.LittleEndian.PutUint32(bs, uint32(lastInt))
+
 			digit := AsciiByteToBase9(deltaString)
-			fmt.Printf("%d  %s   %35s    %.6f _%d_\n", delta, last, t.Text, float64(delta)/86400.0, digit)
+			fmt.Printf("%d  %s   %35s    %.6f _%d_\n", delta, fmt.Sprintf("%d-%d",
+				bs[0], bs[1]),
+				t.Text, float64(delta)/86400.0, digit)
 		}
 		prev = t.Val
 	}
