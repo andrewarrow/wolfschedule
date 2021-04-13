@@ -314,23 +314,26 @@ func ParseData(f string) []Month {
 		return things[i].Val < things[j].Val
 	})
 	prev := int64(0)
-	prevMonth := int(0)
+	prevMonth := int(1)
 	u := time.Now()
 	delta := int64(0)
+	deltas := []int64{}
 	for _, t := range things {
 		//fmt.Println(t.Val, t.Text)
 		u = time.Unix(t.Val, 0)
 		if int(u.Month()) != prevMonth {
-			fmt.Println(u.Month())
+			fmt.Println(prevMonth, deltas)
+			deltas = []int64{}
 		}
 		if prev > 0 {
 			delta = t.Val - prev
-			fmt.Println(delta)
+			deltas = append(deltas, delta)
 		}
 
 		prev = t.Val
 		prevMonth = int(u.Month())
 	}
+	fmt.Println(prevMonth, deltas)
 	return months
 }
 
