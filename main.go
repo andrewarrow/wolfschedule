@@ -43,8 +43,11 @@ func GetAll() []Month {
 	sort.SliceStable(things, func(i, j int) bool {
 		return things[i].Val < things[j].Val
 	})
+	encList := []string{}
 	prev := int64(0)
+	prevDigit := byte(0)
 	for _, t := range things {
+		digit := byte(0)
 		if prev > 0 {
 			delta := t.Val - prev
 			deltaString := fmt.Sprintf("%d", delta)
@@ -53,14 +56,47 @@ func GetAll() []Month {
 
 			bs := make([]byte, 4)
 			binary.LittleEndian.PutUint32(bs, uint32(lastInt))
+			//enc := b64.StdEncoding.EncodeToString(bs)
 
-			digit := AsciiByteToBase9(deltaString)
-			fmt.Printf("%d  %s   %35s    %.6f _%d_\n", delta, fmt.Sprintf("%d-%d",
-				bs[0], bs[1]),
-				t.Text, float64(delta)/86400.0, digit)
+			digit = AsciiByteToBase9(deltaString)
+			encList = append(encList, fmt.Sprintf("%d", digit))
+			//encList = append(encList, enc[0:len(enc)-5])
+			if digit != prevDigit {
+				fmt.Printf("\"%s\",\"%.6f\",\"%d\"\n",
+					t.Text,
+					float64(delta)/86400.0,
+					digit)
+			}
+			/*
+				fmt.Printf("%d  %s   %35s    %.6f _%d_\n",
+					delta,
+					enc[0:len(enc)-5],
+					t.Text,
+					float64(delta)/86400.0,
+					digit)
+					fmt.Printf("%d  %s   %35s    %.6f _%d_\n",
+						delta,
+						fmt.Sprintf("%d-%d", bs[0], bs[1]),
+						t.Text,
+						float64(delta)/86400.0,
+						digit)*/
 		}
 		prev = t.Val
+		prevDigit = digit
 	}
+
+	/*
+		for _, e := range encList {
+			if e == "3" {
+				fmt.Printf("%s ", ".")
+			} else if e == "6" {
+				fmt.Printf("%s ", "*")
+			} else {
+				fmt.Printf("%s ", " ")
+			}
+		}
+		fmt.Println("")
+	*/
 	return all
 }
 
