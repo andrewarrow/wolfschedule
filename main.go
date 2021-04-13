@@ -32,6 +32,7 @@ func PrintHelp() {
 	fmt.Println("wolfschedule next      # --offset=x")
 	fmt.Println("wolfschedule prev      # --offset=x")
 	fmt.Println("wolfschedule debug     # ")
+	fmt.Println("wolfschedule wave      # display wave form")
 	fmt.Println("")
 }
 
@@ -73,7 +74,7 @@ func main() {
 	}
 	command := os.Args[1]
 
-	if argMap["year"] != "" {
+	if argMap["year"] != "" && command != "wave" {
 		months := ParseData2(argMap["year"] + ".txt")
 		for _, m := range months {
 			fmt.Println(m.String())
@@ -112,11 +113,16 @@ func main() {
 			}
 			prevTime = int64(t)
 		}
+	} else if command == "wave" {
+		months := ParseData(argMap["year"] + ".txt")
+		for _, m := range months {
+			fmt.Println(m.String())
+		}
 	} else if command == "debug" {
 		all := GetAll()
 		encList := []string{}
 		prev := int64(0)
-		prevDigit := byte(0)
+		//prevDigit := byte(0)
 		for _, t := range things {
 			digit := byte(0)
 			if prev > 0 {
@@ -132,12 +138,9 @@ func main() {
 				digit = AsciiByteToBase9(deltaString)
 				encList = append(encList, fmt.Sprintf("%d", digit))
 				//encList = append(encList, enc[0:len(enc)-5])
-				if digit != prevDigit {
-					fmt.Printf("\"%s\",\"%.6f\",\"%d\"\n",
-						t.Text,
-						float64(delta)/86400.0,
-						digit)
-				}
+				fmt.Printf("\"%s\",\"%.6f\"\n",
+					t.Text,
+					float64(delta)/86400.0)
 				/*
 					fmt.Printf("%d  %s   %35s    %.6f _%d_\n",
 						delta,
@@ -153,7 +156,7 @@ func main() {
 							digit)*/
 			}
 			prev = t.Val
-			prevDigit = digit
+			//prevDigit = digit
 		}
 
 		/*
@@ -198,7 +201,10 @@ func ParseData2(f string) []Month {
 
 	months = []Month{}
 
-	b, _ := ioutil.ReadFile(f)
+	b, e := ioutil.ReadFile(f)
+	if e != nil {
+		return months
+	}
 	s := string(b)
 	monthInt := 0
 	year := ""
@@ -303,6 +309,27 @@ func ParseData(f string) []Month {
 		thing.Text = line
 		thing.Val = eventDate.Unix()
 		things = append(things, thing)
+	}
+	sort.SliceStable(things, func(i, j int) bool {
+		return things[i].Val < things[j].Val
+	})
+	prev := int64(0)
+	prevMonth := int(0)
+	u := time.Now()
+	delta := int64(0)
+	for _, t := range things {
+		//fmt.Println(t.Val, t.Text)
+		u = time.Unix(t.Val, 0)
+		if int(u.Month()) != prevMonth {
+			fmt.Println(u.Month())
+		}
+		if prev > 0 {
+			delta = t.Val - prev
+			fmt.Println(delta)
+		}
+
+		prev = t.Val
+		prevMonth = int(u.Month())
 	}
 	return months
 }
