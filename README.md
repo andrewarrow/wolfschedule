@@ -18,6 +18,6 @@ Before you try your next anti-depression fix, try a little old fashion (like far
 
 Here is a calendar for 2021 with a new kind of weekend / work week definition. You get two days off before and after any red number. With normal Monday thru Friday, 52 weeks a year, you get 104 days off. With this schedule you get 48 "weekends" plus 24 "event days" for total of 120 days off.
 
-So look at the first graphic again. At every peak and every valley, you pause, rest up. And then attack the upcoming UP or DOWN work week. You’re on this crazy spaceship no matter what, might as well swim with the current?
+So look at the first graphic again. At every peak and every valley, you pause, rest up. And then attack the upcoming UP or DOWN work week. You’re on this crazy spaceship no matter what, might as well swim with the current? Notice the big rest periods every 6 months around July / December.
 
 What current does your arbitrary Monday through Friday sync with?
