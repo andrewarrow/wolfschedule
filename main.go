@@ -4,6 +4,7 @@ import (
 	"encoding/binary"
 	"fmt"
 	"io/ioutil"
+	"math"
 	"math/rand"
 	"os"
 	"sort"
@@ -104,8 +105,16 @@ func main() {
 		}
 	} else if command == "wave" {
 		_, deltas := ParseData(argMap["year"] + ".txt")
+		prevDays := 0.0
+		dir := ""
 		for _, d := range deltas {
-			fmt.Println(d.Val, float64(d.Val)/86400, d.Text)
+			days := float64(d.Val) / 86400
+			dir = "down"
+			if days > prevDays {
+				dir = "up"
+			}
+			fmt.Println(d.Val, days, d.Text, dir, math.Abs(prevDays-days))
+			prevDays = days
 		}
 	} else if command == "debug" {
 		all := GetAll()
@@ -248,7 +257,6 @@ func ParseData(f string) ([]Month, []Delta) {
 		return things[i].Val < things[j].Val
 	})
 	prev := int64(0)
-	prevText := ""
 	prevMonth := int(1)
 	u := time.Now()
 	delta := int64(0)
@@ -275,7 +283,6 @@ func ParseData(f string) ([]Month, []Delta) {
 		}
 
 		prev = t.Val
-		prevText = t.Text
 		prevMonth = int(u.Month())
 	}
 	//fmt.Println(prevMonth, times)
@@ -286,7 +293,6 @@ func ParseData(f string) ([]Month, []Delta) {
 		m = handleMonth(&times[0], &times[1], nil)
 	}
 	months = append(months, m)
-	deltas = append(deltas, Delta{int(delta), prevText})
 	return months, deltas
 }
 
