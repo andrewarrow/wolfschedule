@@ -103,11 +103,10 @@ func main() {
 			prevTime = int64(t)
 		}
 	} else if command == "wave" {
-		months, deltas := ParseData(argMap["year"] + ".txt")
-		for _, m := range months {
-			fmt.Println(m.String())
+		_, deltas := ParseData(argMap["year"] + ".txt")
+		for _, d := range deltas {
+			fmt.Println(d.Val, float64(d.Val)/86400, d.Text)
 		}
-		fmt.Println(deltas)
 	} else if command == "debug" {
 		all := GetAll()
 		encList := []string{}
@@ -186,7 +185,7 @@ func main() {
 	}
 }
 
-func ParseData(f string) ([]Month, []int64) {
+func ParseData(f string) ([]Month, []Delta) {
 	timeZone, _ := time.LoadLocation("America/Phoenix")
 
 	months = []Month{}
@@ -249,10 +248,11 @@ func ParseData(f string) ([]Month, []int64) {
 		return things[i].Val < things[j].Val
 	})
 	prev := int64(0)
+	prevText := ""
 	prevMonth := int(1)
 	u := time.Now()
 	delta := int64(0)
-	deltas := []int64{}
+	deltas := []Delta{}
 	times := []time.Time{}
 	for _, t := range things {
 		//fmt.Println(t.Val, t.Text)
@@ -266,16 +266,16 @@ func ParseData(f string) ([]Month, []int64) {
 			}
 			months = append(months, m)
 			//fmt.Println(prevMonth, times)
-			deltas = []int64{}
 			times = []time.Time{}
 		}
 		times = append(times, u)
 		if prev > 0 {
 			delta = t.Val - prev
-			deltas = append(deltas, delta)
+			deltas = append(deltas, Delta{int(delta), t.Text})
 		}
 
 		prev = t.Val
+		prevText = t.Text
 		prevMonth = int(u.Month())
 	}
 	//fmt.Println(prevMonth, times)
@@ -286,7 +286,7 @@ func ParseData(f string) ([]Month, []int64) {
 		m = handleMonth(&times[0], &times[1], nil)
 	}
 	months = append(months, m)
-	deltas = append(deltas, delta)
+	deltas = append(deltas, Delta{int(delta), prevText})
 	return months, deltas
 }
 
