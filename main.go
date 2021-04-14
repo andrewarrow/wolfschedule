@@ -36,17 +36,6 @@ func PrintHelp() {
 	fmt.Println("")
 }
 
-func GetAllClassic() []Month {
-	all := []Month{}
-	for i := 2003; i < 2031; i++ {
-		months := ParseData2(fmt.Sprintf("%d.txt", i))
-		all = append(all, months...)
-	}
-	sort.SliceStable(things, func(i, j int) bool {
-		return things[i].Val < things[j].Val
-	})
-	return all
-}
 func GetAll() []Month {
 	all := []Month{}
 	for i := 2003; i < 2031; i++ {
@@ -65,7 +54,7 @@ func main() {
 
 	if len(os.Args) == 1 {
 		PrintHelp()
-		months := ParseData2("2021.txt")
+		months := ParseData("2021.txt")
 		for _, m := range months {
 			fmt.Println(m.String())
 		}
@@ -75,7 +64,7 @@ func main() {
 	command := os.Args[1]
 
 	if argMap["year"] != "" && command != "wave" {
-		months := ParseData2(argMap["year"] + ".txt")
+		months := ParseData(argMap["year"] + ".txt")
 		for _, m := range months {
 			fmt.Println(m.String())
 		}
@@ -196,61 +185,6 @@ func main() {
 	}
 }
 
-func ParseData2(f string) []Month {
-	timeZone, _ := time.LoadLocation("America/Phoenix")
-
-	months = []Month{}
-
-	b, e := ioutil.ReadFile(f)
-	if e != nil {
-		return months
-	}
-	s := string(b)
-	monthInt := 0
-	year := ""
-	bigMap := map[string][]string{}
-	for _, line := range strings.Split(s, "\n") {
-		//2022 February 16 16:59 UTC
-		tokens := strings.Split(line, " ")
-		if len(tokens) < 4 {
-			break
-		}
-		month := tokens[1]
-		bigMap[month] = append(bigMap[month], line)
-	}
-	text := []string{"January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"}
-	for i, month := range text {
-		curMonth = Month{}
-		for j, line := range bigMap[month] {
-			monthInt = i + 1
-			tokens := strings.Split(line, " ")
-			year = tokens[0]
-			yearInt, _ := strconv.Atoi(year)
-			day := tokens[2]
-			dayInt, _ := strconv.Atoi(day)
-			hourMin := tokens[3]
-			tokens = strings.Split(hourMin, ":")
-			hour := tokens[0]
-			hourInt, _ := strconv.Atoi(hour)
-			min := tokens[1]
-			minInt, _ := strconv.Atoi(min)
-
-			eventDate := time.Date(yearInt, time.Month(monthInt), dayInt, hourInt, minInt, 0, 0, timeZone)
-			if j == 0 {
-				curMonth.Event1 = dayInt
-				curMonth.Event1Unix = eventDate.Unix()
-			} else if j == 1 {
-				curMonth.Event2 = dayInt
-				curMonth.Event2Unix = eventDate.Unix()
-			} else if j == 2 {
-				curMonth.Event3 = dayInt
-				curMonth.Event3Unix = eventDate.Unix()
-			}
-		}
-		MakeDaysAnd(monthInt, year)
-	}
-	return months
-}
 func ParseData(f string) []Month {
 	timeZone, _ := time.LoadLocation("America/Phoenix")
 
@@ -318,13 +252,23 @@ func ParseData(f string) []Month {
 	u := time.Now()
 	delta := int64(0)
 	deltas := []int64{}
+	times := []time.Time{}
 	for _, t := range things {
 		//fmt.Println(t.Val, t.Text)
 		u = time.Unix(t.Val, 0)
 		if int(u.Month()) != prevMonth {
-			fmt.Println(prevMonth, deltas)
+			var m Month
+			if len(times) == 3 {
+				m = handleMonth(&times[0], &times[1], &times[2])
+			} else if len(times) == 2 {
+				m = handleMonth(&times[0], &times[1], nil)
+			}
+			months = append(months, m)
+			//fmt.Println(prevMonth, times)
 			deltas = []int64{}
+			times = []time.Time{}
 		}
+		times = append(times, u)
 		if prev > 0 {
 			delta = t.Val - prev
 			deltas = append(deltas, delta)
@@ -333,7 +277,14 @@ func ParseData(f string) []Month {
 		prev = t.Val
 		prevMonth = int(u.Month())
 	}
-	fmt.Println(prevMonth, deltas)
+	//fmt.Println(prevMonth, times)
+	var m Month
+	if len(times) == 3 {
+		m = handleMonth(&times[0], &times[1], &times[2])
+	} else if len(times) == 2 {
+		m = handleMonth(&times[0], &times[1], nil)
+	}
+	months = append(months, m)
 	return months
 }
 
