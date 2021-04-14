@@ -39,7 +39,7 @@ func PrintHelp() {
 func GetAll() []Month {
 	all := []Month{}
 	for i := 2003; i < 2031; i++ {
-		months := ParseData(fmt.Sprintf("%d.txt", i))
+		months, _ := ParseData(fmt.Sprintf("%d.txt", i))
 		all = append(all, months...)
 	}
 	sort.SliceStable(things, func(i, j int) bool {
@@ -54,7 +54,7 @@ func main() {
 
 	if len(os.Args) == 1 {
 		PrintHelp()
-		months := ParseData("2021.txt")
+		months, _ := ParseData("2021.txt")
 		for _, m := range months {
 			fmt.Println(m.String())
 		}
@@ -64,7 +64,7 @@ func main() {
 	command := os.Args[1]
 
 	if argMap["year"] != "" && command != "wave" {
-		months := ParseData(argMap["year"] + ".txt")
+		months, _ := ParseData(argMap["year"] + ".txt")
 		for _, m := range months {
 			fmt.Println(m.String())
 		}
@@ -103,10 +103,11 @@ func main() {
 			prevTime = int64(t)
 		}
 	} else if command == "wave" {
-		months := ParseData(argMap["year"] + ".txt")
+		months, deltas := ParseData(argMap["year"] + ".txt")
 		for _, m := range months {
 			fmt.Println(m.String())
 		}
+		fmt.Println(deltas)
 	} else if command == "debug" {
 		all := GetAll()
 		encList := []string{}
@@ -168,7 +169,7 @@ func main() {
 		all := GetAll()
 		fmt.Println(len(all))
 	} else if command == "today" {
-		months := ParseData("2021.txt")
+		months, _ := ParseData("2021.txt")
 		today := time.Now()
 		fmt.Println(today.Month())
 		for _, m := range months {
@@ -180,12 +181,12 @@ func main() {
 	} else if command == "help" {
 		PrintHelp()
 	} else if command == "html" {
-		months := ParseData("2021.txt")
+		months, _ := ParseData("2021.txt")
 		MakeHtml(months)
 	}
 }
 
-func ParseData(f string) []Month {
+func ParseData(f string) ([]Month, []int64) {
 	timeZone, _ := time.LoadLocation("America/Phoenix")
 
 	months = []Month{}
@@ -285,7 +286,8 @@ func ParseData(f string) []Month {
 		m = handleMonth(&times[0], &times[1], nil)
 	}
 	months = append(months, m)
-	return months
+	deltas = append(deltas, delta)
+	return months, deltas
 }
 
 func MakeDaysAnd(monthInt int, year string) {
