@@ -104,6 +104,34 @@ func main() {
 			prevTime = int64(t)
 		}
 	} else if command == "side" {
+		c := "         **                               **                         "
+		d := "               **                                  **                "
+		mapByOne := map[string][]string{}
+		for _, d := range deltas {
+			days := float64(d.Val) / 86400
+			oneDigit := fmt.Sprintf("%.1f", days)
+			mapByOne[oneDigit] = append(mapByOne[oneDigit], "  ")
+		}
+		fmt.Println("16|")
+		fmt.Println("  |") //.8 .9
+		fmt.Println("  |") //.7 .6
+		fmt.Println("  |") //.5
+		fmt.Println("  |") //.3 .4
+		fmt.Println("  |") //.1 .2
+		fmt.Println("15|")
+		fmt.Println("  |")
+		fmt.Println("  |")
+		fmt.Println("  |")
+		fmt.Println("  |")
+		fmt.Println("  |")
+		fmt.Println("14|")
+		fmt.Println("  |")
+		fmt.Println("  |")
+		fmt.Println("  |")
+		fmt.Println("  |")
+		fmt.Println("  |")
+		fmt.Println("13|")
+		fmt.Printf("   ")
 		_, deltas := ParseData(argMap["year"] + ".txt")
 		for _, d := range deltas {
 			ms := fmt.Sprintf("%d", int(d.Time.Month()))
@@ -114,6 +142,7 @@ func main() {
 			}
 		}
 		fmt.Println("")
+		fmt.Printf("   ")
 		for _, d := range deltas {
 			ms := fmt.Sprintf("%d", d.Time.Day())
 			if len(ms) == 1 {
