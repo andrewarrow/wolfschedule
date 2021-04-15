@@ -64,7 +64,7 @@ func main() {
 	}
 	command := os.Args[1]
 
-	if argMap["year"] != "" && command != "wave" {
+	if argMap["year"] != "" && command != "wave" && command != "side" {
 		months, _ := ParseData(argMap["year"] + ".txt")
 		for _, m := range months {
 			fmt.Println(m.String())
@@ -103,6 +103,26 @@ func main() {
 			}
 			prevTime = int64(t)
 		}
+	} else if command == "side" {
+		_, deltas := ParseData(argMap["year"] + ".txt")
+		for _, d := range deltas {
+			ms := fmt.Sprintf("%d", int(d.Time.Month()))
+			if len(ms) == 1 {
+				fmt.Printf(" %s ", ms)
+			} else {
+				fmt.Printf("%s ", ms)
+			}
+		}
+		fmt.Println("")
+		for _, d := range deltas {
+			ms := fmt.Sprintf("%d", d.Time.Day())
+			if len(ms) == 1 {
+				fmt.Printf(" %s ", ms)
+			} else {
+				fmt.Printf("%s ", ms)
+			}
+		}
+		fmt.Println("")
 	} else if command == "wave" {
 		_, deltas := ParseData(argMap["year"] + ".txt")
 		prevDays := 0.0
