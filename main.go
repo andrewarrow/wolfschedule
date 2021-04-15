@@ -114,20 +114,35 @@ func main() {
 			if days > prevDays {
 				//dir = "up"
 			}
+			i := 0
+			day1 := d.Time
+			day1 = day1.AddDate(0, 0, -1)
+			day1 = day1.AddDate(0, 0, -1)
+			day1 = day1.AddDate(0, 0, -1)
+			day1 = day1.AddDate(0, 0, -1)
+			day1 = day1.AddDate(0, 0, -1)
+			day1 = day1.AddDate(0, 0, -1)
+			for {
+				day1 = day1.AddDate(0, 0, 1)
+				fmt.Printf("++++ %s %s\n", fmt.Sprintf("%v", day1)[:10], day1.Weekday())
+				if i > 3 {
+					break
+				}
+				i++
+			}
 			if prevDays == 0.0 {
-				fmt.Printf("%d, %.3f, %30s\n", d.Val, days, d.Text)
+				fmt.Printf("%d, %.3f, %30s %s\n", d.Val, days, d.Text, d.Time.Weekday())
 			} else {
-				fmt.Printf("%d, %.3f, %30s %.3f\n", d.Val, days, d.Text, math.Abs(prevDays-days))
+				fmt.Printf("%d, %.3f, %30s %.3f %s\n", d.Val, days, d.Text, math.Abs(prevDays-days), d.Time.Weekday())
 			}
 
 			if int(now.Month()) == d.Month {
-				fmt.Printf("---- %v \n", d.Time)
 				day1 := d.Time
 				i := 0
 				for {
 					day1 = day1.AddDate(0, 0, 1)
-					fmt.Printf("---- %v %s\n", day1, day1.Weekday())
-					if i > 15 {
+					fmt.Printf("---- %s %s\n", fmt.Sprintf("%v", day1)[:10], day1.Weekday())
+					if i > 5 {
 						break
 					}
 					i++
