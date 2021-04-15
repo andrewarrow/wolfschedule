@@ -106,14 +106,18 @@ func main() {
 	} else if command == "wave" {
 		_, deltas := ParseData(argMap["year"] + ".txt")
 		prevDays := 0.0
-		dir := ""
+		//dir := ""
 		for _, d := range deltas {
 			days := float64(d.Val) / 86400
-			dir = "down"
+			//dir = "down"
 			if days > prevDays {
-				dir = "up"
+				//dir = "up"
 			}
-			fmt.Println(d.Val, days, d.Text, dir, math.Abs(prevDays-days))
+			if prevDays == 0.0 {
+				fmt.Printf("%d, %.3f, %30s\n", d.Val, days, d.Text)
+			} else {
+				fmt.Printf("%d, %.3f, %30s %.3f\n", d.Val, days, d.Text, math.Abs(prevDays-days))
+			}
 			prevDays = days
 		}
 	} else if command == "debug" {
