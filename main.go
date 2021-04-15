@@ -136,10 +136,11 @@ func main() {
 					i++
 				}
 			}
+			digit := AsciiByteToBase9(fmt.Sprintf("%d", d.Val))
 			if prevDays == 0.0 {
-				fmt.Printf("%d, %.3f, %30s %s\n", d.Val, days, d.Text, d.Time.Weekday())
+				fmt.Printf("%d %d, %.3f, %30s %s\n", digit, d.Val, days, d.Text, d.Time.Weekday())
 			} else {
-				fmt.Printf("%d, %.3f, %30s %.3f %s\n", d.Val, days, d.Text, math.Abs(prevDays-days), d.Time.Weekday())
+				fmt.Printf("%d %d, %.3f, %30s %.3f %s\n", digit, d.Val, days, d.Text, math.Abs(prevDays-days), d.Time.Weekday())
 			}
 
 			if isNext && int(now.Month()) == d.Month {
