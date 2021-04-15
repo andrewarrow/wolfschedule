@@ -106,6 +106,7 @@ func main() {
 	} else if command == "wave" {
 		_, deltas := ParseData(argMap["year"] + ".txt")
 		prevDays := 0.0
+		now := time.Now()
 		//dir := ""
 		for _, d := range deltas {
 			days := float64(d.Val) / 86400
@@ -118,6 +119,21 @@ func main() {
 			} else {
 				fmt.Printf("%d, %.3f, %30s %.3f\n", d.Val, days, d.Text, math.Abs(prevDays-days))
 			}
+
+			if int(now.Month()) == d.Month {
+				fmt.Printf("---- %v \n", d.Time)
+				day1 := d.Time
+				i := 0
+				for {
+					day1 = day1.AddDate(0, 0, 1)
+					fmt.Printf("---- %v %s\n", day1, day1.Weekday())
+					if i > 15 {
+						break
+					}
+					i++
+				}
+			}
+
 			prevDays = days
 		}
 	} else if command == "debug" {
@@ -283,7 +299,9 @@ func ParseData(f string) ([]Month, []Delta) {
 		times = append(times, u)
 		if prev > 0 {
 			delta = t.Val - prev
-			deltas = append(deltas, Delta{int(delta), t.Text})
+			d := NewDelta(int(delta), t.Text, int(u.Month()))
+			d.Time = u
+			deltas = append(deltas, d)
 		}
 
 		prev = t.Val
