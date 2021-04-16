@@ -16,13 +16,14 @@ func allThe(s ...string) string {
 		return ""
 	}
 	sort.Ints(list)
+	//fmt.Println(list)
 	max := list[len(list)-1]
 	m := map[int]bool{}
 	for _, thing := range list {
 		m[thing] = true
 	}
 	buff := []string{}
-	for i := 0; i < max; i++ {
+	for i := 0; i < max+1; i++ {
 		if m[i] {
 			buff = append(buff, "**")
 		} else {

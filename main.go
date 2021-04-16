@@ -114,23 +114,23 @@ func main() {
 			mapByOne[oneDigit] = append(mapByOne[oneDigit], i)
 		}
 		fmt.Println("16|")
-		fmt.Println("  |")                          //.8 .9
-		fmt.Println("  |")                          //.7 .6
-		fmt.Println("  |")                          //.5
+		fmt.Println("  |" + allThe("15.8", "15.9")) //.8 .9
+		fmt.Println("  |" + allThe("15.7", "15.7")) //.7 .6
+		fmt.Println("  |" + allThe("15.5"))
 		fmt.Println("  |" + allThe("15.3", "15.4")) //.1 .2
 		fmt.Println("  |" + allThe("15.1", "15.2")) //.1 .2
-		fmt.Println("15|")
-		fmt.Println("  |")
-		fmt.Println("  |")
-		fmt.Println("  |")
-		fmt.Println("  |")
-		fmt.Println("  |")
-		fmt.Println("14|")
-		fmt.Println("  |")
-		fmt.Println("  |")
-		fmt.Println("  |")
-		fmt.Println("  |")
-		fmt.Println("  |")
+		fmt.Println("15|" + allThe("15.0"))
+		fmt.Println("  |" + allThe("14.8", "14.9")) //.8 .9
+		fmt.Println("  |" + allThe("14.7", "14.7")) //.7 .6
+		fmt.Println("  |" + allThe("14.5"))
+		fmt.Println("  |" + allThe("14.3", "14.4")) //.1 .2
+		fmt.Println("  |" + allThe("14.1", "14.2")) //.1 .2
+		fmt.Println("14|" + allThe("14.0"))
+		fmt.Println("  |" + allThe("13.8", "13.9")) //.8 .9
+		fmt.Println("  |" + allThe("13.7", "13.7")) //.7 .6
+		fmt.Println("  |" + allThe("13.5"))
+		fmt.Println("  |" + allThe("13.3", "13.4")) //.1 .2
+		fmt.Println("  |" + allThe("13.1", "13.2")) //.1 .2
 		fmt.Println("13|")
 		fmt.Printf("   ")
 		for _, d := range deltas {
