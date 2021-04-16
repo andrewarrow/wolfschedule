@@ -106,12 +106,13 @@ func main() {
 	} else if command == "side" {
 		//c := "         **                               **                         "
 		//d := "               **                                  **                "
-		mapByOne = map[string][]int{}
+		mapByOne = map[string][]DigitAndIndex{}
 		_, deltas := ParseData(argMap["year"] + ".txt")
 		for i, d := range deltas {
 			days := float64(d.Val) / 86400
+			digit := AsciiByteToBase9(fmt.Sprintf("%d", d.Val))
 			oneDigit := fmt.Sprintf("%.1f", days)
-			mapByOne[oneDigit] = append(mapByOne[oneDigit], i)
+			mapByOne[oneDigit] = append(mapByOne[oneDigit], DigitAndIndex{digit, i})
 		}
 		fmt.Println("16|")
 		fmt.Println("  |" + allThe("15.8", "15.9")) //.8 .9

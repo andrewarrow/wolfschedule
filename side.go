@@ -1,31 +1,38 @@
 package main
 
 import (
+	"fmt"
 	"sort"
 	"strings"
 )
 
-var mapByOne = map[string][]int{}
+type DigitAndIndex struct {
+	Digit byte
+	Index int
+}
+
+var mapByOne = map[string][]DigitAndIndex{}
 
 func allThe(s ...string) string {
-	list := []int{}
+	list := []DigitAndIndex{}
 	for _, item := range s {
 		list = append(list, mapByOne[item]...)
 	}
 	if len(list) == 0 {
 		return ""
 	}
-	sort.Ints(list)
-	//fmt.Println(list)
+	sort.SliceStable(list, func(i, j int) bool {
+		return list[i].Index < list[j].Index
+	})
 	max := list[len(list)-1]
-	m := map[int]bool{}
+	m := map[int]byte{}
 	for _, thing := range list {
-		m[thing] = true
+		m[thing.Index] = thing.Digit
 	}
 	buff := []string{}
-	for i := 0; i < max+1; i++ {
-		if m[i] {
-			buff = append(buff, "**")
+	for i := 0; i < max.Index+1; i++ {
+		if m[i] != 0 {
+			buff = append(buff, fmt.Sprintf(" %d", m[i]))
 		} else {
 			buff = append(buff, "  ")
 		}
