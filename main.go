@@ -36,7 +36,7 @@ func PrintHelp() {
 	fmt.Println("")
 }
 
-func GetAll() {
+func GetAll(y int) {
 	things = []Thing{}
 	for i := 2003; i < 2031; i++ {
 		ParseData2(fmt.Sprintf("%d.txt", i))
@@ -47,11 +47,11 @@ func GetAll() {
 	all := []Thing{}
 	for _, t := range things {
 		u := time.Unix(t.Val, 0)
-		if u.Year() == 2020 && int(u.Month()) == 12 {
+		if u.Year() == y-1 && int(u.Month()) == 12 {
 			all = append(all, t)
-		} else if u.Year() == 2022 && int(u.Month()) == 1 {
+		} else if u.Year() == y+1 && int(u.Month()) == 1 {
 			all = append(all, t)
-		} else if u.Year() == 2021 {
+		} else if u.Year() == y {
 			all = append(all, t)
 		}
 	}
@@ -129,8 +129,8 @@ func main() {
 	} else if command == "images" {
 		//MakeImages(myimage)
 	} else if command == "side" {
-		//y, _ := strconv.Atoi(argMap["year"])
-		GetAll()
+		y, _ := strconv.Atoi(argMap["year"])
+		GetAll(y)
 		//MakeSides(deltas, fmt.Sprintf("%d", y))
 	} else if command == "wave" {
 		_, deltas := ParseData(argMap["year"] + ".txt")
