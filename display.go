@@ -6,13 +6,13 @@ import (
 	"time"
 )
 
-func DisplayCurrentDay(year string) {
+func DisplayCurrentDay(year string, add int) {
 	y, _ := strconv.Atoi(year)
 	now := time.Now()
 	if year == "" {
 		y = now.Year()
 	}
-	//now = now.AddDate(0, 0, -1)
+	now = now.AddDate(0, 0, add)
 	today := fmt.Sprintf("%v", now)
 	all := GetAll(y)
 	m := map[string]bool{}

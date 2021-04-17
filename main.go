@@ -108,7 +108,7 @@ func main() {
 
 	if len(os.Args) == 1 {
 		PrintHelp()
-		DisplayCurrentDay(argMap["year"])
+		DisplayCurrentDay(argMap["year"], 0)
 		return
 	}
 	command := os.Args[1]
@@ -117,9 +117,13 @@ func main() {
 	} else if command == "images" {
 	} else if strings.HasPrefix(command, "--year") {
 		//MakeImages(myimage)
-		DisplayCurrentDay(argMap["year"])
+		DisplayCurrentDay(argMap["year"], 0)
+	} else if strings.HasPrefix(command, "+") {
+		//MakeImages(myimage)
+		add, _ := strconv.Atoi(command[1:])
+		DisplayCurrentDay(argMap["year"], add)
 	} else if command == "day" {
-		DisplayCurrentDay(argMap["year"])
+		DisplayCurrentDay(argMap["year"], 0)
 	} else if command == "wave" {
 		_, deltas := ParseData(argMap["year"] + ".txt")
 		prevDays := 0.0
