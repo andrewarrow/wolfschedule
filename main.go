@@ -106,11 +106,11 @@ func main() {
 	} else if command == "images" {
 		//MakeImages(myimage)
 	} else if command == "side" {
-		//MakeSides(argMap["year"])
-		for i := 2003; i < 2031; i++ {
-			MakeSides(fmt.Sprintf("%d", i))
-			things = []Thing{}
-		}
+		MakeSides(argMap["year"])
+		//for i := 2003; i < 2031; i++ {
+		//		MakeSides(fmt.Sprintf("%d", i))
+		//	things = []Thing{}
+		//	}
 	} else if command == "wave" {
 		_, deltas := ParseData(argMap["year"] + ".txt")
 		prevDays := 0.0
