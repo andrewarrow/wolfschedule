@@ -104,7 +104,7 @@ func main() {
 			prevTime = int64(t)
 		}
 	} else if command == "images" {
-		MakeImages()
+		//MakeImages()
 	} else if command == "side" {
 		//c := "         **                               **                         "
 		//d := "               **                                  **                "
