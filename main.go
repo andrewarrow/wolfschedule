@@ -141,9 +141,9 @@ func main() {
 		for {
 			u := fmt.Sprintf("%v", day1)
 			if m[u[0:10]] {
-				fmt.Println("*", u[0:10])
+				fmt.Println(u[0:10], day1.Weekday())
 			} else {
-				fmt.Println(u[0:10])
+				fmt.Println("          ", u[0:10], day1.Weekday())
 			}
 			day1 = day1.AddDate(0, 0, 1)
 			if day1.After(last) {
