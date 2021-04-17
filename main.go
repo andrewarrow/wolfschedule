@@ -24,7 +24,7 @@ type Thing struct {
 
 func PrintHelp() {
 	fmt.Println("")
-	fmt.Println("By Default, it will display the current year, full year view.")
+	fmt.Println("By Default, it will display the current -15 +15 days")
 	fmt.Println("")
 	fmt.Println("wolfschedule help      # this menu")
 	fmt.Println("wolfschedule today     # show me just enough for today")
@@ -108,69 +108,18 @@ func main() {
 
 	if len(os.Args) == 1 {
 		PrintHelp()
-		months, _ := ParseData("2021.txt")
-		for _, m := range months {
-			fmt.Println(m.String())
-		}
-		fmt.Println("")
+		DisplayCurrentDay(argMap["year"])
 		return
 	}
 	command := os.Args[1]
 
-	if argMap["year"] != "" && command != "wave" && command != "side" {
-		months, _ := ParseData(argMap["year"] + ".txt")
-		for _, m := range months {
-			fmt.Println(m.String())
-		}
-		return
-	}
-
 	if command == "parse" {
 	} else if command == "images" {
+	} else if strings.HasPrefix(command, "--year") {
 		//MakeImages(myimage)
-	} else if command == "side" {
-		y, _ := strconv.Atoi(argMap["year"])
-		now := time.Now()
-		now = now.AddDate(0, 0, -1)
-		today := fmt.Sprintf("%v", now)
-		all := GetAll(y)
-		m := map[string]bool{}
-		for _, t := range all {
-			u := fmt.Sprintf("%v", time.Unix(t.Val, 0))
-			m[u[0:10]] = true
-		}
-		day1 := time.Unix(all[0].Val, 0)
-		last := time.Unix(all[len(all)-1].Val, 0)
-		for {
-			u := fmt.Sprintf("%v", day1)
-			wd := fmt.Sprintf("%v", day1.Weekday())
-			if wd == "Tuesday" || wd == "Thursday" || wd == "Saturday" ||
-				wd == "Sunday" {
-				wd = ""
-			}
-
-			col1 := "" // event date
-			col2 := "" // normal date
-			col3 := "" // arrow
-			col4 := "" // wd
-
-			substring := u[0:10]
-			if m[substring] {
-				col1 = substring
-			} else {
-				col2 = substring
-			}
-			if substring == today[0:10] {
-				col3 = " <-------------"
-			}
-			col4 = wd
-			fmt.Printf("%10s %10s%20s%30s\n", col1, col2, col3, col4)
-			day1 = day1.AddDate(0, 0, 1)
-			if day1.After(last) {
-				break
-			}
-		}
-		//MakeSides(deltas, fmt.Sprintf("%d", y))
+		DisplayCurrentDay(argMap["year"])
+	} else if command == "day" {
+		DisplayCurrentDay(argMap["year"])
 	} else if command == "wave" {
 		_, deltas := ParseData(argMap["year"] + ".txt")
 		prevDays := 0.0
