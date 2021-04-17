@@ -106,7 +106,15 @@ func main() {
 	} else if command == "images" {
 		//MakeImages(myimage)
 	} else if command == "side" {
-		MakeSides(argMap["year"])
+		y, _ := strconv.Atoi(argMap["year"])
+		_, deltas1 := ParseData(fmt.Sprintf("%d.txt", y))
+		things = []Thing{}
+		_, deltas2 := ParseData(fmt.Sprintf("%d.txt", y-1))
+		things = []Thing{}
+		_, deltas3 := ParseData(fmt.Sprintf("%d.txt", y+1))
+		deltas := append([]Delta{deltas2[len(deltas2)-1]}, deltas1...)
+		deltas = append(deltas, deltas3[0])
+		MakeSides(deltas, fmt.Sprintf("%d", y))
 		//for i := 2003; i < 2031; i++ {
 		//		MakeSides(fmt.Sprintf("%d", i))
 		//	things = []Thing{}

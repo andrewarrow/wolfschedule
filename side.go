@@ -18,9 +18,8 @@ type DigitAndIndex struct {
 
 var mapByOne = map[string][]DigitAndIndex{}
 
-func MakeSides(year string) {
+func MakeSides(deltas []Delta, year string) {
 	mapByOne = map[string][]DigitAndIndex{}
-	_, deltas := ParseData(year + ".txt")
 
 	myimage := image.NewRGBA(image.Rect(0, 0, 2430, 1450))
 	mygreen := color.RGBA{0, 0, 0, 255}
