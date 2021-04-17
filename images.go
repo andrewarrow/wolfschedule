@@ -57,6 +57,11 @@ func MakeImage(myimage *image.RGBA, i int, val float64, digit byte, month, day i
 	ten := 10 + (i * 100)
 	red_rect := image.Rect(ten, 10, ten+100, 1400)
 	myred := color.RGBA{0, 0, uint8(255.0 * per), 255}
+	if digit == 3 {
+		myred = color.RGBA{0, uint8(255.0 * per), 0, 255}
+	} else if digit == 6 {
+		myred = color.RGBA{uint8(255.0 * per), 0, 0, 255}
+	}
 
 	draw.Draw(myimage, red_rect, &image.Uniform{myred}, image.ZP, draw.Src)
 
