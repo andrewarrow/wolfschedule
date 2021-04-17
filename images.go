@@ -9,7 +9,7 @@ import (
 	"os"
 )
 
-func MakeImage(i int, val float64, digit byte, month, day int) {
+func MakeImage(myimage *image.RGBA, i int, val float64, digit byte, month, day int) {
 	//fmt.Println(i, oneDigit, digit, month, day)
 	ity := 0
 	if val < 14.1 && val >= 14.0 {
@@ -52,7 +52,14 @@ func MakeImage(i int, val float64, digit byte, month, day int) {
 		ity = 40
 	}
 	fmt.Println(val, ity)
-	MakeOneImage(i, float64(ity)/100.0)
+	per := float64(ity) / 100.0
+
+	ten := 10 + (i * 100)
+	red_rect := image.Rect(ten, 10, ten+100, 1400)
+	myred := color.RGBA{0, 0, uint8(255.0 * per), 255}
+
+	draw.Draw(myimage, red_rect, &image.Uniform{myred}, image.ZP, draw.Src)
+
 }
 func MakeOneImage(i int, per float64) {
 

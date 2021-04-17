@@ -3,6 +3,10 @@ package main
 import (
 	"encoding/binary"
 	"fmt"
+	"image"
+	"image/color"
+	"image/draw"
+	"image/jpeg"
 	"io/ioutil"
 	"math"
 	"math/rand"
@@ -104,19 +108,27 @@ func main() {
 			prevTime = int64(t)
 		}
 	} else if command == "images" {
-		//MakeImages()
+		//MakeImages(myimage)
 	} else if command == "side" {
 		//c := "         **                               **                         "
 		//d := "               **                                  **                "
 		mapByOne = map[string][]DigitAndIndex{}
 		_, deltas := ParseData(argMap["year"] + ".txt")
+
+		myimage := image.NewRGBA(image.Rect(0, 0, 2350, 1450))
+		mygreen := color.RGBA{0, 0, 0, 255}
+
+		draw.Draw(myimage, myimage.Bounds(), &image.Uniform{mygreen}, image.ZP, draw.Src)
 		for i, d := range deltas {
 			days := float64(d.Val) / 86400
 			digit := AsciiByteToBase9(fmt.Sprintf("%d", d.Val))
 			oneDigit := fmt.Sprintf("%.1f", days)
-			MakeImage(i, days, digit, int(d.Time.Month()), d.Time.Day())
+			MakeImage(myimage, i, days, digit, int(d.Time.Month()), d.Time.Day())
 			mapByOne[oneDigit] = append(mapByOne[oneDigit], DigitAndIndex{digit, i})
 		}
+		myfile, _ := os.Create(fmt.Sprintf("out.jpg"))
+		jpeg.Encode(myfile, myimage, &jpeg.Options{jpeg.DefaultQuality})
+
 		fmt.Println("16|")
 		fmt.Println("  |" + allThe("15.8", "15.9")) //.8 .9
 		fmt.Println("  |" + allThe("15.6", "15.7")) //.7 .6
