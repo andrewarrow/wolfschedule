@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"image"
 	"image/color"
 	"image/draw"
@@ -8,10 +9,54 @@ import (
 	"os"
 )
 
+func MakeImage(i int, val float64, digit byte, month, day int) {
+	//fmt.Println(i, oneDigit, digit, month, day)
+	ity := 0
+	if val < 14.1 && val >= 14.0 {
+		ity = 20
+	} else if val < 14.2 && val >= 14.1 {
+		ity = 25
+	} else if val < 14.3 && val >= 14.2 {
+		ity = 30
+	} else if val < 14.4 && val >= 14.3 {
+		ity = 35
+	} else if val < 14.5 && val >= 14.4 {
+		ity = 40
+	} else if val < 14.6 && val >= 14.5 {
+		ity = 45
+	} else if val < 14.7 && val >= 14.6 {
+		ity = 50
+	} else if val < 14.8 && val >= 14.7 {
+		ity = 55
+	} else if val < 14.9 && val >= 14.8 {
+		ity = 60
+	} else if val < 15.0 && val >= 14.9 {
+		ity = 65
+	} else if val < 15.1 && val >= 15.0 {
+		ity = 70
+	} else if val < 15.2 && val >= 15.1 {
+		ity = 75
+	} else if val < 15.3 && val >= 15.2 {
+		ity = 80
+	} else if val < 15.4 && val >= 15.3 {
+		ity = 85
+	} else if val < 15.5 && val >= 15.4 {
+		ity = 90
+	} else if val < 15.6 && val >= 15.5 {
+		ity = 95
+	} else if val < 14.0 && val >= 13.9 {
+		ity = 15
+	} else if val < 13.9 && val >= 13.8 {
+		ity = 10
+	} else if val < 13.8 && val >= 13.9 {
+		ity = 5
+	}
+	fmt.Println(val, ity)
+}
 func MakeImages() {
 
-	myimage := image.NewRGBA(image.Rect(0, 0, 220, 220)) // x1,y1,  x2,y2
-	mygreen := color.RGBA{0, 100, 0, 255}                //  R, G, B, Alpha
+	myimage := image.NewRGBA(image.Rect(0, 0, 1850, 1450)) // x1,y1,  x2,y2
+	mygreen := color.RGBA{0, 100, 0, 255}                  //  R, G, B, Alpha
 
 	draw.Draw(myimage, myimage.Bounds(), &image.Uniform{mygreen}, image.ZP, draw.Src)
 

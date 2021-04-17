@@ -114,6 +114,7 @@ func main() {
 			days := float64(d.Val) / 86400
 			digit := AsciiByteToBase9(fmt.Sprintf("%d", d.Val))
 			oneDigit := fmt.Sprintf("%.1f", days)
+			MakeImage(i, days, digit, int(d.Time.Month()), d.Time.Day())
 			mapByOne[oneDigit] = append(mapByOne[oneDigit], DigitAndIndex{digit, i})
 		}
 		fmt.Println("16|")
