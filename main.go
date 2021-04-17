@@ -130,6 +130,8 @@ func main() {
 		//MakeImages(myimage)
 	} else if command == "side" {
 		y, _ := strconv.Atoi(argMap["year"])
+		now := time.Now()
+		today := fmt.Sprintf("%v", now)
 		all := GetAll(y)
 		m := map[string]bool{}
 		for _, t := range all {
@@ -140,11 +142,26 @@ func main() {
 		last := time.Unix(all[len(all)-1].Val, 0)
 		for {
 			u := fmt.Sprintf("%v", day1)
-			if m[u[0:10]] {
-				fmt.Println(u[0:10], day1.Weekday())
-			} else {
-				fmt.Println("          ", u[0:10], day1.Weekday())
+			wd := fmt.Sprintf("%v", day1.Weekday())
+			if wd == "Tuesday" || wd == "Thursday" || wd == "Saturday" ||
+				wd == "Sunday" {
+				wd = ""
 			}
+			substring := u[0:10]
+			arrow := " "
+			if substring == today[0:10] {
+				arrow = " <---------------"
+			}
+			padding := ""
+			otherPadding := ""
+			if m[u[0:10]] {
+				padding = ""
+				otherPadding = "           "
+			} else {
+				otherPadding = ""
+				padding = "           "
+			}
+			fmt.Printf("%s%s%s%s%s\n", padding, substring, otherPadding, arrow, fmt.Sprintf("%40s", wd))
 			day1 = day1.AddDate(0, 0, 1)
 			if day1.After(last) {
 				break
