@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/binary"
 	"fmt"
 	"io/ioutil"
 	"math"
@@ -37,16 +36,70 @@ func PrintHelp() {
 	fmt.Println("")
 }
 
-func GetAll() []Month {
-	all := []Month{}
+func GetAll() {
+	things = []Thing{}
 	for i := 2003; i < 2031; i++ {
-		months, _ := ParseData(fmt.Sprintf("%d.txt", i))
-		all = append(all, months...)
+		ParseData2(fmt.Sprintf("%d.txt", i))
 	}
 	sort.SliceStable(things, func(i, j int) bool {
 		return things[i].Val < things[j].Val
 	})
-	return all
+	all := []Thing{}
+	for _, t := range things {
+		u := time.Unix(t.Val, 0)
+		if u.Year() == 2020 && int(u.Month()) == 12 {
+			all = append(all, t)
+		} else if u.Year() == 2022 && int(u.Month()) == 1 {
+			all = append(all, t)
+		} else if u.Year() == 2021 {
+			all = append(all, t)
+		}
+	}
+	sort.SliceStable(all, func(i, j int) bool {
+		return all[i].Val < all[j].Val
+	})
+	fmt.Println(all)
+	/*
+		prev := int64(0)
+		prevMonth := int(1)
+		u := time.Now()
+		delta := int64(0)
+		deltas := []Delta{}
+		times := []time.Time{}
+		for _, t := range things {
+			//fmt.Println(t.Val, t.Text)
+			u = time.Unix(t.Val, 0)
+			if int(u.Month()) != prevMonth {
+				var m Month
+				if len(times) == 3 {
+					m = handleMonth(&times[0], &times[1], &times[2])
+				} else if len(times) == 2 {
+					m = handleMonth(&times[0], &times[1], nil)
+				}
+				months = append(months, m)
+				//fmt.Println(prevMonth, times)
+				times = []time.Time{}
+			}
+			times = append(times, u)
+			if prev > 0 {
+				delta = t.Val - prev
+				d := NewDelta(int(delta), t.Text, int(u.Month()))
+				d.Time = u
+				deltas = append(deltas, d)
+			}
+
+			prev = t.Val
+			prevMonth = int(u.Month())
+		}
+		//fmt.Println(prevMonth, times)
+		var m Month
+		if len(times) == 3 {
+			m = handleMonth(&times[0], &times[1], &times[2])
+		} else if len(times) == 2 {
+			m = handleMonth(&times[0], &times[1], nil)
+		}
+		months = append(months, m)
+	*/
 }
 
 func main() {
@@ -73,52 +126,12 @@ func main() {
 	}
 
 	if command == "parse" {
-		times := []float64{}
-		for _, m := range GetAll() {
-			//fmt.Println(m.Event1Unix, m.Event2Unix, m.Event3Unix)
-			if m.Event1Unix > 0 {
-				times = append([]float64{float64(m.Event1Unix)}, times...)
-			}
-			if m.Event2Unix > 0 {
-				times = append([]float64{float64(m.Event2Unix)}, times...)
-			}
-			if m.Event3Unix > 0 {
-				times = append([]float64{float64(m.Event3Unix)}, times...)
-			}
-		}
-		sort.Float64s(times)
-		prevTime := int64(0)
-		for _, t := range times {
-			if prevTime > 0 {
-				delta := int64(t) - prevTime
-				//fmt.Println(int64(t), prevTime, delta)
-				if delta < 0 {
-					delta = prevTime - int64(t)
-					//fmt.Println("-1", t, prevTime, delta)
-				}
-				fmt.Println(delta / 3600)
-				//deltaString := fmt.Sprintf("%d", delta)
-				//digit := AsciiByteToBase9(deltaString)
-				//fmt.Println(deltaString)
-			}
-			prevTime = int64(t)
-		}
 	} else if command == "images" {
 		//MakeImages(myimage)
 	} else if command == "side" {
-		y, _ := strconv.Atoi(argMap["year"])
-		_, deltas1 := ParseData(fmt.Sprintf("%d.txt", y))
-		things = []Thing{}
-		_, deltas2 := ParseData(fmt.Sprintf("%d.txt", y-1))
-		things = []Thing{}
-		_, deltas3 := ParseData(fmt.Sprintf("%d.txt", y+1))
-		deltas := append([]Delta{deltas2[len(deltas2)-1]}, deltas1...)
-		deltas = append(deltas, deltas3[0])
-		MakeSides(deltas, fmt.Sprintf("%d", y))
-		//for i := 2003; i < 2031; i++ {
-		//		MakeSides(fmt.Sprintf("%d", i))
-		//	things = []Thing{}
-		//	}
+		//y, _ := strconv.Atoi(argMap["year"])
+		GetAll()
+		//MakeSides(deltas, fmt.Sprintf("%d", y))
 	} else if command == "wave" {
 		_, deltas := ParseData(argMap["year"] + ".txt")
 		prevDays := 0.0
@@ -176,65 +189,8 @@ func main() {
 			prevDays = days
 		}
 	} else if command == "debug" {
-		all := GetAll()
-		encList := []string{}
-		prev := int64(0)
-		//prevDigit := byte(0)
-		for _, t := range things {
-			digit := byte(0)
-			if prev > 0 {
-				delta := t.Val - prev
-				deltaString := fmt.Sprintf("%d", delta)
-				last := deltaString[1 : len(deltaString)-1]
-				lastInt, _ := strconv.Atoi(last)
-
-				bs := make([]byte, 4)
-				binary.LittleEndian.PutUint32(bs, uint32(lastInt))
-				//enc := b64.StdEncoding.EncodeToString(bs)
-
-				digit = AsciiByteToBase9(deltaString)
-				encList = append(encList, fmt.Sprintf("%d", digit))
-				//encList = append(encList, enc[0:len(enc)-5])
-				fmt.Printf("\"%s\",\"%.6f\"\n",
-					t.Text,
-					float64(delta)/86400.0)
-				/*
-					fmt.Printf("%d  %s   %35s    %.6f _%d_\n",
-						delta,
-						enc[0:len(enc)-5],
-						t.Text,
-						float64(delta)/86400.0,
-						digit)
-						fmt.Printf("%d  %s   %35s    %.6f _%d_\n",
-							delta,
-							fmt.Sprintf("%d-%d", bs[0], bs[1]),
-							t.Text,
-							float64(delta)/86400.0,
-							digit)*/
-			}
-			prev = t.Val
-			//prevDigit = digit
-		}
-
-		/*
-			for _, e := range encList {
-				if e == "3" {
-					fmt.Printf("%s ", ".")
-				} else if e == "6" {
-					fmt.Printf("%s ", "*")
-				} else {
-					fmt.Printf("%s ", " ")
-				}
-			}
-			fmt.Println("")
-		*/
-		fmt.Println(len(all))
 	} else if command == "next" {
-		all := GetAll()
-		fmt.Println(len(all))
 	} else if command == "prev" {
-		all := GetAll()
-		fmt.Println(len(all))
 	} else if command == "today" {
 		months, _ := ParseData("2021.txt")
 		today := time.Now()
@@ -253,6 +209,66 @@ func main() {
 	}
 }
 
+func ParseData2(f string) {
+	timeZone, _ := time.LoadLocation("America/Phoenix")
+
+	months = []Month{}
+
+	b, _ := ioutil.ReadFile(f)
+	s := string(b)
+	monthInt := 0
+	year := ""
+	for _, line := range strings.Split(s, "\n") {
+		//2022 February 16 16:59 UTC
+		tokens := strings.Split(line, " ")
+		if len(tokens) < 4 {
+			break
+		}
+		year = tokens[0]
+		yearInt, _ := strconv.Atoi(year)
+		month := tokens[1]
+		if month == "January" {
+			monthInt = 1
+		} else if month == "February" {
+			monthInt = 2
+		} else if month == "March" {
+			monthInt = 3
+		} else if month == "April" {
+			monthInt = 4
+		} else if month == "May" {
+			monthInt = 5
+		} else if month == "June" {
+			monthInt = 6
+		} else if month == "July" {
+			monthInt = 7
+		} else if month == "August" {
+			monthInt = 8
+		} else if month == "September" {
+			monthInt = 9
+		} else if month == "October" {
+			monthInt = 10
+		} else if month == "November" {
+			monthInt = 11
+		} else if month == "December" {
+			monthInt = 12
+		}
+		day := tokens[2]
+		dayInt, _ := strconv.Atoi(day)
+		hourMin := tokens[3]
+		tokens = strings.Split(hourMin, ":")
+		hour := tokens[0]
+		hourInt, _ := strconv.Atoi(hour)
+		min := tokens[1]
+		minInt, _ := strconv.Atoi(min)
+
+		eventDate := time.Date(yearInt, time.Month(monthInt), dayInt, hourInt, minInt, 0, 0, timeZone)
+		//fmt.Println(line, eventDate.Unix())
+		thing := Thing{}
+		thing.Text = line
+		thing.Val = eventDate.Unix()
+		things = append(things, thing)
+	}
+}
 func ParseData(f string) ([]Month, []Delta) {
 	timeZone, _ := time.LoadLocation("America/Phoenix")
 
