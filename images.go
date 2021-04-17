@@ -11,7 +11,7 @@ import (
 
 func MakeImage(myimage *image.RGBA, i int, val float64, digit byte, month, day int) {
 	//fmt.Println(i, oneDigit, digit, month, day)
-	ity := 0
+	ity := 100
 	if val < 14.1 && val >= 14.0 {
 		ity = 46
 	} else if val < 14.2 && val >= 14.1 {

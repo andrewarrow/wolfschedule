@@ -22,7 +22,7 @@ func MakeSides(year string) {
 	mapByOne = map[string][]DigitAndIndex{}
 	_, deltas := ParseData(year + ".txt")
 
-	myimage := image.NewRGBA(image.Rect(0, 0, 2350, 1450))
+	myimage := image.NewRGBA(image.Rect(0, 0, 2430, 1450))
 	mygreen := color.RGBA{0, 0, 0, 255}
 
 	draw.Draw(myimage, myimage.Bounds(), &image.Uniform{mygreen}, image.ZP, draw.Src)
@@ -33,7 +33,7 @@ func MakeSides(year string) {
 		MakeImage(myimage, i, days, digit, int(d.Time.Month()), d.Time.Day())
 		mapByOne[oneDigit] = append(mapByOne[oneDigit], DigitAndIndex{digit, i})
 	}
-	myfile, _ := os.Create(fmt.Sprintf(year + ".jpg"))
+	myfile, _ := os.Create(fmt.Sprintf("video/%s.jpg", year))
 	jpeg.Encode(myfile, myimage, &jpeg.Options{jpeg.DefaultQuality})
 
 	fmt.Println("16|")
