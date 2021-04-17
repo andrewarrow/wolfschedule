@@ -131,6 +131,7 @@ func main() {
 	} else if command == "side" {
 		y, _ := strconv.Atoi(argMap["year"])
 		now := time.Now()
+		now = now.AddDate(0, 0, -1)
 		today := fmt.Sprintf("%v", now)
 		all := GetAll(y)
 		m := map[string]bool{}
@@ -147,21 +148,23 @@ func main() {
 				wd == "Sunday" {
 				wd = ""
 			}
+
+			col1 := "" // event date
+			col2 := "" // normal date
+			col3 := "" // arrow
+			col4 := "" // wd
+
 			substring := u[0:10]
-			arrow := " "
-			if substring == today[0:10] {
-				arrow = " <---------------"
-			}
-			padding := ""
-			otherPadding := ""
-			if m[u[0:10]] {
-				padding = ""
-				otherPadding = "           "
+			if m[substring] {
+				col1 = substring
 			} else {
-				otherPadding = ""
-				padding = "           "
+				col2 = substring
 			}
-			fmt.Printf("%s%s%s%s%s\n", padding, substring, otherPadding, arrow, fmt.Sprintf("%40s", wd))
+			if substring == today[0:10] {
+				col3 = " <-------------"
+			}
+			col4 = wd
+			fmt.Printf("%10s %10s%20s%30s\n", col1, col2, col3, col4)
 			day1 = day1.AddDate(0, 0, 1)
 			if day1.After(last) {
 				break
