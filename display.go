@@ -19,8 +19,8 @@ func DisplayCurrentDay(year string, add int) int64 {
 		u := fmt.Sprintf("%v", time.Unix(t.Val, 0))
 		m[u[0:10]] = t.Val
 	}
-	day1 := now.AddDate(0, 0, -15)
-	b1 := day1.AddDate(0, 0, +30)
+	day1 := now.AddDate(0, 0, -25)
+	b1 := day1.AddDate(0, 0, +38)
 	last := int64(0)
 	for {
 		u := fmt.Sprintf("%v", day1)
