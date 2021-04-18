@@ -104,6 +104,9 @@ func main() {
 	} else if strings.HasPrefix(command, "--year") {
 		//MakeImages(myimage)
 		DisplayCurrentDay(argMap["year"], 0)
+	} else if strings.HasPrefix(command, "-") {
+		add, _ := strconv.Atoi(command)
+		DisplayCurrentDay(argMap["year"], add)
 	} else if strings.HasPrefix(command, "+") {
 		//MakeImages(myimage)
 		add, _ := strconv.Atoi(command[1:])

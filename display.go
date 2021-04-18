@@ -20,7 +20,7 @@ func DisplayCurrentDay(year string, add int) {
 		m[u[0:10]] = true
 	}
 	day1 := now.AddDate(0, 0, -15)
-	b1 := now.AddDate(0, 0, +15)
+	b1 := day1.AddDate(0, 0, +30)
 	for {
 		u := fmt.Sprintf("%v", day1)
 		wd := fmt.Sprintf("%v", day1.Weekday())
