@@ -5,7 +5,7 @@ import (
 	"time"
 )
 
-func DisplayCurrentDay(year string, add int) {
+func DisplayCurrentDay(year string, add int) int64 {
 	//y, _ := strconv.Atoi(year)
 	now := time.Now()
 	if year == "" {
@@ -14,13 +14,14 @@ func DisplayCurrentDay(year string, add int) {
 	now = now.AddDate(0, 0, add)
 	today := fmt.Sprintf("%v", now)
 	all := GetAll()
-	m := map[string]bool{}
+	m := map[string]int64{}
 	for _, t := range all {
 		u := fmt.Sprintf("%v", time.Unix(t.Val, 0))
-		m[u[0:10]] = true
+		m[u[0:10]] = t.Val
 	}
 	day1 := now.AddDate(0, 0, -15)
 	b1 := day1.AddDate(0, 0, +30)
+	last := int64(0)
 	for {
 		u := fmt.Sprintf("%v", day1)
 		wd := fmt.Sprintf("%v", day1.Weekday())
@@ -35,8 +36,9 @@ func DisplayCurrentDay(year string, add int) {
 		col4 := "" // wd
 
 		substring := u[0:10]
-		if m[substring] {
+		if m[substring] > 0 {
 			col1 = substring
+			last = m[substring]
 		} else {
 			col2 = substring
 		}
@@ -50,4 +52,5 @@ func DisplayCurrentDay(year string, add int) {
 			break
 		}
 	}
+	return last
 }

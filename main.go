@@ -105,14 +105,20 @@ func main() {
 		//MakeImages(myimage)
 		DisplayCurrentDay(argMap["year"], 0)
 	} else if strings.HasPrefix(command, "-f") {
-		DisplayCurrentDay(argMap["year"], 0)
+		last := DisplayCurrentDay(argMap["year"], 0)
 		fmt.Println("")
-		fmt.Printf("Next Event in: 4.5 days")
+		delta := last - time.Now().Unix()
+		days := float64(delta) / 86400
+		remainder := delta % 86400
+		fmt.Printf("Next Event in: %0.2f day(s), %d second(s)", days, remainder)
 		for {
 			time.Sleep(time.Second * 1)
-			backspace := []byte{8, 8, 8, 8, 8, 8, 8, 8}
+			delta = last - time.Now().Unix()
+			days = float64(delta) / 86400
+			remainder = delta % 86400
+			backspace := []byte{8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8}
 			fmt.Printf("%s", string(backspace))
-			fmt.Printf("4.6 days")
+			fmt.Printf("%0.2f day(s), %d second(s)", days, remainder)
 		}
 	} else if strings.HasPrefix(command, "-") {
 		add, _ := strconv.Atoi(command)
