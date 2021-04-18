@@ -129,6 +129,8 @@ func main() {
 		DisplayCurrentDay(argMap["year"], add)
 	} else if command == "day" {
 		DisplayCurrentDay(argMap["year"], 0)
+	} else if command == "pdf" {
+		MakePDF("2021")
 	} else if command == "earth" {
 		EarthAge()
 	} else if command == "wave" {
