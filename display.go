@@ -2,6 +2,11 @@ package main
 
 import (
 	"fmt"
+	"image"
+	"image/color"
+	"image/draw"
+	"image/jpeg"
+	"os"
 	"time"
 )
 
@@ -91,6 +96,9 @@ func MakePDF(year string, month int) {
 	day1, _ = time.Parse(special, fmt.Sprintf("%02d/01/%s 00:00", month, year))
 	day1 = day1.AddDate(0, 0, -5)
 
+	myimage := image.NewRGBA(image.Rect(0, 0, 1000, 1500))
+	mygreen := color.RGBA{255, 255, 255, 255}
+	draw.Draw(myimage, myimage.Bounds(), &image.Uniform{mygreen}, image.ZP, draw.Src)
 	for {
 		u := fmt.Sprintf("%v", day1)
 		wd := fmt.Sprintf("%v", day1.Weekday())
@@ -115,11 +123,18 @@ func MakePDF(year string, month int) {
 		buff = append(buff, thing)
 		fmt.Println(thing)
 
+		red_rect := image.Rect(60, 80, 520, 560)
+		myred := color.RGBA{0, 0, 0, 255}
+		draw.Draw(myimage, red_rect, &image.Uniform{myred}, image.ZP, draw.Src)
+
 		if eventHappened == 3 && m[substring] == "." {
 			break
 		}
 
 		day1 = day1.AddDate(0, 0, 1)
 	}
+
+	myfile, _ := os.Create(fmt.Sprintf("html/%d.jpg", month))
+	jpeg.Encode(myfile, myimage, &jpeg.Options{jpeg.DefaultQuality})
 
 }
