@@ -104,6 +104,16 @@ func main() {
 	} else if strings.HasPrefix(command, "--year") {
 		//MakeImages(myimage)
 		DisplayCurrentDay(argMap["year"], 0)
+	} else if strings.HasPrefix(command, "-f") {
+		DisplayCurrentDay(argMap["year"], 0)
+		fmt.Println("")
+		fmt.Printf("Next Event in: 4.5 days")
+		for {
+			time.Sleep(time.Second * 1)
+			backspace := []byte{8, 8, 8, 8, 8, 8, 8, 8}
+			fmt.Printf("%s", string(backspace))
+			fmt.Printf("4.6 days")
+		}
 	} else if strings.HasPrefix(command, "-") {
 		add, _ := strconv.Atoi(command)
 		DisplayCurrentDay(argMap["year"], add)
@@ -113,6 +123,8 @@ func main() {
 		DisplayCurrentDay(argMap["year"], add)
 	} else if command == "day" {
 		DisplayCurrentDay(argMap["year"], 0)
+	} else if command == "earth" {
+		EarthAge()
 	} else if command == "wave" {
 		_, deltas := ParseData(argMap["year"] + ".txt")
 		prevDays := 0.0
