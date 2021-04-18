@@ -130,11 +130,7 @@ func main() {
 	} else if command == "day" {
 		DisplayCurrentDay(argMap["year"], 0)
 	} else if command == "pdf" {
-		MakePDF("2021", 10)
-		fmt.Println("-------------------------")
-		MakePDF("2021", 11)
-		fmt.Println("-------------------------")
-		MakePDF("2021", 12)
+		MakePDF("2021", 4)
 		fmt.Println("-------------------------")
 	} else if command == "earth" {
 		EarthAge()

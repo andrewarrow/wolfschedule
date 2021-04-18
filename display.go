@@ -8,6 +8,10 @@ import (
 	"image/jpeg"
 	"os"
 	"time"
+
+	"golang.org/x/image/font"
+	"golang.org/x/image/font/inconsolata"
+	"golang.org/x/image/math/fixed"
 )
 
 func DisplayCurrentDay(year string, add int) int64 {
@@ -96,9 +100,11 @@ func MakePDF(year string, month int) {
 	day1, _ = time.Parse(special, fmt.Sprintf("%02d/01/%s 00:00", month, year))
 	day1 = day1.AddDate(0, 0, -5)
 
-	myimage := image.NewRGBA(image.Rect(0, 0, 1000, 1500))
+	myimage := image.NewRGBA(image.Rect(0, 0, 1000, 2000))
 	mygreen := color.RGBA{255, 255, 255, 255}
 	draw.Draw(myimage, myimage.Bounds(), &image.Uniform{mygreen}, image.ZP, draw.Src)
+	row := 0
+	offset := 50
 	for {
 		u := fmt.Sprintf("%v", day1)
 		wd := fmt.Sprintf("%v", day1.Weekday())
@@ -115,6 +121,9 @@ func MakePDF(year string, month int) {
 		if m[substring] == "0" {
 			col1 = substring
 			eventHappened++
+			red_rect := image.Rect(50, 10+(row*50)+offset, 100, 40+(row*50)+offset)
+			myred := color.RGBA{0, 90, 80, 255}
+			draw.Draw(myimage, red_rect, &image.Uniform{myred}, image.ZP, draw.Src)
 		} else {
 			col2 = substring
 		}
@@ -123,18 +132,33 @@ func MakePDF(year string, month int) {
 		buff = append(buff, thing)
 		fmt.Println(thing)
 
-		red_rect := image.Rect(60, 80, 520, 560)
+		red_rect := image.Rect(50, 10+(row*50)+offset, 900, 11+(row*50)+offset)
 		myred := color.RGBA{0, 0, 0, 255}
 		draw.Draw(myimage, red_rect, &image.Uniform{myred}, image.ZP, draw.Src)
+		addLabel(myimage, 500, 10+(row*50)+offset, col4)
 
 		if eventHappened == 3 && m[substring] == "." {
 			break
 		}
 
 		day1 = day1.AddDate(0, 0, 1)
+		row++
 	}
 
 	myfile, _ := os.Create(fmt.Sprintf("html/%d.jpg", month))
 	jpeg.Encode(myfile, myimage, &jpeg.Options{jpeg.DefaultQuality})
 
+}
+
+func addLabel(img *image.RGBA, x, y int, label string) {
+	col := color.RGBA{25, 25, 25, 255}
+	point := fixed.Point26_6{fixed.Int26_6(x * 64), fixed.Int26_6(y * 64)}
+
+	d := &font.Drawer{
+		Dst:  img,
+		Src:  image.NewUniform(col),
+		Face: inconsolata.Bold8x16,
+		Dot:  point,
+	}
+	d.DrawString(label)
 }
