@@ -36,7 +36,7 @@ func PrintHelp() {
 	fmt.Println("")
 }
 
-func GetAll(y int) []Thing {
+func GetAll() []Thing {
 	things = []Thing{}
 	for i := 2003; i < 2031; i++ {
 		ParseData2(fmt.Sprintf("%d.txt", i))
@@ -44,21 +44,7 @@ func GetAll(y int) []Thing {
 	sort.SliceStable(things, func(i, j int) bool {
 		return things[i].Val < things[j].Val
 	})
-	all := []Thing{}
-	for _, t := range things {
-		u := time.Unix(t.Val, 0)
-		if u.Year() == y-1 && int(u.Month()) == 12 {
-			all = append(all, t)
-		} else if u.Year() == y+1 && int(u.Month()) == 1 {
-			all = append(all, t)
-		} else if u.Year() == y {
-			all = append(all, t)
-		}
-	}
-	sort.SliceStable(all, func(i, j int) bool {
-		return all[i].Val < all[j].Val
-	})
-	return all
+	return things
 	/*
 		prev := int64(0)
 		prevMonth := int(1)
