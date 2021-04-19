@@ -155,6 +155,8 @@ func main() {
 		MakePDF("2022", 12)
 	} else if command == "earth" {
 		EarthAge()
+	} else if command == "pattern" {
+		ParseForPattern()
 	} else if command == "wave" {
 		_, deltas := ParseData(argMap["year"] + ".txt")
 		prevDays := 0.0
