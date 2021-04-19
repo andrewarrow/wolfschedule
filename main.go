@@ -108,13 +108,17 @@ func main() {
 		delta := last - time.Now().Unix()
 		days := float64(delta) / 86400
 		remainder := delta % 86400
-		fmt.Printf("Next Event in: %0.2f day(s), %d second(s)", days, remainder)
+		s := fmt.Sprintf("%0.2f day(s), %d second(s)", days, remainder)
+		fmt.Printf("Next Event in: %s", s)
 		for {
 			time.Sleep(time.Second * 1)
 			delta = last - time.Now().Unix()
 			days = float64(delta) / 86400
 			remainder = delta % 86400
-			backspace := []byte{8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8}
+			backspace := []byte{}
+			for i := 0; i < len(s); i++ {
+				backspace = append(backspace, 8)
+			}
 			fmt.Printf("%s", string(backspace))
 			fmt.Printf("%0.2f day(s), %d second(s)", days, remainder)
 		}
