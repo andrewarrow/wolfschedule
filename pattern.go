@@ -6,8 +6,6 @@ import (
 	"strconv"
 	"strings"
 	"time"
-
-	"github.com/otiai10/primes"
 )
 
 func ParseForPattern2() {
@@ -52,13 +50,30 @@ func ParseForPattern() {
 			//maybe := 90600
 			//fmt.Println(delta, float64(delta)/86400, float64(delta)/float64(maybe))
 			deltaString := fmt.Sprintf("%d", delta)
-			factors := primes.Factorize(delta).All()
 			digit := AsciiByteToBase9(deltaString)
-			deltaString = fmt.Sprintf("%d", factors[len(factors)-1])
-			fmt.Println(tokens[0], delta, digit, factors[len(factors)-1], AsciiByteToBase9(deltaString))
+			fmt.Println(tokens[0], delta, digit, delta/60)
 		}
 
 		prevTime = ts
+	}
+	fmt.Println("")
+	fmt.Println("")
+}
+func ParseForPattern4() {
+
+	b, _ := ioutil.ReadFile("1970_2021.txt")
+	s := string(b)
+	for _, line := range strings.Split(s, "\n") {
+		tokens := strings.Split(line, " ")
+		if len(tokens) == 1 {
+			continue
+		}
+		delta := tokens[4]
+		deltaInt, _ := strconv.Atoi(delta)
+		factor := tokens[6]
+		factorInt, _ := strconv.Atoi(factor)
+		tick := float64(deltaInt) / float64(factorInt)
+		fmt.Println(tokens[0], tick/60)
 	}
 	fmt.Println("")
 	fmt.Println("")
