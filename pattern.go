@@ -55,7 +55,7 @@ func ParseForPattern() {
 			factors := primes.Factorize(delta).All()
 			digit := AsciiByteToBase9(deltaString)
 			deltaString = fmt.Sprintf("%d", factors[len(factors)-1])
-			fmt.Println(delta, digit, factors[len(factors)-1], AsciiByteToBase9(deltaString))
+			fmt.Println(tokens[0], delta, digit, factors[len(factors)-1], AsciiByteToBase9(deltaString))
 		}
 
 		prevTime = ts
