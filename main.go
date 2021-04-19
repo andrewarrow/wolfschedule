@@ -38,9 +38,7 @@ func PrintHelp() {
 
 func GetAll() []Thing {
 	things = []Thing{}
-	for i := 2003; i < 2031; i++ {
-		ParseData2(fmt.Sprintf("%d.txt", i))
-	}
+	ParseData2("1970_2100.csv")
 	sort.SliceStable(things, func(i, j int) bool {
 		return things[i].Val < things[j].Val
 	})
@@ -235,59 +233,17 @@ func main() {
 }
 
 func ParseData2(f string) {
-	timeZone, _ := time.LoadLocation("America/Phoenix")
-
 	months = []Month{}
 
 	b, _ := ioutil.ReadFile(f)
 	s := string(b)
-	monthInt := 0
-	year := ""
 	for _, line := range strings.Split(s, "\n") {
-		//2022 February 16 16:59 UTC
-		tokens := strings.Split(line, " ")
-		if len(tokens) < 4 {
+		tokens := strings.Split(line, ",")
+		if len(tokens) < 3 {
 			break
 		}
-		year = tokens[0]
-		yearInt, _ := strconv.Atoi(year)
-		month := tokens[1]
-		if month == "January" {
-			monthInt = 1
-		} else if month == "February" {
-			monthInt = 2
-		} else if month == "March" {
-			monthInt = 3
-		} else if month == "April" {
-			monthInt = 4
-		} else if month == "May" {
-			monthInt = 5
-		} else if month == "June" {
-			monthInt = 6
-		} else if month == "July" {
-			monthInt = 7
-		} else if month == "August" {
-			monthInt = 8
-		} else if month == "September" {
-			monthInt = 9
-		} else if month == "October" {
-			monthInt = 10
-		} else if month == "November" {
-			monthInt = 11
-		} else if month == "December" {
-			monthInt = 12
-		}
-		day := tokens[2]
-		dayInt, _ := strconv.Atoi(day)
-		hourMin := tokens[3]
-		tokens = strings.Split(hourMin, ":")
-		hour := tokens[0]
-		hourInt, _ := strconv.Atoi(hour)
-		min := tokens[1]
-		minInt, _ := strconv.Atoi(min)
-
-		eventDate := time.Date(yearInt, time.Month(monthInt), dayInt, hourInt, minInt, 0, 0, timeZone)
-		//fmt.Println(line, eventDate.Unix())
+		ts, _ := strconv.ParseInt(tokens[1], 10, 64)
+		eventDate := time.Unix(ts, 0)
 		thing := Thing{}
 		thing.Text = line
 		thing.Val = eventDate.Unix()

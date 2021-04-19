@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -58,7 +59,9 @@ func main() {
 		for i, line := range buff3 {
 			if i%2 != 0 {
 				test, _ := time.Parse("January 2, 2006 15:04 PM", line)
-				fmt.Println(test, test.Unix())
+				deltaString := fmt.Sprintf("%d", test.Unix())
+				digit := AsciiByteToBase9(deltaString)
+				fmt.Printf("%s,%d,%d\n", test, test.Unix(), digit)
 			}
 		}
 	}
@@ -74,4 +77,21 @@ func main2() {
 			break
 		}
 	}
+}
+func AsciiByteToBase9(a string) byte {
+
+	sum := byte(0)
+	for i := range a {
+
+		word := a[i : i+1]
+		t, _ := strconv.Atoi(word)
+
+		sum += byte(t)
+	}
+	strSum := fmt.Sprintf("%d", sum)
+	if len(strSum) > 1 {
+		return AsciiByteToBase9(strSum)
+	}
+	return sum
+
 }
