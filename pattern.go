@@ -38,6 +38,7 @@ func ParseForPattern() {
 	b, _ := ioutil.ReadFile("1970_2100.csv")
 	s := string(b)
 	prevTime := int64(0)
+	prevTick := int64(0)
 	for _, line := range strings.Split(s, "\n") {
 		tokens := strings.Split(line, ",")
 		if len(tokens) < 3 {
@@ -51,7 +52,11 @@ func ParseForPattern() {
 			//fmt.Println(delta, float64(delta)/86400, float64(delta)/float64(maybe))
 			deltaString := fmt.Sprintf("%d", delta)
 			digit := AsciiByteToBase9(deltaString)
-			fmt.Println(tokens[0], delta, digit, delta/60)
+			tick := delta / 60
+			if prevTick > 0 {
+				fmt.Println(tokens[0], delta, digit, tick, tick-prevTick)
+			}
+			prevTick = tick
 		}
 
 		prevTime = ts
