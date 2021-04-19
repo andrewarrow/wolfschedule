@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"math"
 	"strconv"
 	"strings"
 	"time"
@@ -39,7 +40,9 @@ func ParseForPattern() {
 	s := string(b)
 	prevTime := int64(0)
 	prevTick := int64(0)
-	sum := int64(0)
+	prevTickDelta := 0
+	goneNeg := false
+	// there will be sign change, first of new sign
 	for _, line := range strings.Split(s, "\n") {
 		tokens := strings.Split(line, ",")
 		if len(tokens) < 3 {
@@ -55,12 +58,19 @@ func ParseForPattern() {
 			digit := AsciiByteToBase9(deltaString)
 			tick := delta / 60
 			if prevTick > 0 {
-				sum += tick
-				fmt.Println(tokens[0], delta, digit, tick, tick-prevTick, sum)
-
-				if sum >= 297434 {
-					sum = 0
+				tickDelta := int(math.Abs(float64(tick - prevTick)))
+				meta := tickDelta - prevTickDelta
+				if goneNeg && meta >= 0 {
+					goneNeg = false
+					fmt.Println(" ")
 				}
+				if meta < 0 {
+					goneNeg = true
+				}
+				fmt.Println(tokens[0], delta, digit, tick, tickDelta, meta)
+
+				// (297501*60)/86400
+				prevTickDelta = tickDelta
 			}
 			prevTick = tick
 		}
