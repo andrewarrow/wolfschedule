@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"strings"
+	"time"
 )
 
 func main() {
@@ -49,7 +50,9 @@ func main() {
 	}
 	for i, line := range buff3 {
 		if i%2 != 0 {
-			fmt.Println(line)
+			test, err := time.Parse("January 2, 2006 15:04 PM", line)
+
+			fmt.Println(test, err)
 		}
 	}
 }
