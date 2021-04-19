@@ -1,4 +1,6 @@
 wolfschedule
 .DS_Store
+go.sum
+vendor
 mooninfo/mooninfo
 mooninfo/html.txt

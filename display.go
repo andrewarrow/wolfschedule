@@ -104,7 +104,7 @@ func MakePDF(year string, month int) {
 	mygreen := color.RGBA{255, 255, 255, 255}
 	draw.Draw(myimage, myimage.Bounds(), &image.Uniform{mygreen}, image.ZP, draw.Src)
 	row := 0
-	offset := 50
+	offset := 150
 	for {
 		u := fmt.Sprintf("%v", day1)
 		wd := fmt.Sprintf("%v", day1.Weekday())
@@ -121,8 +121,8 @@ func MakePDF(year string, month int) {
 		if m[substring] == "0" {
 			col1 = substring
 			eventHappened++
-			red_rect := image.Rect(50, 10+(row*50)+offset, 100, 40+(row*50)+offset)
-			myred := color.RGBA{0, 90, 80, 255}
+			red_rect := image.Rect(50, 10+((row-1)*50)+offset+1, 159, 60+((row-1)*50)+offset+1)
+			myred := color.RGBA{222, 128, 222, 255}
 			draw.Draw(myimage, red_rect, &image.Uniform{myred}, image.ZP, draw.Src)
 		} else {
 			col2 = substring
@@ -135,7 +135,12 @@ func MakePDF(year string, month int) {
 		red_rect := image.Rect(50, 10+(row*50)+offset, 900, 11+(row*50)+offset)
 		myred := color.RGBA{0, 0, 0, 255}
 		draw.Draw(myimage, red_rect, &image.Uniform{myred}, image.ZP, draw.Src)
-		addLabel(myimage, 500, 10+(row*50)+offset, col4)
+		addLabel(myimage, 800, 10+(row*50)+offset-10, col4)
+		if col2 != "" {
+			addLabel(myimage, 160, 10+(row*50)+offset-10+4, col2)
+		} else if col1 != "" {
+			addLabel(myimage, 60, 10+(row*50)+offset-10+4, col1)
+		}
 
 		if eventHappened == 3 && m[substring] == "." {
 			break
