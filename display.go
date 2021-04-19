@@ -147,7 +147,7 @@ func MakePDF(year string, month int) {
 			addLabel(myimage, 60+leftPush, 10+(row*rowSize)+offset-10+4, col1)
 		}
 
-		if eventHappened == 3 && m[substring] == "." {
+		if row >= 32 && int(day1Orig.Month()) != int(day1.Month()) {
 			break
 		}
 
@@ -156,7 +156,7 @@ func MakePDF(year string, month int) {
 	}
 
 	myfile, _ := os.Create(fmt.Sprintf("html/%d.jpg", month))
-	jpeg.Encode(myfile, myimage, &jpeg.Options{jpeg.DefaultQuality})
+	jpeg.Encode(myfile, myimage, &jpeg.Options{100})
 
 }
 
