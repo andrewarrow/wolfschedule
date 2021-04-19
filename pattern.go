@@ -25,9 +25,11 @@ func ParseForPattern() {
 		if prevYear > 0 && year != prevYear {
 			fmt.Println("")
 		} else {
-			fmt.Printf("%s ", tokens[2])
+			fmt.Printf("%s", tokens[2])
 		}
 
 		prevYear = year
 	}
+	fmt.Println("")
+	fmt.Println("")
 }
