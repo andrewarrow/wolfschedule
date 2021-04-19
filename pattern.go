@@ -41,6 +41,7 @@ func ParseForPattern() {
 	prevTime := int64(0)
 	prevTick := int64(0)
 	sum := int64(0)
+	lastSum := int64(0)
 	prevTickDelta := 0
 	goneNeg := false
 	// there will be sign change, first of new sign
@@ -63,16 +64,20 @@ func ParseForPattern() {
 				meta := tickDelta - prevTickDelta
 				if goneNeg && meta >= 0 {
 					goneNeg = false
-					fmt.Println(" ")
+					//	fmt.Println(" ")
+					fmt.Printf("%v %v %v %v %v %v %v %0.2f %d\n", tokens[0], delta, digit,
+						tick, tickDelta, meta, sum,
+						float64(sum*60)/86400, sum-lastSum)
+					lastSum = sum
 					sum = 0
 				}
 				sum += tick
 				if meta < 0 {
 					goneNeg = true
 				}
-				fmt.Printf("%v %v %v %v %v %v %v %0.2f\n", tokens[0], delta, digit,
-					tick, tickDelta, meta, sum,
-					float64(sum*60)/86400)
+				//fmt.Printf("%v %v %v %v %v %v %v %0.2f\n", tokens[0], delta, digit,
+				//tick, tickDelta, meta, sum,
+				//float64(sum*60)/86400)
 
 				// (297501*60)/86400
 				prevTickDelta = tickDelta
