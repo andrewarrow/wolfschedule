@@ -101,12 +101,15 @@ func MakePDF(year string, month int) {
 	day1Orig := day1
 	day1 = day1.AddDate(0, 0, -5)
 
-	myimage := image.NewRGBA(image.Rect(0, 0, 1000, 2000))
+	//2550 x 3300
+	myimage := image.NewRGBA(image.Rect(0, 0, 1275, 1650))
 	mygreen := color.RGBA{255, 255, 255, 255}
 	draw.Draw(myimage, myimage.Bounds(), &image.Uniform{mygreen}, image.ZP, draw.Src)
-	addLabel(myimage, 500, 80, fmt.Sprintf("%v %d", day1Orig.Month(), day1Orig.Year()))
+	addLabel(myimage, 650, 80, fmt.Sprintf("%v %d", day1Orig.Month(), day1Orig.Year()))
 	row := 0
-	offset := 150
+	offset := 100
+	rowSize := 40
+	leftPush := 100
 	for {
 		u := fmt.Sprintf("%v", day1)
 		wd := fmt.Sprintf("%v", day1.Weekday())
@@ -123,7 +126,7 @@ func MakePDF(year string, month int) {
 		if m[substring] == "0" {
 			col1 = substring
 			eventHappened++
-			red_rect := image.Rect(50, 10+((row-1)*50)+offset+1, 159, 60+((row-1)*50)+offset+1)
+			red_rect := image.Rect(50+leftPush, 10+((row-1)*rowSize)+offset+1, 159+leftPush, 10+rowSize+((row-1)*rowSize)+offset+1)
 			myred := color.RGBA{222, 128, 222, 255}
 			draw.Draw(myimage, red_rect, &image.Uniform{myred}, image.ZP, draw.Src)
 		} else {
@@ -134,14 +137,14 @@ func MakePDF(year string, month int) {
 		buff = append(buff, thing)
 		fmt.Println(thing)
 
-		red_rect := image.Rect(50, 10+(row*50)+offset, 900, 11+(row*50)+offset)
+		red_rect := image.Rect(50+leftPush, 10+(row*rowSize)+offset, 1200, 11+(row*rowSize)+offset)
 		myred := color.RGBA{0, 0, 0, 255}
 		draw.Draw(myimage, red_rect, &image.Uniform{myred}, image.ZP, draw.Src)
-		addLabel(myimage, 800, 10+(row*50)+offset-10, col4)
+		addLabel(myimage, 1100, 10+(row*rowSize)+offset-10, col4)
 		if col2 != "" {
-			addLabel(myimage, 160, 10+(row*50)+offset-10+4, col2)
+			addLabel(myimage, 160+leftPush, 10+(row*rowSize)+offset-10+4, col2)
 		} else if col1 != "" {
-			addLabel(myimage, 60, 10+(row*50)+offset-10+4, col1)
+			addLabel(myimage, 60+leftPush, 10+(row*rowSize)+offset-10+4, col1)
 		}
 
 		if eventHappened == 3 && m[substring] == "." {
