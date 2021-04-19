@@ -98,11 +98,13 @@ func MakePDF(year string, month int) {
 	eventHappened = 0
 	buff := []string{}
 	day1, _ = time.Parse(special, fmt.Sprintf("%02d/01/%s 00:00", month, year))
+	day1Orig := day1
 	day1 = day1.AddDate(0, 0, -5)
 
 	myimage := image.NewRGBA(image.Rect(0, 0, 1000, 2000))
 	mygreen := color.RGBA{255, 255, 255, 255}
 	draw.Draw(myimage, myimage.Bounds(), &image.Uniform{mygreen}, image.ZP, draw.Src)
+	addLabel(myimage, 500, 80, fmt.Sprintf("%v %d", day1Orig.Month(), day1Orig.Year()))
 	row := 0
 	offset := 150
 	for {
