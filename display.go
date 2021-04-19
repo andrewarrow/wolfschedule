@@ -14,7 +14,7 @@ import (
 	"golang.org/x/image/math/fixed"
 )
 
-func DisplayCurrentDay(year string, add int) int64 {
+func DisplayCurrentDay(year string, add int) (int64, int64) {
 	//y, _ := strconv.Atoi(year)
 	now := time.Now()
 	if year == "" {
@@ -31,6 +31,7 @@ func DisplayCurrentDay(year string, add int) int64 {
 	day1 := now.AddDate(0, 0, -25)
 	b1 := day1.AddDate(0, 0, +38)
 	last := int64(0)
+	other := int64(0)
 	for {
 		u := fmt.Sprintf("%v", day1)
 		wd := fmt.Sprintf("%v", day1.Weekday())
@@ -47,6 +48,7 @@ func DisplayCurrentDay(year string, add int) int64 {
 		substring := u[0:10]
 		if m[substring] > 0 {
 			col1 = substring
+			other = last
 			last = m[substring]
 		} else {
 			col2 = substring
@@ -61,7 +63,7 @@ func DisplayCurrentDay(year string, add int) int64 {
 			break
 		}
 	}
-	return last
+	return last, other
 }
 
 func MakePDF(year string, month int) {

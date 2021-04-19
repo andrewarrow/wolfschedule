@@ -103,7 +103,7 @@ func main() {
 		//MakeImages(myimage)
 		DisplayCurrentDay(argMap["year"], 0)
 	} else if strings.HasPrefix(command, "-f") {
-		last := DisplayCurrentDay(argMap["year"], 0)
+		last, _ := DisplayCurrentDay(argMap["year"], 0)
 		fmt.Println("")
 		delta := last - time.Now().Unix()
 		days := float64(delta) / 86400
