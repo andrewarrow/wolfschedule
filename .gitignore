@@ -2,5 +2,6 @@ wolfschedule
 .DS_Store
 go.sum
 vendor
+calendar12/calendar12
 mooninfo/mooninfo
 mooninfo/html.txt
