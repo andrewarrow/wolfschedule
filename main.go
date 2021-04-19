@@ -130,6 +130,10 @@ func main() {
 	} else if command == "day" {
 		DisplayCurrentDay(argMap["year"], 0)
 	} else if command == "pdf" {
+		MakePDF("2021", 1)
+		MakePDF("2021", 2)
+		MakePDF("2021", 3)
+		MakePDF("2021", 4)
 		MakePDF("2021", 5)
 		MakePDF("2021", 6)
 		MakePDF("2021", 7)
