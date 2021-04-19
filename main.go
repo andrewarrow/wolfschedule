@@ -109,21 +109,23 @@ func main() {
 		days := float64(delta) / 86400
 		seconds := delta % 86400
 		distance := last - other
-		per := float64(distance)
-		per = 0.75
-		s := fmt.Sprintf("%0.2f day(s), %d second(s) %% %0.2f", days, seconds, per)
+		done := distance - delta
+		per := float64(done) / float64(distance)
+		s := fmt.Sprintf("%0.2f day(s), %d second(s) %% %0.6f", days, seconds, per)
 		fmt.Printf("Next Event in: %s", s)
 		for {
 			time.Sleep(time.Second * 1)
 			delta = last - time.Now().Unix()
 			days = float64(delta) / 86400
 			seconds = delta % 86400
+			done = distance - delta
+			per = float64(done) / float64(distance)
 			backspace := []byte{}
 			for i := 0; i < len(s); i++ {
 				backspace = append(backspace, 8)
 			}
 			fmt.Printf("%s", string(backspace))
-			fmt.Printf("%0.2f day(s), %d second(s) %% %0.2f", days, seconds, per)
+			fmt.Printf("%0.2f day(s), %d second(s) %% %0.6f", days, seconds, per)
 		}
 	} else if strings.HasPrefix(command, "-") {
 		add, _ := strconv.Atoi(command)
