@@ -142,6 +142,19 @@ func main() {
 		MakePDF("2021", 10)
 		MakePDF("2021", 11)
 		MakePDF("2021", 12)
+
+		MakePDF("2022", 1)
+		MakePDF("2022", 2)
+		MakePDF("2022", 3)
+		MakePDF("2022", 4)
+		MakePDF("2022", 5)
+		MakePDF("2022", 6)
+		MakePDF("2022", 7)
+		MakePDF("2022", 8)
+		MakePDF("2022", 9)
+		MakePDF("2022", 10)
+		MakePDF("2022", 11)
+		MakePDF("2022", 12)
 	} else if command == "earth" {
 		EarthAge()
 	} else if command == "wave" {

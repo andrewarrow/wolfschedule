@@ -155,7 +155,7 @@ func MakePDF(year string, month int) {
 		row++
 	}
 
-	myfile, _ := os.Create(fmt.Sprintf("html/%d.jpg", month))
+	myfile, _ := os.Create(fmt.Sprintf("html/%s_%d.jpg", year, month))
 	jpeg.Encode(myfile, myimage, &jpeg.Options{100})
 
 }
