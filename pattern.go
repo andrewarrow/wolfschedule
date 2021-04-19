@@ -39,6 +39,7 @@ func ParseForPattern() {
 	s := string(b)
 	prevTime := int64(0)
 	prevTick := int64(0)
+	sum := int64(0)
 	for _, line := range strings.Split(s, "\n") {
 		tokens := strings.Split(line, ",")
 		if len(tokens) < 3 {
@@ -54,7 +55,12 @@ func ParseForPattern() {
 			digit := AsciiByteToBase9(deltaString)
 			tick := delta / 60
 			if prevTick > 0 {
-				fmt.Println(tokens[0], delta, digit, tick, tick-prevTick)
+				sum += tick
+				fmt.Println(tokens[0], delta, digit, tick, tick-prevTick, sum)
+
+				if sum >= 297434 {
+					sum = 0
+				}
 			}
 			prevTick = tick
 		}

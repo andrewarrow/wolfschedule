@@ -111,6 +111,8 @@ func main() {
 		distance := last - other
 		done := distance - delta
 		per := float64(done) / float64(distance)
+		moreEvents := 4
+		fmt.Printf("%d more event(s) until end of ~207 day cycle\n", moreEvents)
 		s := fmt.Sprintf("%0.2f day(s), %d second(s) %% %0.6f", days, seconds, per)
 		fmt.Printf("Next Event in: %s", s)
 		for {
