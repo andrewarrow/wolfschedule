@@ -29,7 +29,7 @@ func DisplayCurrentDay(year string, add int) (int64, int64) {
 		m[u[0:10]] = t.Val
 	}
 	day1 := now.AddDate(0, 0, -25)
-	b1 := day1.AddDate(0, 0, +38)
+	b1 := day1.AddDate(0, 0, +40)
 	last := int64(0)
 	other := int64(0)
 	for {
