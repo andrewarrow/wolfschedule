@@ -6,6 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
 
     <title>wolfschedule</title>
+
+     <script src="wasm_exec.js"></script>
+     <script>
+       const go = new Go();
+WebAssembly.instantiateStreaming(fetch("wolf.wasm"), go.importObject).then((result) => {
+  go.run(result.instance);
+});
+     </script>
+
   </head>
   <body style="background-color: black;">
     <div style="color: rgb(0, 200, 0); font-family: courier;" id="ne">
@@ -13,14 +22,14 @@
     </div>
 <script>
 function GetUpdate() {
-        console.log("-----------");
+  var word = wolfData("hi");
   var ne = document.getElementById("ne");
   ne.innerHTML = '<pre>2021-04-26                                                       Monday<br/>' +
 '           2021-04-27                                                  <br/>' +
 '           2021-04-28                                         Wednesday<br/>' +
 '           2021-04-29                                                  <br/>' +
 '           2021-04-30                                            Friday<br/>' +
-'           2021-05-01      <-------------   <br/></pre>';
+'           2021-05-01      <-------------   <br/></pre>'+word;
 }
 
 setInterval(GetUpdate, 1000);
