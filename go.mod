@@ -1,4 +1,4 @@
-module wolfschedule
+module github.com/andrewarrow/wolfschedule
 
 go 1.16
 

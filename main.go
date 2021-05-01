@@ -7,7 +7,8 @@ import (
 	"strconv"
 	"strings"
 	"time"
-	"wolfschedule/parse"
+
+	"github.com/andrewarrow/wolfschedule/parse"
 )
 
 var curMonth = Month{}

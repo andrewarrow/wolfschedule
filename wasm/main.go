@@ -6,6 +6,8 @@ import (
 	"io/fs"
 	"syscall/js"
 	"time"
+
+	"github.com/andrewarrow/wolfschedule/parse"
 )
 
 //go:embed *.csv
@@ -30,13 +32,9 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	f, err := fsys.Open("1970_2100.csv")
-	if err != nil {
-		panic(err)
-	}
-	buff := make([]byte, 138492)
-	f.Read(buff)
-	fmt.Println(string(buff))
+
+	fmt.Println(fsys)
+	parse.GetAll()
 
 	for {
 		time.Sleep(time.Second * 1)
