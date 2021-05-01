@@ -19,7 +19,20 @@ type Thing struct {
 var things = []Thing{}
 
 func ForHTML() string {
-	_, _, buff := DisplayCurrentDay("2021", 0)
+	last, other, buff := DisplayCurrentDay("2021", 0)
+	delta := last - time.Now().Unix() // left to go
+	days := float64(delta) / 86400
+	seconds := delta % 86400
+	distance := last - other
+	done := distance - delta
+	per := float64(done) / float64(distance)
+	//moreCycles := 19
+	//moreEvents := 4
+	buff = append(buff, "<br/>")
+	//fmt.Printf("%d more cycles(s) until end of multi year cycle: %% %0.6f\n", moreCycles, per)
+	//fmt.Printf("%d more event(s) until end of ~207 day cycle: %% %0.6f\n", moreEvents, per)
+	s := fmt.Sprintf("%0.2f day(s), %d second(s) %% %0.6f", days, seconds, per)
+	buff = append(buff, fmt.Sprintf("Next Event in: %s<br/>", s))
 	return "<pre>" + strings.Join(buff, "") + "</pre>"
 }
 
