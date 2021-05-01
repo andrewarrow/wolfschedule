@@ -2,12 +2,10 @@ package main
 
 import (
 	"embed"
-	"fmt"
 	"io/fs"
 	"syscall/js"
 	"time"
-
-	"github.com/andrewarrow/wolfschedule/parse"
+	"wasm/parse"
 )
 
 //go:embed *.csv
@@ -20,7 +18,7 @@ func jsonWrapper() js.Func {
 		}
 		//inputJSON := args[0].String()
 		//fmt.Printf("input %s\n", inputJSON)
-		return "pretty"
+		return parse.ForHTML()
 	})
 	return jsonFunc
 }
@@ -33,8 +31,7 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Println(fsys)
-	parse.GetAll()
+	parse.GetAll(fsys)
 
 	for {
 		time.Sleep(time.Second * 1)
