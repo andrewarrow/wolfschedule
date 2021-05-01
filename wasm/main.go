@@ -16,8 +16,8 @@ func jsonWrapper() js.Func {
 		if len(args) != 1 {
 			return "Invalid no of arguments passed"
 		}
-		inputJSON := args[0].String()
-		fmt.Printf("input %s\n", inputJSON)
+		//inputJSON := args[0].String()
+		//fmt.Printf("input %s\n", inputJSON)
 		return "pretty"
 	})
 	return jsonFunc

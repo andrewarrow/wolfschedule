@@ -12,10 +12,8 @@ import (
 	"time"
 )
 
-var special = "01/02/2006 15:04"
 var curMonth = Month{}
 var months = []Month{}
-var things = []Thing{}
 
 type Thing struct {
 	Text string
@@ -36,55 +34,47 @@ func PrintHelp() {
 	fmt.Println("")
 }
 
-func GetAll() []Thing {
-	things = []Thing{}
-	ParseData2("1970_2100.csv")
-	sort.SliceStable(things, func(i, j int) bool {
-		return things[i].Val < things[j].Val
-	})
-	return things
-	/*
-		prev := int64(0)
-		prevMonth := int(1)
-		u := time.Now()
-		delta := int64(0)
-		deltas := []Delta{}
-		times := []time.Time{}
-		for _, t := range things {
-			//fmt.Println(t.Val, t.Text)
-			u = time.Unix(t.Val, 0)
-			if int(u.Month()) != prevMonth {
-				var m Month
-				if len(times) == 3 {
-					m = handleMonth(&times[0], &times[1], &times[2])
-				} else if len(times) == 2 {
-					m = handleMonth(&times[0], &times[1], nil)
-				}
-				months = append(months, m)
-				//fmt.Println(prevMonth, times)
-				times = []time.Time{}
+/*
+	prev := int64(0)
+	prevMonth := int(1)
+	u := time.Now()
+	delta := int64(0)
+	deltas := []Delta{}
+	times := []time.Time{}
+	for _, t := range things {
+		//fmt.Println(t.Val, t.Text)
+		u = time.Unix(t.Val, 0)
+		if int(u.Month()) != prevMonth {
+			var m Month
+			if len(times) == 3 {
+				m = handleMonth(&times[0], &times[1], &times[2])
+			} else if len(times) == 2 {
+				m = handleMonth(&times[0], &times[1], nil)
 			}
-			times = append(times, u)
-			if prev > 0 {
-				delta = t.Val - prev
-				d := NewDelta(int(delta), t.Text, int(u.Month()))
-				d.Time = u
-				deltas = append(deltas, d)
-			}
+			months = append(months, m)
+			//fmt.Println(prevMonth, times)
+			times = []time.Time{}
+		}
+		times = append(times, u)
+		if prev > 0 {
+			delta = t.Val - prev
+			d := NewDelta(int(delta), t.Text, int(u.Month()))
+			d.Time = u
+			deltas = append(deltas, d)
+		}
 
-			prev = t.Val
-			prevMonth = int(u.Month())
-		}
-		//fmt.Println(prevMonth, times)
-		var m Month
-		if len(times) == 3 {
-			m = handleMonth(&times[0], &times[1], &times[2])
-		} else if len(times) == 2 {
-			m = handleMonth(&times[0], &times[1], nil)
-		}
-		months = append(months, m)
-	*/
-}
+		prev = t.Val
+		prevMonth = int(u.Month())
+	}
+	//fmt.Println(prevMonth, times)
+	var m Month
+	if len(times) == 3 {
+		m = handleMonth(&times[0], &times[1], &times[2])
+	} else if len(times) == 2 {
+		m = handleMonth(&times[0], &times[1], nil)
+	}
+	months = append(months, m)
+*/
 
 func main() {
 	rand.Seed(time.Now().UnixNano())
@@ -234,24 +224,6 @@ func main() {
 	}
 }
 
-func ParseData2(f string) {
-	months = []Month{}
-
-	b, _ := ioutil.ReadFile(f)
-	s := string(b)
-	for _, line := range strings.Split(s, "\n") {
-		tokens := strings.Split(line, ",")
-		if len(tokens) < 3 {
-			break
-		}
-		ts, _ := strconv.ParseInt(tokens[1], 10, 64)
-		eventDate := time.Unix(ts, 0)
-		thing := Thing{}
-		thing.Text = line
-		thing.Val = eventDate.Unix()
-		things = append(things, thing)
-	}
-}
 func ParseData(f string) ([]Month, []Delta) {
 	timeZone, _ := time.LoadLocation("America/Phoenix")
 
