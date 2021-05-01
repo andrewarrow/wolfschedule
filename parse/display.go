@@ -1,4 +1,4 @@
-package main
+package parse
 
 import (
 	"fmt"
@@ -10,10 +10,15 @@ import (
 )
 
 var special = "01/02/2006 15:04"
+
+type Thing struct {
+	Text string
+	Val  int64
+}
+
 var things = []Thing{}
 
-func ParseData2(f string) {
-	months = []Month{}
+func LoadCSV(f string) {
 
 	b, _ := ioutil.ReadFile(f)
 	s := string(b)
@@ -32,7 +37,7 @@ func ParseData2(f string) {
 }
 func GetAll() []Thing {
 	things = []Thing{}
-	ParseData2("1970_2100.csv")
+	LoadCSV("1970_2100.csv")
 	sort.SliceStable(things, func(i, j int) bool {
 		return things[i].Val < things[j].Val
 	})

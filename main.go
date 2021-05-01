@@ -2,23 +2,16 @@ package main
 
 import (
 	"fmt"
-	"io/ioutil"
-	"math"
 	"math/rand"
 	"os"
-	"sort"
 	"strconv"
 	"strings"
 	"time"
+	"wolfschedule/parse"
 )
 
 var curMonth = Month{}
 var months = []Month{}
-
-type Thing struct {
-	Text string
-	Val  int64
-}
 
 func PrintHelp() {
 	fmt.Println("")
@@ -82,7 +75,7 @@ func main() {
 
 	if len(os.Args) == 1 {
 		PrintHelp()
-		DisplayCurrentDay(argMap["year"], 0)
+		parse.DisplayCurrentDay(argMap["year"], 0)
 		return
 	}
 	command := os.Args[1]
@@ -91,9 +84,9 @@ func main() {
 	} else if command == "images" {
 	} else if strings.HasPrefix(command, "--year") {
 		//MakeImages(myimage)
-		DisplayCurrentDay(argMap["year"], 0)
+		parse.DisplayCurrentDay(argMap["year"], 0)
 	} else if strings.HasPrefix(command, "-f") {
-		last, other := DisplayCurrentDay(argMap["year"], 0)
+		last, other := parse.DisplayCurrentDay(argMap["year"], 0)
 		fmt.Println("")
 		delta := last - time.Now().Unix() // left to go
 		days := float64(delta) / 86400
@@ -123,13 +116,13 @@ func main() {
 		}
 	} else if strings.HasPrefix(command, "-") {
 		add, _ := strconv.Atoi(command)
-		DisplayCurrentDay(argMap["year"], add)
+		parse.DisplayCurrentDay(argMap["year"], add)
 	} else if strings.HasPrefix(command, "+") {
 		//MakeImages(myimage)
 		add, _ := strconv.Atoi(command[1:])
-		DisplayCurrentDay(argMap["year"], add)
+		parse.DisplayCurrentDay(argMap["year"], add)
 	} else if command == "day" {
-		DisplayCurrentDay(argMap["year"], 0)
+		parse.DisplayCurrentDay(argMap["year"], 0)
 	} else if command == "pdf" {
 		MakePDF("1970", 1)
 		MakePDF("1970", 2)
@@ -148,82 +141,87 @@ func main() {
 	} else if command == "pattern" {
 		ParseForPattern()
 	} else if command == "wave" {
-		_, deltas := ParseData(argMap["year"] + ".txt")
-		prevDays := 0.0
-		isNext := false
-		now := time.Now()
-		//dir := ""
-		for _, d := range deltas {
-			if d.Time.After(now) {
-				isNext = true
-			}
-			days := float64(d.Val) / 86400
-			//dir = "down"
-			if days > prevDays {
-				//dir = "up"
-			}
-			if isNext && int(now.Month()) == d.Month {
-				i := 0
-				day1 := d.Time
-				day1 = day1.AddDate(0, 0, -1)
-				day1 = day1.AddDate(0, 0, -1)
-				day1 = day1.AddDate(0, 0, -1)
-				day1 = day1.AddDate(0, 0, -1)
-				day1 = day1.AddDate(0, 0, -1)
-				day1 = day1.AddDate(0, 0, -1)
-				for {
-					day1 = day1.AddDate(0, 0, 1)
-					fmt.Printf("++++ %s %s\n", fmt.Sprintf("%v", day1)[:10], day1.Weekday())
-					if i > 3 {
-						break
-					}
-					i++
+		/*
+			_, deltas := ParseData(argMap["year"] + ".txt")
+			prevDays := 0.0
+			isNext := false
+			now := time.Now()
+			//dir := ""
+			for _, d := range deltas {
+				if d.Time.After(now) {
+					isNext = true
 				}
-			}
-			digit := AsciiByteToBase9(fmt.Sprintf("%d", d.Val))
-			if prevDays == 0.0 {
-				fmt.Printf("%d %d, %.3f, %30s %s\n", digit, d.Val, days, d.Text, d.Time.Weekday())
-			} else {
-				fmt.Printf("%d %d, %.3f, %30s %.3f %s\n", digit, d.Val, days, d.Text, math.Abs(prevDays-days), d.Time.Weekday())
-			}
-
-			if isNext && int(now.Month()) == d.Month {
-				day1 := d.Time
-				i := 0
-				for {
-					day1 = day1.AddDate(0, 0, 1)
-					fmt.Printf("---- %s %s\n", fmt.Sprintf("%v", day1)[:10], day1.Weekday())
-					if i > 3 {
-						break
-					}
-					i++
+				days := float64(d.Val) / 86400
+				//dir = "down"
+				if days > prevDays {
+					//dir = "up"
 				}
-				isNext = false
-			}
+				if isNext && int(now.Month()) == d.Month {
+					i := 0
+					day1 := d.Time
+					day1 = day1.AddDate(0, 0, -1)
+					day1 = day1.AddDate(0, 0, -1)
+					day1 = day1.AddDate(0, 0, -1)
+					day1 = day1.AddDate(0, 0, -1)
+					day1 = day1.AddDate(0, 0, -1)
+					day1 = day1.AddDate(0, 0, -1)
+					for {
+						day1 = day1.AddDate(0, 0, 1)
+						fmt.Printf("++++ %s %s\n", fmt.Sprintf("%v", day1)[:10], day1.Weekday())
+						if i > 3 {
+							break
+						}
+						i++
+					}
+				}
+				digit := AsciiByteToBase9(fmt.Sprintf("%d", d.Val))
+				if prevDays == 0.0 {
+					fmt.Printf("%d %d, %.3f, %30s %s\n", digit, d.Val, days, d.Text, d.Time.Weekday())
+				} else {
+					fmt.Printf("%d %d, %.3f, %30s %.3f %s\n", digit, d.Val, days, d.Text, math.Abs(prevDays-days), d.Time.Weekday())
+				}
 
-			prevDays = days
-		}
+				if isNext && int(now.Month()) == d.Month {
+					day1 := d.Time
+					i := 0
+					for {
+						day1 = day1.AddDate(0, 0, 1)
+						fmt.Printf("---- %s %s\n", fmt.Sprintf("%v", day1)[:10], day1.Weekday())
+						if i > 3 {
+							break
+						}
+						i++
+					}
+					isNext = false
+				}
+
+				prevDays = days
+			}
+		*/
 	} else if command == "debug" {
 	} else if command == "next" {
 	} else if command == "prev" {
 	} else if command == "today" {
-		months, _ := ParseData("2021.txt")
-		today := time.Now()
-		fmt.Println(today.Month())
-		for _, m := range months {
-			if fmt.Sprintf("% 2d", today.Month()) != m.Name {
-				continue
+		/*
+			months, _ := ParseData("2021.txt")
+			today := time.Now()
+			fmt.Println(today.Month())
+			for _, m := range months {
+				if fmt.Sprintf("% 2d", today.Month()) != m.Name {
+					continue
+				}
+				fmt.Println(m.StringForToday(today))
 			}
-			fmt.Println(m.StringForToday(today))
-		}
+		*/
 	} else if command == "help" {
 		PrintHelp()
 	} else if command == "html" {
-		months, _ := ParseData("2021.txt")
-		MakeHtml(months)
+		//months, _ := ParseData("2021.txt")
+		//MakeHtml(months)
 	}
 }
 
+/*
 func ParseData(f string) ([]Month, []Delta) {
 	timeZone, _ := time.LoadLocation("America/Phoenix")
 
@@ -363,6 +361,7 @@ func handleMonth(newDate, fullDate, newDate2 *time.Time) Month {
 	}
 	return mm
 }
+*/
 
 func AsciiByteToBase9(a string) byte {
 
