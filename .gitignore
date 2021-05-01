@@ -1,6 +1,7 @@
 wolfschedule
 wasm/wasm
 html/wolf.wasm
+html/html
 .DS_Store
 go.sum
 vendor

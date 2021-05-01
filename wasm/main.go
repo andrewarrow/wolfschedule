@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/fs"
 	"syscall/js"
+	"time"
 )
 
 //go:embed *.csv
@@ -36,4 +37,8 @@ func main() {
 	buff := make([]byte, 138492)
 	f.Read(buff)
 	fmt.Println(string(buff))
+
+	for {
+		time.Sleep(time.Second * 1)
+	}
 }
