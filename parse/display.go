@@ -2,7 +2,8 @@ package parse
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io/fs"
+	"os"
 	"sort"
 	"strconv"
 	"strings"
@@ -18,9 +19,15 @@ type Thing struct {
 
 var things = []Thing{}
 
-func LoadCSV(f string) {
+func LoadCSV(filename string, fsys fs.FS) {
 
-	b, _ := ioutil.ReadFile(f)
+	f, err := fsys.Open("1970_2100.csv")
+	if err != nil {
+		panic(err)
+	}
+	b := make([]byte, 138492)
+	f.Read(b)
+
 	s := string(b)
 	for _, line := range strings.Split(s, "\n") {
 		tokens := strings.Split(line, ",")
@@ -36,8 +43,12 @@ func LoadCSV(f string) {
 	}
 }
 func GetAll() []Thing {
+	var f fs.FS
+	if true {
+		f = os.DirFS(".")
+	}
 	things = []Thing{}
-	LoadCSV("1970_2100.csv")
+	LoadCSV("1970_2100.csv", f)
 	sort.SliceStable(things, func(i, j int) bool {
 		return things[i].Val < things[j].Val
 	})
