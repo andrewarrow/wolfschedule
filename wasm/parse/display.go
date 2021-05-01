@@ -19,7 +19,8 @@ type Thing struct {
 var things = []Thing{}
 
 func ForHTML() string {
-	return things[0].Text
+	_, _, buff := DisplayCurrentDay("2021", 0)
+	return "<pre>" + strings.Join(buff, "") + "</pre>"
 }
 
 func LoadCSV(filename string, fsys fs.FS) {
@@ -54,8 +55,9 @@ func GetAll(fsys fs.FS) []Thing {
 	return things
 }
 
-func DisplayCurrentDay(year string, add int) (int64, int64) {
+func DisplayCurrentDay(year string, add int) (int64, int64, []string) {
 	//y, _ := strconv.Atoi(year)
+	buff := []string{}
 	now := time.Now()
 	if year == "" {
 		//	y = now.Year()
@@ -96,11 +98,13 @@ func DisplayCurrentDay(year string, add int) (int64, int64) {
 			col3 = " <-------------"
 		}
 		col4 = wd
-		fmt.Printf("%10s %10s%20s%30s\n", col1, col2, col3, col4)
+		s := fmt.Sprintf("%10s %10s%20s%30s<br/>", col1, col2, col3, col4)
+		buff = append(buff, s)
+
 		day1 = day1.AddDate(0, 0, 1)
 		if day1.After(b1) {
 			break
 		}
 	}
-	return last, other
+	return last, other, buff
 }
