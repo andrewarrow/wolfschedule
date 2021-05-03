@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1" />
 
     <title>wolfschedule</title>
+  <script src="/assets/wasm_exec.js"></script>
       <link rel="shortcut icon" href="https://bucketeer-e05bbc84-baa3-437e-9518-adb32be77984.s3.amazonaws.com/public/images/7f75e346-695f-4ec7-bca2-d08fdef28ad6/favicon.ico">
 
 
@@ -68,7 +69,7 @@
      <script src="wasm_exec.js"></script>
      <script>
        const go = new Go();
-WebAssembly.instantiateStreaming(fetch("wolf.wasm?rand=1"), go.importObject).then((result) => {
+WebAssembly.instantiateStreaming(fetch("/assets/wolf.wasm?rand=2"), go.importObject).then((result) => {
   go.run(result.instance);
 });
      </script>

@@ -17,16 +17,21 @@ type Thing struct {
 }
 
 var things = []Thing{}
-var pause = false
+var pauseTicker = false
 var add = 0
 
 func HandleKey(key string) {
 	if key == " " {
-		pause = !pause
 	} else if key == "u" {
 		add--
 	} else if key == "d" {
 		add++
+	} else if key == "c" {
+		add = 0
+	}
+	pauseTicker = false
+	if add != 0 {
+		pauseTicker = true
 	}
 }
 
@@ -44,10 +49,9 @@ func ForHTML() string {
 	buff = append(buff, "<br/>")
 	//fmt.Printf("%d more cycles(s) until end of multi year cycle: %% %0.6f\n", moreCycles, per)
 	//fmt.Printf("%d more event(s) until end of ~207 day cycle: %% %0.6f\n", moreEvents, per)
-	s := fmt.Sprintf("%0.2f day(s), %d second(s) %% %0.6f", days, seconds, per)
-	buff = append(buff, fmt.Sprintf("Next Event in: %s<br/>", s))
-	if pause {
-		return "<pre>PAUSED</pre>"
+	if pauseTicker == false {
+		s := fmt.Sprintf("%0.2f day(s), %d second(s) %% %0.6f", days, seconds, per)
+		buff = append(buff, fmt.Sprintf("Next Event in: %s<br/>", s))
 	}
 	return "<pre>" + strings.Join(buff, "") + "</pre>"
 }
