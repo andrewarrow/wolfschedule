@@ -76,8 +76,8 @@ WebAssembly.instantiateStreaming(fetch("wolf.wasm?rand=1"), go.importObject).the
   </head>
   <body style="background-color: black;">
     <div style="color: rgb(0, 200, 0); font-family: courier; font-size: 0.8em;" id="ne">
-    Loading... if this doesn't disappear soon it means the javascript WASM
-    file can't be run on your browser.
+    this means the javascript WASM
+    can't be run on your browser.
     </div>
 <script>
 function GetUpdate() {
@@ -86,7 +86,7 @@ function GetUpdate() {
   ne.innerHTML = word;
 }
 
-setInterval(GetUpdate, 1000);
+setInterval(GetUpdate, 500);
 
 document.onkeypress = function (e) {
     e = e || window.event;

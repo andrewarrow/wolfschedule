@@ -18,14 +18,21 @@ type Thing struct {
 
 var things = []Thing{}
 var pause = false
+var add = 0
 
 func HandleKey(key string) {
-	pause = !pause
+	if key == " " {
+		pause = !pause
+	} else if key == "u" {
+		add--
+	} else if key == "d" {
+		add++
+	}
 }
 
 func ForHTML() string {
 	year := time.Now().Year()
-	last, other, buff := DisplayCurrentDay(fmt.Sprintf("%d", year), 0)
+	last, other, buff := DisplayCurrentDay(fmt.Sprintf("%d", year), add)
 	delta := last - time.Now().Unix() // left to go
 	days := float64(delta) / 86400
 	seconds := delta % 86400
