@@ -68,7 +68,7 @@
      <script src="wasm_exec.js"></script>
      <script>
        const go = new Go();
-WebAssembly.instantiateStreaming(fetch("wolf.wasm"), go.importObject).then((result) => {
+WebAssembly.instantiateStreaming(fetch("wolf.wasm?rand=1"), go.importObject).then((result) => {
   go.run(result.instance);
 });
      </script>
@@ -76,7 +76,8 @@ WebAssembly.instantiateStreaming(fetch("wolf.wasm"), go.importObject).then((resu
   </head>
   <body style="background-color: black;">
     <div style="color: rgb(0, 200, 0); font-family: courier; font-size: 0.8em;" id="ne">
-    Next Event in: 10.14 day(s), 12305 second(s) % 0.307422
+    Loading... if this doesn't disappear soon it means the javascript WASM
+    file can't be run on your browser.
     </div>
 <script>
 function GetUpdate() {
@@ -86,6 +87,11 @@ function GetUpdate() {
 }
 
 setInterval(GetUpdate, 1000);
+
+document.onkeypress = function (e) {
+    e = e || window.event;
+    handleKey(e.key);
+};
 </script>
   </body>
 </html>

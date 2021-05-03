@@ -17,9 +17,15 @@ type Thing struct {
 }
 
 var things = []Thing{}
+var pause = false
+
+func HandleKey(key string) {
+	pause = !pause
+}
 
 func ForHTML() string {
-	last, other, buff := DisplayCurrentDay("2021", 0)
+	year := time.Now().Year()
+	last, other, buff := DisplayCurrentDay(fmt.Sprintf("%d", year), 0)
 	delta := last - time.Now().Unix() // left to go
 	days := float64(delta) / 86400
 	seconds := delta % 86400
@@ -33,6 +39,9 @@ func ForHTML() string {
 	//fmt.Printf("%d more event(s) until end of ~207 day cycle: %% %0.6f\n", moreEvents, per)
 	s := fmt.Sprintf("%0.2f day(s), %d second(s) %% %0.6f", days, seconds, per)
 	buff = append(buff, fmt.Sprintf("Next Event in: %s<br/>", s))
+	if pause {
+		return "<pre>PAUSED</pre>"
+	}
 	return "<pre>" + strings.Join(buff, "") + "</pre>"
 }
 
