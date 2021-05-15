@@ -20,15 +20,17 @@ func main() {
 			Limit: 10,
 		})
 
-	fmt.Printf("%s %s %s %s %s %s\n",
+	fmt.Printf("%s %s %s %s %s %s %s\n",
 		display.LeftAligned("", 10),
 		display.LeftAligned("", 10),
 		display.LeftAligned("Pairs", 10),
 		display.LeftAligned("Max", 10),
 		display.LeftAligned("Circulating", 15),
-		display.LeftAligned("Total", 10))
+		display.LeftAligned("Total", 10),
+		display.LeftAligned("USD", 10))
 	for _, c := range listings {
-		fmt.Printf("%s %s %s %s %s %s\n",
+		usd := c.Quote["USD"].Price
+		fmt.Printf("%s %s %s %s %s %s %s\n",
 			//display.LeftAligned(c.Name, 10),
 			display.LeftAligned(c.DateAdded, 10),
 			display.LeftAligned(c.Symbol, 10),
@@ -36,6 +38,7 @@ func main() {
 			// CMCRank
 			display.LeftAligned(fmt.Sprintf("%0.2f", c.MaxSupply/1000000.0), 10),
 			display.LeftAligned(fmt.Sprintf("%0.2f", c.CirculatingSupply/1000000.0), 15),
-			display.LeftAligned(fmt.Sprintf("%0.2f", c.TotalSupply/1000000.0), 10))
+			display.LeftAligned(fmt.Sprintf("%0.2f", c.TotalSupply/1000000.0), 10),
+			display.LeftAligned(fmt.Sprintf("%0.2f", usd), 10))
 	}
 }
