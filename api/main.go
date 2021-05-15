@@ -17,7 +17,7 @@ func main() {
 
 	listings, _ := client.Cryptocurrency.
 		LatestListings(&cmc.ListingOptions{
-			Limit: 100,
+			Limit: 1000,
 		})
 
 	fmt.Printf("%s %s %s %s%s%s %s %s\n",
@@ -30,6 +30,9 @@ func main() {
 		display.LeftAligned("USD", 10),
 		display.LeftAligned("Cap", 10))
 	for _, c := range listings {
+		if c.Symbol == "SAFEMOON" || c.Symbol == "ELON" {
+			continue
+		}
 		usd := c.Quote["USD"].Price
 		mcap := (c.CirculatingSupply / 1000000000.0) * usd
 		fmt.Printf("%s %s %s %s%s%s %s %s\n",
