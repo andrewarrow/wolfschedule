@@ -26,7 +26,7 @@ func main() {
 
 	for _, c := range listings {
 		if c.Symbol != "ADA" && c.Symbol != "ALGO" &&
-			c.Symbol != "IOTA" && c.Symbol != "NANO" &&
+			c.Symbol != "MIOTA" && c.Symbol != "NANO" &&
 			c.Symbol != "EGLD" && c.Symbol != "CELO" &&
 			c.Symbol != "ATOM" && c.Symbol != "LUNA" &&
 			c.Symbol != "BTC" && c.Symbol != "ETH" &&
