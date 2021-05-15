@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+
+	"api/display"
 	"os"
 
 	//cmc "github.com/coincircle/go-coinmarketcap"
@@ -10,7 +12,6 @@ import (
 
 func main() {
 	api := os.Getenv("CMC")
-	fmt.Println("key", api)
 
 	client := cmc.NewClient(&cmc.Config{ProAPIKey: api})
 
@@ -19,8 +20,19 @@ func main() {
 			Limit: 10,
 		})
 
-	for _, listing := range listings {
-		fmt.Println(listing.Name)
-		fmt.Println(listing.Quote["USD"].Price)
+	for _, c := range listings {
+		fmt.Printf("%s %s %s\n",
+			//display.LeftAligned(c.Name, 10),
+			display.LeftAligned(c.Symbol, 10),
+			// CirculatingSupply
+			// DateAdded
+			// TotalSupply
+			// MaxSupply
+			// Symbol
+			// DateAdded
+			// NumMarketPairs
+			// CMCRank
+			display.LeftAligned(fmt.Sprintf("%0.2f", c.CirculatingSupply/1000000.0), 10),
+			display.LeftAligned(fmt.Sprintf("%0.2f", c.TotalSupply/1000000.0), 10))
 	}
 }
