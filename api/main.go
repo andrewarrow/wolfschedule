@@ -17,16 +17,16 @@ func main() {
 
 	listings, _ := client.Cryptocurrency.
 		LatestListings(&cmc.ListingOptions{
-			Limit: 10,
+			Limit: 100,
 		})
 
 	fmt.Printf("%s %s %s %s %s %s %s %s\n",
 		display.LeftAligned("", 10),
-		display.LeftAligned("", 5),
+		display.LeftAligned("", 8),
 		display.LeftAligned("Pairs", 10),
 		display.LeftAligned("Max", 10),
-		display.LeftAligned("Circulating", 15),
-		display.LeftAligned("Total", 10),
+		display.LeftAligned("Cir", 10),
+		display.LeftAligned("Total", 12),
 		display.LeftAligned("USD", 10),
 		display.LeftAligned("Cap", 10))
 	for _, c := range listings {
@@ -35,12 +35,12 @@ func main() {
 		fmt.Printf("%s %s %s %s %s %s %s %s\n",
 			//display.LeftAligned(c.Name, 10),
 			display.LeftAligned(c.DateAdded, 10),
-			display.LeftAligned(c.Symbol, 5),
+			display.LeftAligned(c.Symbol, 8),
 			display.LeftAligned(c.NumMarketPairs, 10),
 			// CMCRank
-			display.LeftAligned(fmt.Sprintf("%0.2f", c.MaxSupply/1000000.0), 10),
-			display.LeftAligned(fmt.Sprintf("%0.2f", c.CirculatingSupply/1000000.0), 15),
-			display.LeftAligned(fmt.Sprintf("%0.2f", c.TotalSupply/1000000.0), 10),
+			display.LeftAligned(fmt.Sprintf("%0.2f", c.MaxSupply/1000000000.0), 10),
+			display.LeftAligned(fmt.Sprintf("%0.2f", c.CirculatingSupply/1000000000.0), 10),
+			display.LeftAligned(fmt.Sprintf("%0.2f", c.TotalSupply/1000000000.0), 12),
 			display.LeftAligned(fmt.Sprintf("%0.2f", usd), 10),
 			display.LeftAligned(fmt.Sprintf("%0.2f", mcap), 10))
 	}
