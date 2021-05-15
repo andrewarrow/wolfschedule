@@ -1,5 +1,6 @@
 wolfschedule
 marketing/bootstrap.min.css
+api/api
 wasm/wasm
 html/wolf.wasm
 html/html
