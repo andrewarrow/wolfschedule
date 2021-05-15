@@ -13,6 +13,32 @@ import (
 func main() {
 	api := os.Getenv("CMC")
 
+	template := `<tr>
+<td>%s</td> <td>%s</td> <td>%s</td> <td>0.0</td> <td>0.0</td> <td>0.0</td> <td>0.0</td>
+</tr>`
+
+	client := cmc.NewClient(&cmc.Config{ProAPIKey: api})
+
+	listings, _ := client.Cryptocurrency.
+		LatestListings(&cmc.ListingOptions{
+			Limit: 1000,
+		})
+
+	for _, c := range listings {
+		if c.Symbol == "SAFEMOON" || c.Symbol == "ELON" {
+			continue
+		}
+		usd := c.Quote["USD"].Price
+		mcap := (c.CirculatingSupply / 1000000000.0) * usd
+
+		html := fmt.Sprintf(template, c.Symbol, display.LeftAligned(c.NumMarketPairs, 10),
+			fmt.Sprintf("%0.2f", mcap))
+		fmt.Println(html)
+	}
+}
+func main2() {
+	api := os.Getenv("CMC")
+
 	client := cmc.NewClient(&cmc.Config{ProAPIKey: api})
 
 	listings, _ := client.Cryptocurrency.
