@@ -14,7 +14,7 @@ func main() {
 	api := os.Getenv("CMC")
 
 	template := `<tr>
-<td>%s</td> <td>%s</td> <td>%s</td> <td>0.0</td> <td>0.0</td> <td>0.0</td> <td>0.0</td>
+<td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td> <td>0.0</td> <td>0.0</td> <td>0.0</td> <td>0.0</td>
 </tr>`
 
 	client := cmc.NewClient(&cmc.Config{ProAPIKey: api})
@@ -31,8 +31,10 @@ func main() {
 		usd := c.Quote["USD"].Price
 		mcap := (c.CirculatingSupply / 1000000000.0) * usd
 
-		html := fmt.Sprintf(template, c.Symbol, display.LeftAligned(c.NumMarketPairs, 10),
-			fmt.Sprintf("%0.2f", mcap))
+		html := fmt.Sprintf(template, display.LeftAligned(c.DateAdded, 4),
+			c.Symbol,
+			fmt.Sprintf("%0.2f", mcap),
+			display.LeftAligned(c.NumMarketPairs, 10))
 		fmt.Println(html)
 	}
 }
