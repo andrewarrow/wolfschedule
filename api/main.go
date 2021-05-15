@@ -14,7 +14,7 @@ func main() {
 	api := os.Getenv("CMC")
 
 	template := `<tr>
-<td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td> <td>0.0</td> <td>0.0</td> <td>0.0</td> <td>0.0</td>
+<td>%s</td><td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td> <td>0.0</td> <td>0.0</td> <td>0.0</td> <td>0.0</td>
 </tr>`
 
 	client := cmc.NewClient(&cmc.Config{ProAPIKey: api})
@@ -25,13 +25,23 @@ func main() {
 		})
 
 	for _, c := range listings {
-		if c.Symbol == "SAFEMOON" || c.Symbol == "ELON" {
+		if c.Symbol != "ADA" && c.Symbol != "ALGO" &&
+			c.Symbol != "IOTA" && c.Symbol != "NANO" &&
+			c.Symbol != "EGLD" && c.Symbol != "CELO" &&
+			c.Symbol != "ATOM" && c.Symbol != "LUNA" &&
+			c.Symbol != "BTC" && c.Symbol != "ETH" &&
+			c.Symbol != "DOGE" && c.Symbol != "XLM" &&
+			c.Symbol != "VET" &&
+			c.Symbol != "QTUM" &&
+			c.Symbol != "ONE" &&
+			c.Symbol != "KAVA" && c.Symbol != "BNB" && c.Symbol != "KSM" &&
+			c.Symbol != "XTZ" && c.Symbol != "DOT" {
 			continue
 		}
 		usd := c.Quote["USD"].Price
 		mcap := (c.CirculatingSupply / 1000000000.0) * usd
 
-		html := fmt.Sprintf(template, display.LeftAligned(c.DateAdded, 4),
+		html := fmt.Sprintf(template, c.Name, display.LeftAligned(c.DateAdded, 4),
 			c.Symbol,
 			fmt.Sprintf("%0.2f", mcap),
 			display.LeftAligned(c.NumMarketPairs, 10))
