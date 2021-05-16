@@ -14,17 +14,15 @@ import (
 )
 
 type Replacer struct {
-	AlgoCap string
+	Caps map[string]string
 }
 
-func MakeHtml(algoCap string) {
+func MakeHtml(r Replacer) {
 	b2, _ := ioutil.ReadFile("stake.list.tmpl")
 	blob := string(b2)
 	t := template.Must(template.New("tmpl").
 		Parse(blob))
 	var buff bytes.Buffer
-	r := Replacer{}
-	r.AlgoCap = algoCap
 	t.Execute(&buff, r)
 	ioutil.WriteFile("../marketing/stake.list.html", buff.Bytes(), 0755)
 }
@@ -43,7 +41,8 @@ func main() {
 			Limit: 1000,
 		})
 
-	algoCap := ""
+	r := Replacer{}
+	r.Caps = map[string]string{}
 	for _, c := range listings {
 		if c.Symbol != "ADA" && c.Symbol != "ALGO" &&
 			c.Symbol != "MIOTA" && c.Symbol != "NANO" &&
@@ -61,9 +60,7 @@ func main() {
 		usd := c.Quote["USD"].Price
 		mcap := (c.CirculatingSupply / 1000000000.0) * usd
 
-		if c.Symbol == "ALGO" {
-			algoCap = fmt.Sprintf("%0.2f", mcap)
-		}
+		r.Caps[c.Symbol] = fmt.Sprintf("%0.2f", mcap)
 
 		html := fmt.Sprintf(template, c.Name, display.LeftAligned(c.DateAdded, 4),
 			c.Symbol,
@@ -71,7 +68,7 @@ func main() {
 			display.LeftAligned(c.NumMarketPairs, 10))
 		fmt.Println(html)
 	}
-	MakeHtml(algoCap)
+	MakeHtml(r)
 }
 func main2() {
 	api := os.Getenv("CMC")
