@@ -14,7 +14,9 @@ import (
 )
 
 type Replacer struct {
-	Caps map[string]string
+	Caps    map[string]string
+	Vol24   map[string]string
+	Change1 map[string]string
 }
 
 func MakeHtml(r Replacer) {
@@ -30,9 +32,9 @@ func MakeHtml(r Replacer) {
 func main() {
 	api := os.Getenv("CMC")
 
-	template := `<tr>
-<td>%s</td><td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td> <td>0.0</td> <td>0.0</td> <td>0.0</td> <td>0.0</td>
-</tr>`
+	//template := `<tr>
+	//<td>%s</td><td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td> <td>0.0</td> <td>0.0</td> <td>0.0</td> <td>0.0</td>
+	//</tr>`
 
 	client := cmc.NewClient(&cmc.Config{ProAPIKey: api})
 
@@ -43,6 +45,8 @@ func main() {
 
 	r := Replacer{}
 	r.Caps = map[string]string{}
+	r.Vol24 = map[string]string{}
+	r.Change1 = map[string]string{}
 	for _, c := range listings {
 		if c.Symbol != "ADA" && c.Symbol != "ALGO" &&
 			c.Symbol != "MIOTA" && c.Symbol != "NANO" &&
@@ -63,12 +67,18 @@ func main() {
 		mcap := (c.CirculatingSupply / 1000000000.0) * usd
 
 		r.Caps[c.Symbol] = fmt.Sprintf("%0.2f", mcap)
+		//r.Vol24[c.Symbol]
+		//r.Change1[c.Symbol]
 
-		html := fmt.Sprintf(template, c.Name, display.LeftAligned(c.DateAdded, 4),
-			c.Symbol,
-			fmt.Sprintf("%0.2f", mcap),
-			display.LeftAligned(c.NumMarketPairs, 10))
-		fmt.Println(html)
+		fmt.Printf("%+v\n", c)
+
+		/*
+			html := fmt.Sprintf(template, c.Name, display.LeftAligned(c.DateAdded, 4),
+				c.Symbol,
+				fmt.Sprintf("%0.2f", mcap),
+				display.LeftAligned(c.NumMarketPairs, 10))
+			fmt.Println(html)
+		*/
 	}
 	MakeHtml(r)
 }
