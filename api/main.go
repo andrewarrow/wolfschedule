@@ -34,31 +34,21 @@ type CMC struct {
 	NumMarketPairs string `json:"num_market_pairs"`
 	DateAdded      string `json:"date_added"`
 	Tags           []string
-	MaxSupply      string `json:"max_supply"`
-	Circulating    string `json:"circulating_supply"`
-	TotalSupply    string `json:"total_supply"`
+	MaxSupply      float64 `json:"max_supply"`
+	Circulating    float64 `json:"circulating_supply"`
+	TotalSupply    float64 `json:"total_supply"`
 	Platform       string
-	Quote          map[string]interface{}
-
-	/*
-	   "quote": {
-	     "USD": {
-	       "price": 43187.585412696455,
-	       "volume_24h": 82493265835.38838,
-	       "percent_change_1h": -1.24368813,
-	       "percent_change_24h": -8.23503955,
-	       "percent_change_7d": -25.30824614,
-	       "percent_change_30d": -29.37895374,
-	       "percent_change_60d": -27.89324191,
-	       "percent_change_90d": -11.50405066,
-	       "market_cap": 808143632402.0536,
-	*/
+	Quote          map[string]USD
 }
 
 type CMCHolder struct {
 	Data []CMC `json:"data"`
 }
 type USD struct {
+	Price    float64
+	Volume24 float64 `json:"volume_24h"`
+	Change1  float64 `json:"percent_change_1h"`
+	Cap      float64 `json:"market_cap`
 }
 
 func main() {
@@ -66,55 +56,35 @@ func main() {
 	jsonString := DoGet(pat, "v1/cryptocurrency/listings/latest")
 	var cmcHolder CMCHolder
 	json.Unmarshal([]byte(jsonString), &cmcHolder)
-	fmt.Println(cmcHolder)
 
-	//template := `<tr>
-	//<td>%s</td><td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td> <td>0.0</td> <td>0.0</td> <td>0.0</td> <td>0.0</td>
-	//</tr>`
-	/*
-			client := cmc.NewClient(&cmc.Config{ProAPIKey: api})
-
-			listings, _ := client.Cryptocurrency.
-				LatestListings(&cmc.ListingOptions{
-					Limit: 1000,
-				})
-		r := Replacer{}
-		r.Caps = map[string]string{}
-		r.Vol24 = map[string]string{}
-		r.Change1 = map[string]string{}
-		for _, c := range listings {
-			if c.Symbol != "ADA" && c.Symbol != "ALGO" &&
-				c.Symbol != "MIOTA" && c.Symbol != "NANO" &&
-				c.Symbol != "EGLD" && c.Symbol != "CELO" &&
-				c.Symbol != "ATOM" && c.Symbol != "LUNA" &&
-				c.Symbol != "BTC" && c.Symbol != "ETH" &&
-				c.Symbol != "DOGE" && c.Symbol != "XLM" &&
-				c.Symbol != "VET" &&
-				c.Symbol != "AVAX" &&
-				c.Symbol != "MATIC" &&
-				c.Symbol != "QTUM" &&
-				c.Symbol != "ONE" &&
-				c.Symbol != "KAVA" && c.Symbol != "BNB" && c.Symbol != "KSM" &&
-				c.Symbol != "XTZ" && c.Symbol != "DOT" {
-				continue
-			}
-			usd := c.Quote["USD"].Price
-			mcap := (c.CirculatingSupply / 1000000000.0) * usd
-
-			r.Caps[c.Symbol] = fmt.Sprintf("%0.2f", mcap)
-			//r.Vol24[c.Symbol]
-			//r.Change1[c.Symbol]
-
-			fmt.Printf("%+v\n", c)
-
-				html := fmt.Sprintf(template, c.Name, display.LeftAligned(c.DateAdded, 4),
-					c.Symbol,
-					fmt.Sprintf("%0.2f", mcap),
-					display.LeftAligned(c.NumMarketPairs, 10))
-				fmt.Println(html)
+	r := Replacer{}
+	r.Caps = map[string]string{}
+	r.Vol24 = map[string]string{}
+	r.Change1 = map[string]string{}
+	for _, c := range cmcHolder.Data {
+		if c.Symbol != "ADA" && c.Symbol != "ALGO" &&
+			c.Symbol != "MIOTA" && c.Symbol != "NANO" &&
+			c.Symbol != "EGLD" && c.Symbol != "CELO" &&
+			c.Symbol != "ATOM" && c.Symbol != "LUNA" &&
+			c.Symbol != "BTC" && c.Symbol != "ETH" &&
+			c.Symbol != "DOGE" && c.Symbol != "XLM" &&
+			c.Symbol != "VET" &&
+			c.Symbol != "AVAX" &&
+			c.Symbol != "MATIC" &&
+			c.Symbol != "QTUM" &&
+			c.Symbol != "ONE" &&
+			c.Symbol != "KAVA" && c.Symbol != "BNB" && c.Symbol != "KSM" &&
+			c.Symbol != "XTZ" && c.Symbol != "DOT" {
+			continue
 		}
-	*/
-	//MakeHtml(r)
+		usd := c.Quote["USD"].Price
+		mcap := (c.Circulating / 1000000000.0) * usd
+
+		r.Caps[c.Symbol] = fmt.Sprintf("%0.2f", mcap)
+		r.Vol24[c.Symbol] = fmt.Sprintf("%0.2f", c.Quote["USD"].Volume24/1000000.0)
+		r.Change1[c.Symbol] = fmt.Sprintf("%0.2f", c.Quote["USD"].Change1*100.0)
+	}
+	MakeHtml(r)
 }
 
 /*
