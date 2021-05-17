@@ -165,63 +165,91 @@ border-top: 1px solid #989898;}
 </tr>
 <tr>
 <td>Dogecoin</td><td>2013</td> <td>DOGE</td> <td>{{ index .Caps "DOGE" }}</td> 
-<td>360       </td> <td>0.0</td> <td>0.0</td> <td>0.0</td> <td>0.0</td>
+<td>{{ index .Vol24 "DOGE" }}</td> 
+<td>{{ index .Change1 "DOGE" }}</td> 
+<td>0.0</td> <td>0.0</td> <td>0.0</td>
 </tr>
 <tr class="yellow">
 <td>Polkadot</td><td>2020</td> <td>DOT</td> <td>{{ index .Caps "DOT" }}</td>
-<td>195       </td> <td>0.0</td> <td>12.0%</td> <td>0.0</td> <td>0.0</td>
+<td>{{ index .Vol24 "DOT" }}</td> 
+<td>{{ index .Change1 "DOT" }}</td> 
+<td>0.0</td> <td>12.0%</td> <td>0.0</td>
 </tr>
 <tr>
 <td>Stellar</td><td>2014</td> <td>XLM</td> <td>{{ index .Caps "XLM" }}</td>
-<td>341       </td> <td>0.0</td> <td>0.0</td> <td>0.0</td> <td>0.0</td>
+<td>{{ index .Vol24 "XLM" }}</td> 
+<td>{{ index .Change1 "XLM" }}</td> 
+<td>0.0</td> <td>0.0</td> <td>0.0</td> 
 </tr>
 <tr>
 <td>Polygon</td><td>20xx</td> <td>MATIC</td> <td>{{ index .Caps "MATIC" }}</td> 
-<td>        </td> <td>0.0</td> <td>0.0</td> <td>0.0</td> <td>0.0</td>
+<td>{{ index .Vol24 "MATIC" }}</td> 
+<td>{{ index .Change1 "MATIC" }}</td> 
+<td>0.0</td> <td>0.0</td> <td>0.0</td>
 </tr>
 <tr>
 <td>VeChain</td><td>2017</td> <td>VET</td> <td>{{ index .Caps "VET" }}</td> 
-<td>126       </td> <td>0.0</td> <td>0.0</td> <td>2.0%</td> <td>0.0</td>
+<td>{{ index .Vol24 "VET" }}</td> 
+<td>{{ index .Change1 "VET" }}</td> 
+ <td>0.0</td> <td>0.0</td> <td>2.0%</td> 
 </tr>
 <tr>
 <td>Terra</td><td>2019</td> <td>LUNA</td> <td>{{ index .Caps "LUNA" }}</td> 
-<td>59        </td> <td>0.0</td> <td>0.0</td> <td>0.0</td> <td>0.0</td>
+<td>{{ index .Vol24 "LUNA" }}</td> 
+<td>{{ index .Change1 "LUNA" }}</td> 
+<td>0.0</td> <td>0.0</td> <td>0.0</td>
 </tr>
 <tr class="yellow">
-<td>Cosmos</td><td>2019</td> <td>ATOM</td> <td>{{ index .Caps "ATOM" }}</td> <td>171       </td> <td>4.0%</td> <td>7.0%</td> <td>9.0%</td> <td>0.0</td>
+<td>Cosmos</td><td>2019</td> <td>ATOM</td> <td>{{ index .Caps "ATOM" }}</td> 
+<td>{{ index .Vol24 "ATOM" }}</td> 
+<td>{{ index .Change1 "ATOM" }}</td> 
+<td>4.0%</td> <td>7.0%</td> <td>9.0%</td>
 </tr>
 <tr class="yellow">
-<td>Tezos</td><td>2017</td> <td>XTZ</td> <td>{{ index .Caps "XTZ" }}</td> <td>165       </td> <td>5.0%</td> <td>5.5%</td> <td>7.0%</td> <td>0.0</td>
+<td>Tezos</td><td>2017</td> <td>XTZ</td> <td>{{ index .Caps "XTZ" }}</td>
+<td>{{ index .Vol24 "XTZ" }}</td> 
+<td>{{ index .Change1 "XTZ" }}</td> 
+<td>5.0%</td> <td>5.5%</td> <td>7.0%</td> 
 </tr>
 <tr>
-<td>IOTA</td><td>2017</td> <td>MIOTA</td> <td>{{ index .Caps "MIOTA" }}</td> <td>65        </td> <td>0.0</td> <td>0.0</td> <td>0.0</td> <td>0.0</td>
+<td>IOTA</td><td>2017</td> <td>MIOTA</td> <td>{{ index .Caps "MIOTA" }}</td> 
+<td>65        </td> <td>0.0</td> <td>0.0</td> <td>0.0</td> <td>0.0</td>
 </tr>
 <tr class="up">
-<td>Kusama</td><td>2019</td> <td>KSM</td> <td>{{ index .Caps "KSM" }}</td> <td>70        </td> <td>0.0</td> <td>12.0%</td> <td>0.0</td> <td>0.0</td>
+<td>Kusama</td><td>2019</td> <td>KSM</td> <td>{{ index .Caps "KSM" }}</td> 
+<td>70        </td> <td>0.0</td> <td>12.0%</td> <td>0.0</td> <td>0.0</td>
 </tr>
 <tr>
-<td>Avalanche</td><td>2020</td> <td>AVAX</td> <td>{{ index .Caps "AVAX" }}</td> <td>        </td> <td>0.0</td> <td>0.0</td> <td>0.0</td> <td>0.0</td>
+<td>Avalanche</td><td>2020</td> <td>AVAX</td> <td>{{ index .Caps "AVAX" }}</td> 
+<td>        </td> <td>0.0</td> <td>0.0</td> <td>0.0</td> <td>0.0</td>
 </tr>
 <tr class="red">
-<td>Algorand</td><td>2019</td> <td>ALGO</td> <td>{{ index .Caps "ALGO" }}</td> <td>133       </td> <td>6.0%</td> <td>0.0</td> <td>10.0%</td> <td>0.0</td>
+<td>Algorand</td><td>2019</td> <td>ALGO</td> <td>{{ index .Caps "ALGO" }}</td>
+<td>133       </td> <td>6.0%</td> <td>0.0</td> <td>10.0%</td> <td>0.0</td>
 </tr>
 <tr>
-<td>Elrond</td><td>2020</td> <td>EGLD</td> <td>{{ index .Caps "EGLD" }}</td> <td>39        </td> <td>0.0</td> <td>0.0</td> <td>0.0</td> <td>0.0</td>
+<td>Elrond</td><td>2020</td> <td>EGLD</td> <td>{{ index .Caps "EGLD" }}</td> 
+<td>39        </td> <td>0.0</td> <td>0.0</td> <td>0.0</td> <td>0.0</td>
 </tr>
 <tr>
-<td>Qtum</td><td>2017</td> <td>QTUM</td> <td>{{ index .Caps "QTUM" }}</td> <td>192       </td> <td>0.0</td> <td>0.0</td> <td>2.0%</td> <td>0.0</td>
+<td>Qtum</td><td>2017</td> <td>QTUM</td> <td>{{ index .Caps "QTUM" }}</td> 
+<td>192       </td> <td>0.0</td> <td>0.0</td> <td>2.0%</td> <td>0.0</td>
 </tr>
 <tr>
-<td>Nano</td><td>2017</td> <td>NANO</td> <td>{{ index .Caps "NANO" }}</td> <td>55        </td> <td>0.0</td> <td>0.0</td> <td>0.0</td> <td>0.0</td>
+<td>Nano</td><td>2017</td> <td>NANO</td> <td>{{ index .Caps "NANO" }}</td> 
+<td>55        </td> <td>0.0</td> <td>0.0</td> <td>0.0</td> <td>0.0</td>
 </tr>
 <tr>
-<td>Harmony</td><td>2019</td> <td>ONE</td> <td>{{ index .Caps "ONE" }}</td> <td>34        </td> <td>0.0</td> <td>0.0</td> <td>2.0%</td> <td>0.0</td>
+<td>Harmony</td><td>2019</td> <td>ONE</td> <td>{{ index .Caps "ONE" }}</td> 
+<td>34        </td> <td>0.0</td> <td>0.0</td> <td>2.0%</td> <td>0.0</td>
 </tr>
 <tr>
-<td>Celo</td><td>2020</td> <td>CELO</td> <td>{{ index .Caps "CELO" }}</td> <td>32        </td> <td>0.0</td> <td>0.0</td> <td>0.0</td> <td>0.0</td>
+<td>Celo</td><td>2020</td> <td>CELO</td> <td>{{ index .Caps "CELO" }}</td> 
+<td>32        </td> <td>0.0</td> <td>0.0</td> <td>0.0</td> <td>0.0</td>
 </tr>
 <tr class="up">
-<td>Kava.io</td><td>2019</td> <td>KAVA</td> <td>{{ index .Caps "KAVA" }}</td> <td>51        </td> <td>0.0</td> <td>20.0%</td> <td>0.0</td> <td>0.0</td>
+<td>Kava.io</td><td>2019</td> <td>KAVA</td> <td>{{ index .Caps "KAVA" }}</td> 
+<td>51        </td> <td>0.0</td> <td>20.0%</td> <td>0.0</td> <td>0.0</td>
 </tr>
 
 
