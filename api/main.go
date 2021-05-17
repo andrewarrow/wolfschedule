@@ -2,6 +2,7 @@ package main
 
 import (
 	"bytes"
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"text/template"
@@ -27,10 +28,45 @@ func MakeHtml(r Replacer) {
 	ioutil.WriteFile("../marketing/stake.list.html", buff.Bytes(), 0755)
 }
 
+type CMC struct {
+	Name           string
+	Symbol         string
+	NumMarketPairs string `json:"num_market_pairs"`
+	DateAdded      string `json:"date_added"`
+	Tags           []string
+	MaxSupply      string `json:"max_supply"`
+	Circulating    string `json:"circulating_supply"`
+	TotalSupply    string `json:"total_supply"`
+	Platform       string
+	Quote          map[string]interface{}
+
+	/*
+	   "quote": {
+	     "USD": {
+	       "price": 43187.585412696455,
+	       "volume_24h": 82493265835.38838,
+	       "percent_change_1h": -1.24368813,
+	       "percent_change_24h": -8.23503955,
+	       "percent_change_7d": -25.30824614,
+	       "percent_change_30d": -29.37895374,
+	       "percent_change_60d": -27.89324191,
+	       "percent_change_90d": -11.50405066,
+	       "market_cap": 808143632402.0536,
+	*/
+}
+
+type CMCHolder struct {
+	Data []CMC `json:"data"`
+}
+type USD struct {
+}
+
 func main() {
 	pat := os.Getenv("CMC")
 	jsonString := DoGet(pat, "v1/cryptocurrency/listings/latest")
-	fmt.Println(jsonString)
+	var cmcHolder CMCHolder
+	json.Unmarshal([]byte(jsonString), &cmcHolder)
+	fmt.Println(cmcHolder)
 
 	//template := `<tr>
 	//<td>%s</td><td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td> <td>0.0</td> <td>0.0</td> <td>0.0</td> <td>0.0</td>
