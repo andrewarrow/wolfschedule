@@ -53,7 +53,7 @@ type USD struct {
 
 func main() {
 	pat := os.Getenv("CMC")
-	jsonString := DoGet(pat, "v1/cryptocurrency/listings/latest")
+	jsonString := DoGet(pat, "v1/cryptocurrency/listings/latest?limit=1000")
 	var cmcHolder CMCHolder
 	json.Unmarshal([]byte(jsonString), &cmcHolder)
 
@@ -62,6 +62,7 @@ func main() {
 	r.Vol24 = map[string]string{}
 	r.Change1 = map[string]string{}
 	for _, c := range cmcHolder.Data {
+		fmt.Println(c.Symbol, c.Name)
 		if c.Symbol != "ADA" && c.Symbol != "ALGO" &&
 			c.Symbol != "MIOTA" && c.Symbol != "NANO" &&
 			c.Symbol != "EGLD" && c.Symbol != "CELO" &&
@@ -81,8 +82,8 @@ func main() {
 		mcap := (c.Circulating / 1000000000.0) * usd
 
 		r.Caps[c.Symbol] = fmt.Sprintf("%0.2f", mcap)
-		r.Vol24[c.Symbol] = fmt.Sprintf("%0.2f", c.Quote["USD"].Volume24/1000000.0)
-		r.Change1[c.Symbol] = fmt.Sprintf("%0.2f", c.Quote["USD"].Change1*100.0)
+		r.Vol24[c.Symbol] = fmt.Sprintf("%0.2f", c.Quote["USD"].Volume24/1000000000.0)
+		r.Change1[c.Symbol] = fmt.Sprintf("%0.2f", c.Quote["USD"].Change1)
 	}
 	MakeHtml(r)
 }
