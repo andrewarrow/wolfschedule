@@ -213,7 +213,9 @@ border-top: 1px solid #989898;}
 </tr>
 <tr>
 <td>IOTA</td><td>2017</td> <td>MIOTA</td> <td>{{ index .Caps "MIOTA" }}</td> 
-<td>65        </td> <td>0.0</td> <td>0.0</td> <td>0.0</td> <td>0.0</td>
+<td>{{ index .Vol24 "MIOTA" }}</td> 
+<td>{{ index .Change1 "MIOTA" }}</td> 
+ <td>0.0</td> <td>0.0</td> <td>0.0</td> 
 </tr>
 <tr class="up">
 <td>Kusama</td><td>2019</td> <td>KSM</td> <td>{{ index .Caps "KSM" }}</td> 
@@ -221,11 +223,15 @@ border-top: 1px solid #989898;}
 </tr>
 <tr>
 <td>Avalanche</td><td>2020</td> <td>AVAX</td> <td>{{ index .Caps "AVAX" }}</td> 
-<td>        </td> <td>0.0</td> <td>0.0</td> <td>0.0</td> <td>0.0</td>
+<td>{{ index .Vol24 "AVAX" }}</td> 
+<td>{{ index .Change1 "AVAX" }}</td> 
+ <td>0.0</td> <td>0.0</td> <td>0.0</td> 
 </tr>
 <tr class="red">
 <td>Algorand</td><td>2019</td> <td>ALGO</td> <td>{{ index .Caps "ALGO" }}</td>
-<td>133       </td> <td>6.0%</td> <td>0.0</td> <td>10.0%</td> <td>0.0</td>
+<td>{{ index .Vol24 "ALGO" }}</td> 
+<td>{{ index .Change1 "ALGO" }}</td> 
+ <td>6.0%</td> <td>0.0</td> <td>10.0%</td> 
 </tr>
 <tr>
 <td>Elrond</td><td>2020</td> <td>EGLD</td> <td>{{ index .Caps "EGLD" }}</td> 
@@ -249,7 +255,9 @@ border-top: 1px solid #989898;}
 </tr>
 <tr class="up">
 <td>Kava.io</td><td>2019</td> <td>KAVA</td> <td>{{ index .Caps "KAVA" }}</td> 
-<td>51        </td> <td>0.0</td> <td>20.0%</td> <td>0.0</td> <td>0.0</td>
+<td>{{ index .Vol24 "KAVA" }}</td> 
+<td>{{ index .Change1 "KAVA" }}</td> 
+ <td>0.0</td> <td>20.0%</td> <td>0.0</td>
 </tr>
 
 
