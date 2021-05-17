@@ -51,6 +51,7 @@ func main() {
 			c.Symbol != "BTC" && c.Symbol != "ETH" &&
 			c.Symbol != "DOGE" && c.Symbol != "XLM" &&
 			c.Symbol != "VET" &&
+			c.Symbol != "AVAX" &&
 			c.Symbol != "QTUM" &&
 			c.Symbol != "ONE" &&
 			c.Symbol != "KAVA" && c.Symbol != "BNB" && c.Symbol != "KSM" &&
