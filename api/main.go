@@ -6,11 +6,9 @@ import (
 	"io/ioutil"
 	"text/template"
 
-	"api/display"
 	"os"
-
 	//cmc "github.com/coincircle/go-coinmarketcap"
-	cmc "github.com/miguelmota/go-coinmarketcap/pro/v1"
+	//cmc "github.com/miguelmota/go-coinmarketcap/pro/v1"
 )
 
 type Replacer struct {
@@ -30,58 +28,60 @@ func MakeHtml(r Replacer) {
 }
 
 func main() {
-	api := os.Getenv("CMC")
+	pat := os.Getenv("CMC")
+	jsonString := DoGet(pat, "v1/cryptocurrency/listings/latest")
+	fmt.Println(jsonString)
 
 	//template := `<tr>
 	//<td>%s</td><td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td> <td>0.0</td> <td>0.0</td> <td>0.0</td> <td>0.0</td>
 	//</tr>`
+	/*
+			client := cmc.NewClient(&cmc.Config{ProAPIKey: api})
 
-	client := cmc.NewClient(&cmc.Config{ProAPIKey: api})
+			listings, _ := client.Cryptocurrency.
+				LatestListings(&cmc.ListingOptions{
+					Limit: 1000,
+				})
+		r := Replacer{}
+		r.Caps = map[string]string{}
+		r.Vol24 = map[string]string{}
+		r.Change1 = map[string]string{}
+		for _, c := range listings {
+			if c.Symbol != "ADA" && c.Symbol != "ALGO" &&
+				c.Symbol != "MIOTA" && c.Symbol != "NANO" &&
+				c.Symbol != "EGLD" && c.Symbol != "CELO" &&
+				c.Symbol != "ATOM" && c.Symbol != "LUNA" &&
+				c.Symbol != "BTC" && c.Symbol != "ETH" &&
+				c.Symbol != "DOGE" && c.Symbol != "XLM" &&
+				c.Symbol != "VET" &&
+				c.Symbol != "AVAX" &&
+				c.Symbol != "MATIC" &&
+				c.Symbol != "QTUM" &&
+				c.Symbol != "ONE" &&
+				c.Symbol != "KAVA" && c.Symbol != "BNB" && c.Symbol != "KSM" &&
+				c.Symbol != "XTZ" && c.Symbol != "DOT" {
+				continue
+			}
+			usd := c.Quote["USD"].Price
+			mcap := (c.CirculatingSupply / 1000000000.0) * usd
 
-	listings, _ := client.Cryptocurrency.
-		LatestListings(&cmc.ListingOptions{
-			Limit: 1000,
-		})
+			r.Caps[c.Symbol] = fmt.Sprintf("%0.2f", mcap)
+			//r.Vol24[c.Symbol]
+			//r.Change1[c.Symbol]
 
-	r := Replacer{}
-	r.Caps = map[string]string{}
-	r.Vol24 = map[string]string{}
-	r.Change1 = map[string]string{}
-	for _, c := range listings {
-		if c.Symbol != "ADA" && c.Symbol != "ALGO" &&
-			c.Symbol != "MIOTA" && c.Symbol != "NANO" &&
-			c.Symbol != "EGLD" && c.Symbol != "CELO" &&
-			c.Symbol != "ATOM" && c.Symbol != "LUNA" &&
-			c.Symbol != "BTC" && c.Symbol != "ETH" &&
-			c.Symbol != "DOGE" && c.Symbol != "XLM" &&
-			c.Symbol != "VET" &&
-			c.Symbol != "AVAX" &&
-			c.Symbol != "MATIC" &&
-			c.Symbol != "QTUM" &&
-			c.Symbol != "ONE" &&
-			c.Symbol != "KAVA" && c.Symbol != "BNB" && c.Symbol != "KSM" &&
-			c.Symbol != "XTZ" && c.Symbol != "DOT" {
-			continue
+			fmt.Printf("%+v\n", c)
+
+				html := fmt.Sprintf(template, c.Name, display.LeftAligned(c.DateAdded, 4),
+					c.Symbol,
+					fmt.Sprintf("%0.2f", mcap),
+					display.LeftAligned(c.NumMarketPairs, 10))
+				fmt.Println(html)
 		}
-		usd := c.Quote["USD"].Price
-		mcap := (c.CirculatingSupply / 1000000000.0) * usd
-
-		r.Caps[c.Symbol] = fmt.Sprintf("%0.2f", mcap)
-		//r.Vol24[c.Symbol]
-		//r.Change1[c.Symbol]
-
-		fmt.Printf("%+v\n", c)
-
-		/*
-			html := fmt.Sprintf(template, c.Name, display.LeftAligned(c.DateAdded, 4),
-				c.Symbol,
-				fmt.Sprintf("%0.2f", mcap),
-				display.LeftAligned(c.NumMarketPairs, 10))
-			fmt.Println(html)
-		*/
-	}
-	MakeHtml(r)
+	*/
+	//MakeHtml(r)
 }
+
+/*
 func main2() {
 	api := os.Getenv("CMC")
 
@@ -120,3 +120,4 @@ func main2() {
 			display.LeftAligned(fmt.Sprintf("%0.2f", mcap), 10))
 	}
 }
+*/
