@@ -52,6 +52,7 @@ func main() {
 			c.Symbol != "DOGE" && c.Symbol != "XLM" &&
 			c.Symbol != "VET" &&
 			c.Symbol != "AVAX" &&
+			c.Symbol != "MATIC" &&
 			c.Symbol != "QTUM" &&
 			c.Symbol != "ONE" &&
 			c.Symbol != "KAVA" && c.Symbol != "BNB" && c.Symbol != "KSM" &&
