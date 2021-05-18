@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
+	"strings"
 	"text/template"
 
 	"os"
@@ -31,6 +32,7 @@ func MakeHtml(r Replacer) {
 
 type CMC struct {
 	Name           string
+	Slug           string `json:"slug"`
 	Symbol         string
 	NumMarketPairs string `json:"num_market_pairs"`
 	DateAdded      string `json:"date_added"`
@@ -40,6 +42,8 @@ type CMC struct {
 	TotalSupply    float64 `json:"total_supply"`
 	Platform       string
 	Quote          map[string]USD
+	Volume24       string
+	Change1        string
 }
 
 type CMCHolder struct {
@@ -63,30 +67,24 @@ func main() {
 	r.Vol24 = map[string]string{}
 	r.Change1 = map[string]string{}
 	list := []CMC{}
+	valid := `bitcoin ethereum binance-coin cardano dogecoin polkadot-new polygon stellar vechain terra-luna iota kusama tezos cosmos avalanche algorand elrond-egld qtum harmony nano celo kava`
+	validMap := map[string]bool{}
+	for _, v := range strings.Split(valid, " ") {
+		validMap[v] = true
+	}
 	for _, c := range cmcHolder.Data {
-		fmt.Println(c.Symbol, c.Name)
-		if c.Symbol != "ADA" && c.Symbol != "ALGO" &&
-			c.Symbol != "MIOTA" && c.Symbol != "NANO" &&
-			c.Symbol != "EGLD" && c.Symbol != "CELO" &&
-			c.Symbol != "ATOM" && c.Symbol != "LUNA" &&
-			c.Symbol != "BTC" && c.Symbol != "ETH" &&
-			c.Symbol != "DOGE" && c.Symbol != "XLM" &&
-			c.Symbol != "VET" &&
-			c.Symbol != "AVAX" &&
-			c.Symbol != "MATIC" &&
-			c.Symbol != "QTUM" &&
-			c.Symbol != "ONE" &&
-			c.Symbol != "KAVA" && c.Symbol != "BNB" && c.Symbol != "KSM" &&
-			c.Symbol != "XTZ" && c.Symbol != "DOT" {
+		if validMap[c.Slug] == false {
 			continue
 		}
-		list = append(list, c)
+		fmt.Println(c.Symbol, c.Name, c.Slug)
+		c.DateAdded = c.DateAdded[0:10]
 		usd := c.Quote["USD"].Price
 		mcap := (c.Circulating / 1000000000.0) * usd
 
 		r.Caps[c.Symbol] = fmt.Sprintf("%0.2f", mcap)
-		r.Vol24[c.Symbol] = fmt.Sprintf("%0.2f", c.Quote["USD"].Volume24/1000000000.0)
-		r.Change1[c.Symbol] = fmt.Sprintf("%0.2f", c.Quote["USD"].Change1)
+		c.Volume24 = fmt.Sprintf("%0.2f", c.Quote["USD"].Volume24/1000000000.0)
+		c.Change1 = fmt.Sprintf("%0.2f", c.Quote["USD"].Change1)
+		list = append(list, c)
 	}
 	r.Things = list
 	MakeHtml(r)

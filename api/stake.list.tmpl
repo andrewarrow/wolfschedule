@@ -136,15 +136,15 @@ border-top: 1px solid #989898;}
 
 
 
-<tr>
         {{range $e := .Things}}
-                <td>{{$e.Name}}</td><td>$e.DateAdded</td> <td>$e.Symbol</td> 
+<tr>
+                <td>{{$e.Name}}</td><td>{{$e.DateAdded}}</td> <td>{{$e.Symbol}}</td> 
                 <td>caps</td> 
-                <td>caps</td> 
-                <td>caps</td> 
+                <td>{{$e.Volume24}}</td> 
+                <td>{{$e.Change1}}</td> 
                 <td>0.0</td> <td>0.0</td> <td>0.0</td>
-        {{end}}
 </tr>
+        {{end}}
 
 
 
