@@ -16,6 +16,7 @@ type Replacer struct {
 	Caps    map[string]string
 	Vol24   map[string]string
 	Change1 map[string]string
+	Things  []CMC
 }
 
 func MakeHtml(r Replacer) {
@@ -61,6 +62,7 @@ func main() {
 	r.Caps = map[string]string{}
 	r.Vol24 = map[string]string{}
 	r.Change1 = map[string]string{}
+	list := []CMC{}
 	for _, c := range cmcHolder.Data {
 		fmt.Println(c.Symbol, c.Name)
 		if c.Symbol != "ADA" && c.Symbol != "ALGO" &&
@@ -78,6 +80,7 @@ func main() {
 			c.Symbol != "XTZ" && c.Symbol != "DOT" {
 			continue
 		}
+		list = append(list, c)
 		usd := c.Quote["USD"].Price
 		mcap := (c.Circulating / 1000000000.0) * usd
 
@@ -85,6 +88,7 @@ func main() {
 		r.Vol24[c.Symbol] = fmt.Sprintf("%0.2f", c.Quote["USD"].Volume24/1000000000.0)
 		r.Change1[c.Symbol] = fmt.Sprintf("%0.2f", c.Quote["USD"].Change1)
 	}
+	r.Things = list
 	MakeHtml(r)
 }
 
