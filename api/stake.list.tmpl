@@ -137,9 +137,13 @@ border-top: 1px solid #989898;}
 
 
         {{range $e := .Things}}
+{{ if $e.Red }}
+<tr class="red">
+{{ else }}
 <tr>
-                <td>{{$e.Name}}</td><td>{{$e.DateAdded}}</td> <td>{{$e.Symbol}}</td> 
-                <td>caps</td> 
+{{ end }}
+                <td nowrap="true">{{$e.Name}}</td><td>{{$e.DateAdded}}</td> <td>{{$e.Symbol}}</td> 
+                <td>{{$e.MarketCap}}</td> 
                 <td>{{$e.Volume24}}</td> 
                 <td>{{$e.Change1}}</td> 
                 <td>0.0</td> <td>0.0</td> <td>0.0</td>

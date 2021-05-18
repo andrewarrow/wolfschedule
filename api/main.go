@@ -42,8 +42,10 @@ type CMC struct {
 	TotalSupply    float64 `json:"total_supply"`
 	Platform       string
 	Quote          map[string]USD
+	MarketCap      string
 	Volume24       string
 	Change1        string
+	Red            bool
 }
 
 type CMCHolder struct {
@@ -77,13 +79,16 @@ func main() {
 			continue
 		}
 		fmt.Println(c.Symbol, c.Name, c.Slug)
-		c.DateAdded = c.DateAdded[0:10]
+		c.DateAdded = c.DateAdded[0:4]
 		usd := c.Quote["USD"].Price
 		mcap := (c.Circulating / 1000000000.0) * usd
 
-		r.Caps[c.Symbol] = fmt.Sprintf("%0.2f", mcap)
+		c.MarketCap = fmt.Sprintf("%0.2f", mcap)
 		c.Volume24 = fmt.Sprintf("%0.2f", c.Quote["USD"].Volume24/1000000000.0)
 		c.Change1 = fmt.Sprintf("%0.2f", c.Quote["USD"].Change1)
+		if c.Symbol == "ALGO" || c.Symbol == "ADA" {
+			c.Red = true
+		}
 		list = append(list, c)
 	}
 	r.Things = list
