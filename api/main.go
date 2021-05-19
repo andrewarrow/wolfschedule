@@ -46,6 +46,7 @@ type CMC struct {
 	Volume24       string
 	Change1        string
 	Red            bool
+	Price          string
 }
 
 type CMCHolder struct {
@@ -69,7 +70,7 @@ func main() {
 	r.Vol24 = map[string]string{}
 	r.Change1 = map[string]string{}
 	list := []CMC{}
-	valid := `bitcoin ethereum binance-coin cardano dogecoin polkadot-new polygon stellar vechain terra-luna iota kusama tezos cosmos avalanche algorand elrond-egld qtum harmony nano celo kava`
+	valid := `monero bitcoin ethereum binance-coin cardano dogecoin polkadot-new polygon stellar vechain terra-luna iota kusama tezos cosmos avalanche algorand elrond-egld qtum harmony nano celo kava`
 	validMap := map[string]bool{}
 	for _, v := range strings.Split(valid, " ") {
 		validMap[v] = true
@@ -86,6 +87,7 @@ func main() {
 		c.MarketCap = fmt.Sprintf("%0.2f", mcap)
 		c.Volume24 = fmt.Sprintf("%0.2f", c.Quote["USD"].Volume24/1000000000.0)
 		c.Change1 = fmt.Sprintf("%0.2f", c.Quote["USD"].Change1)
+		c.Price = fmt.Sprintf("%0.2f", c.Quote["USD"].Price)
 		if c.Symbol == "ALGO" || c.Symbol == "ADA" {
 			c.Red = true
 		}

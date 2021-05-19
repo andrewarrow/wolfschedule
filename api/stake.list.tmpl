@@ -125,6 +125,7 @@ border-top: 1px solid #989898;}
                     <td></td>
                     <td></td>
                     <td>TICKER</td>
+                    <td></td>
                     <td>CAP</td>
                     <td>VOL24</td>
                     <td>C1</td>
@@ -142,7 +143,10 @@ border-top: 1px solid #989898;}
 {{ else }}
 <tr>
 {{ end }}
-                <td nowrap="true">{{$e.Name}}</td><td>{{$e.DateAdded}}</td> <td>{{$e.Symbol}}</td> 
+                <td nowrap="true">{{$e.Name}}</td>
+                <td>{{$e.DateAdded}}</td> 
+                <td>{{$e.Symbol}}</td> 
+                <td>{{$e.Price}}</td> 
                 <td>{{$e.MarketCap}}</td> 
                 <td>{{$e.Volume24}}</td> 
                 <td>{{$e.Change1}}</td> 
