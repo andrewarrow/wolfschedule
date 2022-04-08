@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"time"
+
+	"github.com/andrewarrow/wolfschedule/parse"
 )
 
 func main() {
@@ -10,6 +12,13 @@ func main() {
 	timeZone, _ := time.LoadLocation("America/Phoenix")
 	eventDate := time.Date(year, time.Month(1), 1, 0, 0, 0, 0, timeZone)
 	month := eventDate.Month()
+
+	all := parse.GetAll()
+	m := map[string]int64{}
+	for _, t := range all {
+		u := fmt.Sprintf("%v", time.Unix(t.Val, 0))
+		m[u[0:10]] = t.Val
+	}
 
 	for {
 		count := 0
@@ -32,7 +41,13 @@ func main() {
 			if printDay != "" {
 				dayFinal = fmt.Sprintf("<div class=\"day-of-week\">%s</div>", printDay)
 			}
-			fmt.Printf("<div class=\"col-2 themed-grid-col\">%d\n%s</div>", eventDate.Day(), dayFinal)
+			u := fmt.Sprintf("%v", eventDate)
+			substring := u[0:10]
+			moon := ""
+			if m[substring] > 0 {
+				moon = "moon"
+			}
+			fmt.Printf("<div class=\"col-2 themed-grid-col %s\">%d\n%s</div>", moon, eventDate.Day(), dayFinal)
 			count++
 			if count == 6 {
 				count = 0
