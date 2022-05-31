@@ -35,7 +35,7 @@ func makeTodayHTML() string {
 	prevCount := 0
 	for _, item := range items {
 		if item.Count != prevCount {
-			buffer = append(buffer, fmt.Sprintf("<div>%d</div>", item.Count))
+			buffer = append(buffer, fmt.Sprintf("<h2>%d</h2>", item.Count))
 		}
 		buffer = append(buffer, fmt.Sprintf("<div>%s</div>", item.Title))
 		prevCount = item.Count

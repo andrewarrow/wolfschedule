@@ -17,7 +17,3 @@ func nc() *redis.Client {
 
 	return rdb
 }
-
-func FlushAll() {
-	nc().FlushAll(ctx)
-}

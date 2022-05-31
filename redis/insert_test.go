@@ -4,7 +4,6 @@ import "testing"
 
 func TestInsertItem(t *testing.T) {
 
-	FlushAll()
 	InsertItem(1653948463, "Google Pixel 7 prototype reputedly shows up on eBay")
 	InsertItem(1653948463, "Google Pixel 8 prototype reputedly shows up on eBay")
 	InsertItem(1653950281, "Hurricane Agatha makes landfall in Mexico")

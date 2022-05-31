@@ -13,6 +13,7 @@ type Item struct {
 
 func QueryDay() []Item {
 	t := time.Now()
+	t = t.Add(time.Hour)
 	t = t.Add(time.Hour * -24)
 	buckets := []string{}
 	i := 0
