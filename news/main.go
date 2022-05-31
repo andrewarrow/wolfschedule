@@ -2,37 +2,65 @@ package main
 
 import (
 	"io/ioutil"
-	"sort"
-	"strconv"
 	"strings"
+	"time"
 
 	"github.com/andrewarrow/wolfschedule/redis"
+	"golang.org/x/net/html"
 )
 
 func main() {
-	files := sortedFiles()
-	for _, file := range files {
-		asBytes, _ := ioutil.ReadFile("data/" + file)
-		lines := strings.Split(string(asBytes), "\n")
-
-		for _, line := range lines {
-			tokens := strings.Split(file, ".")
-			ts, _ := strconv.ParseInt(tokens[0], 10, 64)
-			redis.InsertItem(ts, line)
-		}
+	list := handleItems("/home/aa/phantomjs/bin/raw.html")
+	for item, _ := range list {
+		redis.InsertItem(time.Now().Unix(), item)
 	}
 
 }
 
-func sortedFiles() []string {
-	files, _ := ioutil.ReadDir("data")
-	list := []string{}
-	for _, file := range files {
-		list = append(list, file.Name())
+func handleItems(filename string) map[string]bool {
+	b, _ := ioutil.ReadFile(filename)
+	s := string(b)
+	tkn := html.NewTokenizer(strings.NewReader(s))
+
+	hOn := false
+	aOn := false
+
+	list := map[string]bool{}
+
+	for {
+
+		tt := tkn.Next()
+		switch {
+
+		case tt == html.ErrorToken:
+			return list
+
+		case tt == html.StartTagToken:
+
+			t := tkn.Token()
+			if t.Data == "h3" { // || t.Data == "h4" {
+				hOn = true
+			}
+			if t.Data == "a" {
+				aOn = true
+			}
+
+		case tt == html.TextToken:
+
+			t := tkn.Token()
+			txt := strings.TrimSpace(t.Data)
+			if txt == "" {
+				continue
+			}
+			if hOn && aOn {
+				hOn = false
+				aOn = false
+				list[txt] = true
+			}
+
+		}
+
 	}
-	sort.Slice(list, func(a, b int) bool {
-		return list[a] > list[b]
-	})
 
 	return list
 
