@@ -13,11 +13,6 @@ import (
 func main() {
 	rand.Seed(time.Now().UnixNano())
 
-	server.Year = time.Now().Year()
-	timeZone, _ := time.LoadLocation("America/Phoenix")
-	server.EventDate = time.Date(server.Year, time.Month(1), 1, 0, 0, 0, 0, timeZone)
-	server.Month = server.EventDate.Month()
-
 	all := parse.GetAll()
 	for _, t := range all {
 		u := fmt.Sprintf("%v", time.Unix(t.Val, 0))

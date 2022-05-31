@@ -15,6 +15,8 @@ func Serve(port string) {
 	prefix := ""
 	router.Static("/assets", prefix+"assets")
 	router.GET("/", WelcomeIndex)
+	router.GET("/month", MonthIndex)
+	router.GET("/fortnight", FortnightIndex)
 
 	AddTemplates(router, prefix)
 	go router.Run(fmt.Sprintf(":%s", port))

@@ -19,10 +19,18 @@ var Year int
 var EventDate time.Time
 var Month time.Month
 
+func SetupYear() {
+	Year = time.Now().Year()
+	timeZone, _ := time.LoadLocation("America/Phoenix")
+	EventDate = time.Date(Year, time.Month(1), 1, 0, 0, 0, 0, timeZone)
+	Month = EventDate.Month()
+}
+
 func WelcomeIndex(c *gin.Context) {
 
 	TimesMutex.Lock()
-	body := template.HTML(makeHTML())
+	SetupYear()
+	body := template.HTML(makeYearHTML())
 	TimesMutex.Unlock()
 
 	c.HTML(http.StatusOK, "index.tmpl", gin.H{
@@ -31,7 +39,7 @@ func WelcomeIndex(c *gin.Context) {
 	})
 }
 
-func makeHTML() string {
+func makeYearHTML() string {
 	buffer := []string{}
 	for {
 		count := 0
