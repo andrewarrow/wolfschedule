@@ -34,10 +34,16 @@ func QueryDay() []Item {
 		}
 	}
 
-	// take the freshest list
-	//   for each item, compute how many past buckets it appears in
 	freshest := buckets[0]
-	rest := buckets[1:]
+	i = 0
+	for {
+		if len(m[freshest]) > 0 {
+			break
+		}
+		i++
+		freshest = buckets[i]
+	}
+	rest := buckets[i+1:]
 
 	for k, _ := range m[freshest] {
 		for _, history := range rest {

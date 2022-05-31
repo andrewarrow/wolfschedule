@@ -33,13 +33,9 @@ func makeTodayHTML() string {
 
 	items := redis.QueryDay()
 	for _, item := range items {
-		buffer = append(buffer, fmt.Sprintf("<div>%s</div>", truncate(item)))
+		buffer = append(buffer, fmt.Sprintf("<div>%02d. %s</div>", item.Count, item.Title))
 	}
 	buffer = append(buffer, "</div>")
 
 	return strings.Join(buffer, "\n")
-}
-
-func truncate(s string) string {
-	return s
 }
