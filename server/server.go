@@ -17,6 +17,7 @@ func Serve(port string) {
 	router.GET("/", WelcomeIndex)
 	router.GET("/month", MonthIndex)
 	router.GET("/fortnight", FortnightIndex)
+	router.GET("/today", TodayIndex)
 
 	AddTemplates(router, prefix)
 	go router.Run(fmt.Sprintf(":%s", port))
