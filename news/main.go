@@ -1,52 +1,66 @@
 package main
 
 import (
-	"fmt"
 	"io/ioutil"
 	"sort"
+	"strconv"
 	"strings"
+
+	"github.com/andrewarrow/wolfschedule/redis"
 )
 
 func main() {
 	files := sortedFiles()
-	m := map[string]map[string]int{}
 	for _, file := range files {
-		m[file] = map[string]int{}
 		asBytes, _ := ioutil.ReadFile("data/" + file)
 		lines := strings.Split(string(asBytes), "\n")
 
 		for _, line := range lines {
-			m[file][line] = 1
+			tokens := strings.Split(file, ".")
+			ts, _ := strconv.ParseInt(tokens[0], 10, 64)
+			redis.InsertItem(ts, line)
 		}
-
 	}
 
-	// take the freshest list
-	//   for each item, compute how many past files it appears in
+	/*
+		m := map[string]map[string]int{}
+		for _, file := range files {
+			m[file] = map[string]int{}
+			asBytes, _ := ioutil.ReadFile("data/" + file)
+			lines := strings.Split(string(asBytes), "\n")
 
-	freshest := files[0]
-	rest := files[1:]
+			for _, line := range lines {
+				m[file][line] = 1
+			}
 
-	for k, _ := range m[freshest] {
-		for _, history := range rest {
-			if m[history][k] == 1 {
-				m[freshest][k]++
+		}
+
+		// take the freshest list
+		//   for each item, compute how many past files it appears in
+
+		freshest := files[0]
+		rest := files[1:]
+
+		for k, _ := range m[freshest] {
+			for _, history := range rest {
+				if m[history][k] == 1 {
+					m[freshest][k]++
+				}
 			}
 		}
-	}
 
-	items := []Item{}
-	for k, v := range m[freshest] {
-		item := Item{v, k}
-		items = append(items, item)
-	}
-	sort.Slice(items, func(a, b int) bool {
-		return items[a].Count > items[b].Count
-	})
+		items := []Item{}
+		for k, v := range m[freshest] {
+			item := Item{v, k}
+			items = append(items, item)
+		}
+		sort.Slice(items, func(a, b int) bool {
+			return items[a].Count > items[b].Count
+		})
 
-	for _, item := range items {
-		fmt.Printf("%02d. %s\n", item.Count, item.Title)
-	}
+		for _, item := range items {
+			fmt.Printf("%02d. %s\n", item.Count, item.Title)
+		} */
 }
 
 type Item struct {
