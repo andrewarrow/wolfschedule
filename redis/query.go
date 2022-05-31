@@ -7,6 +7,7 @@ import (
 
 func QueryDay() []string {
 	t := time.Now()
+	t = t.Add(time.Hour * -24)
 	buckets := []string{}
 	i := 0
 	for {
@@ -18,15 +19,6 @@ func QueryDay() []string {
 			break
 		}
 	}
-
-	buckets = []string{"2022053018",
-		"2022053020",
-		"2022053016",
-		"2022053019",
-		"2022053021",
-		"2022053017",
-		"2022053022",
-		"2022053015"}
 
 	items := []string{}
 	for _, b := range buckets {
