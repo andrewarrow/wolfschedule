@@ -1,7 +1,13 @@
 package redis
 
-import "testing"
+import (
+	"fmt"
+	"testing"
+)
 
 func TestQueryDay(t *testing.T) {
-	QueryDay()
+	items := QueryDay()
+	for _, item := range items {
+		fmt.Println(item)
+	}
 }
