@@ -1,10 +1,12 @@
 package server
 
 import (
+	"fmt"
 	"html/template"
 	"net/http"
 	"strings"
 
+	"github.com/andrewarrow/wolfschedule/redis"
 	"github.com/gin-gonic/gin"
 )
 
@@ -23,8 +25,13 @@ func ItemIndex(c *gin.Context) {
 func makeItemHTML(title string) string {
 	buffer := []string{}
 
+	m := redis.QueryAttributes(title)
+
 	buffer = append(buffer, "<p><h1>")
 	buffer = append(buffer, title)
 	buffer = append(buffer, "</h1></p>")
+	buffer = append(buffer, "<p>")
+	buffer = append(buffer, fmt.Sprintf("<a href=\"https://news.google.com%s\">source</a>", m["href"][1:]))
+	buffer = append(buffer, "</p>")
 	return strings.Join(buffer, "\n")
 }

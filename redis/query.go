@@ -78,6 +78,11 @@ func QueryBucket(b string) []string {
 	return items
 }
 
-//		for _, item := range items {
-//		fmt.Printf("%02d. %s\n", item.Count, item.Title)
-//	}
+func QueryAttributes(b string) map[string]string {
+	m, err := nc().HGetAll(ctx, b).Result()
+	if err != nil {
+		fmt.Println(err)
+		return m
+	}
+	return m
+}
