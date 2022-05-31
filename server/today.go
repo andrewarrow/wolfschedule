@@ -32,8 +32,13 @@ func makeTodayHTML() string {
 	buffer = append(buffer, "<div>")
 
 	items := redis.QueryDay()
+	prevCount := 0
 	for _, item := range items {
-		buffer = append(buffer, fmt.Sprintf("<div>%02d. %s</div>", item.Count, item.Title))
+		if item.Count != prevCount {
+			buffer = append(buffer, fmt.Sprintf("<div>%d</div>", item.Count))
+		}
+		buffer = append(buffer, fmt.Sprintf("<div>%s</div>", item.Title))
+		prevCount = item.Count
 	}
 	buffer = append(buffer, "</div>")
 
