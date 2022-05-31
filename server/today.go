@@ -1,11 +1,13 @@
 package server
 
 import (
+	"fmt"
 	"html/template"
 	"net/http"
 	"strings"
 	"time"
 
+	"github.com/andrewarrow/wolfschedule/redis"
 	"github.com/gin-gonic/gin"
 )
 
@@ -27,6 +29,17 @@ func makeTodayHTML() string {
 	buffer = append(buffer, "<p><h1>")
 	buffer = append(buffer, time.Now().String()[0:36])
 	buffer = append(buffer, "</h1></p>")
+	buffer = append(buffer, "<div>")
+
+	items := redis.QueryDay()
+	for _, item := range items {
+		buffer = append(buffer, fmt.Sprintf("<div>%s</div>", truncate(item)))
+	}
+	buffer = append(buffer, "</div>")
 
 	return strings.Join(buffer, "\n")
+}
+
+func truncate(s string) string {
+	return s
 }
