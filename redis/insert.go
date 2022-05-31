@@ -7,8 +7,9 @@ import (
 
 var ctx = context.Background()
 
-func InsertItem(item string, ts int64) {
-	err := nc().Set(ctx, "key", "value", 0).Err()
+func InsertItem(ts int64, item string) {
+
+	err := nc().Set(ctx, item, fmt.Sprintf("%d", ts), 0).Err()
 	if err != nil {
 		fmt.Println(err)
 		return
