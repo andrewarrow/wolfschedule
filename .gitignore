@@ -1,6 +1,7 @@
 wolfschedule
 news/data
 news/news
+news/raw.html
 marketing/bootstrap.min.css
 api/api
 wasm/wasm

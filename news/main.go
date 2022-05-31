@@ -11,21 +11,23 @@ import (
 
 func main() {
 	list := handleItems("/home/aa/phantomjs/bin/raw.html")
-	for item, _ := range list {
-		redis.InsertItem(time.Now().Unix(), item)
+	//list := handleItems("raw.html")
+	for item, href := range list {
+		redis.InsertItem(time.Now().Unix(), item, href)
 	}
 
 }
 
-func handleItems(filename string) map[string]bool {
+func handleItems(filename string) map[string]string {
 	b, _ := ioutil.ReadFile(filename)
 	s := string(b)
 	tkn := html.NewTokenizer(strings.NewReader(s))
 
 	hOn := false
 	aOn := false
+	aHref := ""
 
-	list := map[string]bool{}
+	list := map[string]string{}
 
 	for {
 
@@ -42,6 +44,12 @@ func handleItems(filename string) map[string]bool {
 				hOn = true
 			}
 			if t.Data == "a" {
+				for _, a := range t.Attr {
+					if a.Key != "href" {
+						continue
+					}
+					aHref = a.Val
+				}
 				aOn = true
 			}
 
@@ -55,7 +63,8 @@ func handleItems(filename string) map[string]bool {
 			if hOn && aOn {
 				hOn = false
 				aOn = false
-				list[txt] = true
+				list[txt] = aHref
+				aHref = ""
 			}
 
 		}

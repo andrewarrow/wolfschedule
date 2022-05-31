@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	"net/url"
 	"strings"
 	"time"
 
@@ -29,7 +30,7 @@ func makeTodayHTML() string {
 	buffer = append(buffer, "<p><h1>")
 	buffer = append(buffer, time.Now().String()[0:36])
 	buffer = append(buffer, "</h1></p>")
-	buffer = append(buffer, "<div>")
+	buffer = append(buffer, "<div class=\"good-links\">")
 
 	items := redis.QueryDay()
 	prevCount := 0
@@ -37,7 +38,7 @@ func makeTodayHTML() string {
 		if item.Count != prevCount {
 			buffer = append(buffer, fmt.Sprintf("<h2>%d</h2>", item.Count))
 		}
-		buffer = append(buffer, fmt.Sprintf("<div>%s</div>", item.Title))
+		buffer = append(buffer, fmt.Sprintf("<div><a href=\"/item/%s\">%s</a></div>", url.QueryEscape(item.Title), item.Title))
 		prevCount = item.Count
 	}
 	buffer = append(buffer, "</div>")
