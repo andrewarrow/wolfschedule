@@ -1,0 +1,74 @@
+package server
+
+import (
+	"fmt"
+	"net/http"
+	"net/http/httputil"
+	"os"
+	"os/exec"
+	"time"
+
+	"github.com/foomo/simplecert"
+	"github.com/foomo/tlsconfig"
+
+	"github.com/gin-gonic/gin"
+
+	u "net/url"
+)
+
+var runners = map[string]*httputil.ReverseProxy{}
+
+func Serve() {
+	port := 3001
+	domains := []string{"wolfschedule.com", "many.pw", "cyborg.st"}
+	hosts := []string{}
+	for i, host := range domains {
+		hosts = append(hosts, host)
+		url, _ := u.Parse(fmt.Sprintf("http://localhost:%d", (port + i)))
+		runners[host] = httputil.NewSingleHostReverseProxy(url)
+		path := fmt.Sprintf("%s%s", "/root/ice/", host)
+		go exec.Command("/root/ice/feedbacks/run_feedback", path, fmt.Sprintf("%d", (port+i)), host).Output()
+	}
+	router := gin.Default()
+	router.NoRoute(handleReq)
+
+	cfg := simplecert.Default
+	cfg.Domains = hosts
+	cfg.CacheDir = "/certs"
+	cfg.SSLEmail = os.Getenv("SSL_EMAIL")
+	certReloader, err := simplecert.Init(cfg, nil)
+	fmt.Println("err", err)
+
+	go http.ListenAndServe(":80", http.HandlerFunc(simplecert.Redirect))
+	tlsconf := tlsconfig.NewServerTLSConfig(tlsconfig.TLSModeServerStrict)
+	tlsconf.GetCertificate = certReloader.GetCertificateFunc()
+
+	s := &http.Server{
+		Addr:      ":443",
+		Handler:   router,
+		TLSConfig: tlsconf,
+	}
+
+	s.ListenAndServeTLS("", "")
+
+	for {
+		time.Sleep(time.Second)
+	}
+
+}
+
+func getHost(c *gin.Context) string {
+	host := c.Request.Host
+	return host
+}
+
+func handleReq(c *gin.Context) {
+	defer c.Request.Body.Close()
+	c.Writer.Header().Add("Access-Control-Allow-Origin", c.Request.Header.Get("Origin"))
+	c.Writer.Header().Add("Access-Control-Allow-Methods", "GET,POST")
+	c.Writer.Header().Add("Access-Control-Allow-Headers", "Filename")
+	host := getHost(c)
+	if runners[host] != nil {
+		runners[host].ServeHTTP(c.Writer, c.Request)
+	}
+}
