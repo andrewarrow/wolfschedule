@@ -1,6 +1,12 @@
 package redis
 
-import "github.com/go-redis/redis/v8"
+import (
+	"context"
+
+	"github.com/go-redis/redis/v8"
+)
+
+var ctx = context.Background()
 
 func nc() *redis.Client {
 	rdb := redis.NewClient(&redis.Options{
@@ -10,4 +16,8 @@ func nc() *redis.Client {
 	})
 
 	return rdb
+}
+
+func FlushAll() {
+	nc().FlushAll(ctx)
 }

@@ -1,15 +1,12 @@
 package redis
 
 import (
-	"context"
 	"fmt"
 )
 
-var ctx = context.Background()
-
 func InsertItem(ts int64, item string) {
 
-	err := nc().Set(ctx, item, fmt.Sprintf("%d", ts), 0).Err()
+	err := nc().SAdd(ctx, item, fmt.Sprintf("%d", ts)).Err()
 	if err != nil {
 		fmt.Println(err)
 		return
