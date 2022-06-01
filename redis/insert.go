@@ -21,6 +21,11 @@ func InsertItem(ts int64, title, href string) {
 		fmt.Println(err)
 		return
 	}
+	err = nc().HSet(ctx, title, bucket, 1).Err()
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 
 	expireTime := time.Now().Add(time.Hour * 24 * 30 * 12 * 2)
 	nc().ExpireAt(ctx, bucket, expireTime)
