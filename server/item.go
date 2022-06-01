@@ -32,6 +32,14 @@ func makeItemHTML(title string) string {
 	buffer = append(buffer, "</h1></p>")
 	buffer = append(buffer, "<p>")
 	buffer = append(buffer, fmt.Sprintf("<a href=\"https://news.google.com%s\">source</a>", m["href"][1:]))
+	for k, v := range m {
+		if k == "href" {
+			continue
+		}
+		buffer = append(buffer, "<div>")
+		buffer = append(buffer, fmt.Sprintf("%s: %s", k, v))
+		buffer = append(buffer, "</div>")
+	}
 	buffer = append(buffer, "</p>")
 	return strings.Join(buffer, "\n")
 }

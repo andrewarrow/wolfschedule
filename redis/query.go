@@ -20,7 +20,7 @@ func QueryDay(offset int) []Item {
 	buckets := []string{}
 	i := 0
 	for {
-		bucket := bucketForHour(t)
+		bucket := BucketForHour(t)
 		buckets = append([]string{bucket}, buckets...)
 		t = t.Add(time.Hour)
 		i++

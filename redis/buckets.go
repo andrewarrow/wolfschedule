@@ -17,7 +17,7 @@ func bucket_for_day(t time.Time) string {
 	format := t.Format("20060102")
 	return fmt.Sprintf("%s", format)
 }
-func bucketForHour(t time.Time) string {
+func BucketForHour(t time.Time) string {
 	format := t.Format("2006010215")
 	return fmt.Sprintf("%s", format)
 }

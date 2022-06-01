@@ -11,13 +11,38 @@ import (
 	"golang.org/x/net/html"
 )
 
+func main() {
+	t := time.Now()
+	t = t.Add(time.Hour * -120)
+
+	buckets := []string{}
+	i := 0
+	for {
+		bucket := redis.BucketForHour(t)
+		buckets = append([]string{bucket}, buckets...)
+		t = t.Add(time.Hour)
+		i++
+		if i >= 122 {
+			break
+		}
+	}
+
+	for _, b := range buckets {
+		fmt.Println(b)
+		for _, item := range redis.QueryBucket(b) {
+			redis.SetBucketBoolean(item, b)
+		}
+	}
+
+}
+
 func main2() {
 	list := handleItems("/home/aa/phantomjs/bin/raw.html")
 	for item, href := range list {
 		redis.InsertItem(time.Now().Unix(), item, href)
 	}
 }
-func main() {
+func main3() {
 	rand.Seed(time.Now().UnixNano())
 	list := handleItems("raw.html")
 	t := time.Now()
