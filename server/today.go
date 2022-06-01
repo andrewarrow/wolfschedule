@@ -1,6 +1,7 @@
 package server
 
 import (
+	"bytes"
 	"fmt"
 	"html/template"
 	"net/http"
@@ -35,9 +36,19 @@ func makeTodayHTML(offset int) string {
 	t = t.Add(time.Hour)
 	t = t.Add(time.Hour * time.Duration(offset))
 
+	tmpl, err := template.ParseFiles("templates/tz.tmpl")
+	if err != nil {
+		fmt.Println(err)
+		return ""
+	}
+
+	b := bytes.NewBuffer([]byte{})
+	tmpl.Execute(b, nil)
+
 	buffer = append(buffer, "<p><h1>")
 	buffer = append(buffer, t.Format(time.UnixDate))
 	buffer = append(buffer, "</h1></p>")
+	buffer = append(buffer, "<p>"+string(b.Bytes())+"</p>")
 	buffer = append(buffer, "<p>")
 	buffer = append(buffer, fmt.Sprintf("<a href=\"?t=%d\">backwards</a> | <a href=\"?t=%d\">forward</a>", offset-1, offset+1))
 	buffer = append(buffer, "</p>")
