@@ -38,7 +38,7 @@ func QueryDay() []Item {
 	freshest := buckets[0]
 	i = 0
 	for {
-		if len(m[freshest]) > 0 {
+		if len(m[freshest]) > 0 || i >= len(buckets)-1 {
 			break
 		}
 		i++

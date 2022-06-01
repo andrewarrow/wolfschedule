@@ -20,6 +20,9 @@ func Serve(port string) {
 	router.GET("/today", TodayIndex)
 	router.GET("/item/:title", ItemIndex)
 
+	// 12 months, 30 days, 3 week 10 days each
+	// http://dmheroes.co.uk/reference/atlantean-calendar.html
+
 	AddTemplates(router, prefix)
 	go router.Run(fmt.Sprintf(":%s", port))
 

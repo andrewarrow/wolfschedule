@@ -1,7 +1,9 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
+	"math/rand"
 	"strings"
 	"time"
 
@@ -9,13 +11,30 @@ import (
 	"golang.org/x/net/html"
 )
 
-func main() {
+func main2() {
 	list := handleItems("/home/aa/phantomjs/bin/raw.html")
-	//list := handleItems("raw.html")
 	for item, href := range list {
 		redis.InsertItem(time.Now().Unix(), item, href)
 	}
-
+}
+func main() {
+	rand.Seed(time.Now().UnixNano())
+	list := handleItems("raw.html")
+	t := time.Now()
+	t = t.Add(time.Hour * -24)
+	i := 0
+	for {
+		for item, href := range list {
+			redis.InsertItem(t.Unix(), fmt.Sprintf("%d %s", rand.Intn(9), item), href)
+		}
+		fmt.Println(i, "done")
+		time.Sleep(1 * time.Millisecond)
+		t = t.Add(time.Hour * 1)
+		i++
+		if i > 24 {
+			break
+		}
+	}
 }
 
 func handleItems(filename string) map[string]string {
