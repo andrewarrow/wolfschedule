@@ -11,10 +11,12 @@ type Item struct {
 	Title string
 }
 
-func QueryDay() []Item {
+func QueryDay(offset int) []Item {
 	t := time.Now()
 	t = t.Add(time.Hour)
+	t = t.Add(time.Hour * time.Duration(offset))
 	t = t.Add(time.Hour * -24)
+
 	buckets := []string{}
 	i := 0
 	for {

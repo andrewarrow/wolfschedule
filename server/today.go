@@ -28,18 +28,22 @@ func TodayIndex(c *gin.Context) {
 	})
 }
 
-func makeTodayHTML(t int) string {
+func makeTodayHTML(offset int) string {
 	buffer := []string{}
 
+	t := time.Now()
+	t = t.Add(time.Hour)
+	t = t.Add(time.Hour * time.Duration(offset))
+
 	buffer = append(buffer, "<p><h1>")
-	buffer = append(buffer, time.Now().Format(time.UnixDate))
+	buffer = append(buffer, t.Format(time.UnixDate))
 	buffer = append(buffer, "</h1></p>")
 	buffer = append(buffer, "<p>")
-	buffer = append(buffer, fmt.Sprintf("<a href=\"?t=%d\">backwards</a> | <a href=\"?t=%d\">forward</a>", t-1, t+1))
+	buffer = append(buffer, fmt.Sprintf("<a href=\"?t=%d\">backwards</a> | <a href=\"?t=%d\">forward</a>", offset-1, offset+1))
 	buffer = append(buffer, "</p>")
 	buffer = append(buffer, "<div class=\"good-links\">")
 
-	items := redis.QueryDay()
+	items := redis.QueryDay(offset)
 	prevCount := 0
 	for _, item := range items {
 		if item.Count != prevCount {
