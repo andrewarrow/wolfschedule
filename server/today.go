@@ -19,9 +19,12 @@ func TodayIndex(c *gin.Context) {
 	t := c.DefaultQuery("t", "0")
 	tInt, _ := strconv.Atoi(t)
 
-	TimesMutex.Lock()
-	body := template.HTML(makeTodayHTML(tInt))
-	TimesMutex.Unlock()
+	tz, _ := c.Cookie("tz")
+	if tz == "" {
+		tz = "Antarctica/Troll"
+	}
+
+	body := template.HTML(makeTodayHTML(tInt, tz))
 
 	c.HTML(http.StatusOK, "index.tmpl", gin.H{
 		"flash": "",
@@ -29,7 +32,12 @@ func TodayIndex(c *gin.Context) {
 	})
 }
 
-func makeTodayHTML(offset int) string {
+type TimeZoneData struct {
+	Zones []string
+	Zone  string
+}
+
+func makeTodayHTML(offset int, tz string) string {
 	buffer := []string{}
 
 	t := time.Now()
@@ -43,7 +51,11 @@ func makeTodayHTML(offset int) string {
 	}
 
 	b := bytes.NewBuffer([]byte{})
-	tmpl.Execute(b, nil)
+	err = tmpl.Execute(b, TimeZoneData{zones, tz})
+	if err != nil {
+		fmt.Println(tz, err)
+		return ""
+	}
 
 	buffer = append(buffer, "<p><h1>")
 	buffer = append(buffer, t.Format(time.UnixDate))

@@ -1,47 +1,14 @@
+<form>
 <select name="tz">
-<option>America/Anchorage</option>
-<option>America/Chicago</option>
-<option>America/Denver</option>
-<option>America/Detroit</option>
-<option>America/Jamaica</option>
-<option>America/Los_Angeles</option>
-<option>America/New_York</option>
-<option>America/Panama</option>
-<option>America/Phoenix</option>
-<option>Antarctica/Troll</option>
-<option>Asia/Bangkok</option>
-<option>Asia/Dubai</option>
-<option>Asia/Hong_Kong</option>
-<option>Asia/Kabul</option>
-<option>Asia/Kuwait</option>
-<option>Asia/Pyongyang</option>
-<option>Asia/Qatar</option>
-<option>Asia/Seoul</option>
-<option>Asia/Singapore</option>
-<option>Asia/Tehran</option>
-<option>Asia/Tokyo</option>
-<option>Australia/Brisbane</option>
-<option>Australia/Melbourne</option>
-<option>Australia/Sydney</option>
-<option>Europe/Amsterdam</option>
-<option>Europe/Athens</option>
-<option>Europe/Belgrade</option>
-<option>Europe/Brussels</option>
-<option>Europe/Budapest</option>
-<option>Europe/Copenhagen</option>
-<option>Europe/Dublin</option>
-<option>Europe/Helsinki</option>
-<option>Europe/London</option>
-<option>Europe/Minsk</option>
-<option>Europe/Monaco</option>
-<option>Europe/Paris</option>
-<option>Europe/Sarajevo</option>
-<option>Europe/Stockholm</option>
-<option>Europe/Vatican</option>
-<option>Europe/Warsaw</option>
-<option>Europe/Zurich</option>
-<option>Indian/Cocos</option>
-<option>Pacific/Fiji</option>
-<option>Pacific/Guam</option>
-<option>Pacific/Honolulu</option>
+{{$zone := .Zone}}
+{{range $z := .Zones}}
+
+  {{if eq $zone $z}}
+    <option selected="true">{{$z}}</option>
+  {{else}}
+    <option>{{$z}}</option>
+  {{end}}
+
+{{end}}
 </select>
+</form>
