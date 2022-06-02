@@ -43,8 +43,8 @@ func FindNextEvent(t int64) *Event {
 	return nil
 }
 
-func (e *Event) Until(t int64) string {
-	delta := float64(e.Timestamp - t)
+func EventDelta(t int64) string {
+	delta := float64(t)
 	d := delta / 86400.0
 	days := math.Floor(d)
 	hours := 24 * (d - days)

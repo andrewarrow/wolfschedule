@@ -65,12 +65,21 @@ func makeTodayHTML(offset int, tz string) string {
 
 	event := moon.FindNextEvent(t.Unix())
 	if event.FullMoon {
-		buffer = append(buffer, "<p>FULL MOON in</p>")
+		buffer = append(buffer, "<p><b>Next FULL MOON in</b></p>")
 	} else {
-		buffer = append(buffer, "<p>NEW MOON in</p>")
+		buffer = append(buffer, "<p><b>Next NEW MOON in</b></p>")
 	}
 	buffer = append(buffer, "<p>")
-	buffer = append(buffer, event.Until(t.Unix()))
+	buffer = append(buffer, moon.EventDelta(event.Timestamp-t.Unix()))
+	buffer = append(buffer, "</p>")
+
+	if event.FullMoon {
+		buffer = append(buffer, "<p><b>Previous NEW MOON was</b></p>")
+	} else {
+		buffer = append(buffer, "<p><b>Previous FULL MOON was</b></p>")
+	}
+	buffer = append(buffer, "<p>")
+	buffer = append(buffer, moon.EventDelta(t.Unix()-event.Prev.Timestamp)+" ago")
 	buffer = append(buffer, "</p>")
 
 	buffer = append(buffer, "<p>")
