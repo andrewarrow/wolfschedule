@@ -5,9 +5,16 @@ import (
 	"time"
 )
 
+var utc *time.Location
+
+func init() {
+	utc, _ = time.LoadLocation("UTC")
+}
+
 func InsertItem(ts int64, title, href string) {
 
 	t := time.Unix(ts, 0)
+	t = t.In(utc)
 
 	bucket := BucketForHour(t)
 
