@@ -59,7 +59,7 @@ func makeTodayHTML(offset int, tz string) string {
 	}
 
 	buffer = append(buffer, "<p><h1>")
-	buffer = append(buffer, t.Format("Monday Jan 01, 2006"))
+	buffer = append(buffer, t.Format(time.RFC850))
 	buffer = append(buffer, "</h1></p>")
 	buffer = append(buffer, "<p>"+string(b.Bytes())+"</p>")
 
@@ -70,7 +70,8 @@ func makeTodayHTML(offset int, tz string) string {
 		buffer = append(buffer, "<p><b>Next NEW MOON in</b></p>")
 	}
 	buffer = append(buffer, "<p>")
-	buffer = append(buffer, moon.EventDelta(event.Timestamp-t.Unix()))
+	buffer = append(buffer, moon.EventDelta(event.Timestamp-t.Unix())+"<br/>")
+	buffer = append(buffer, event.AsTime(location).Format(time.RFC850))
 	buffer = append(buffer, "</p>")
 
 	if event.FullMoon {
@@ -79,7 +80,8 @@ func makeTodayHTML(offset int, tz string) string {
 		buffer = append(buffer, "<p><b>Previous FULL MOON was</b></p>")
 	}
 	buffer = append(buffer, "<p>")
-	buffer = append(buffer, moon.EventDelta(t.Unix()-event.Prev.Timestamp)+" ago")
+	buffer = append(buffer, moon.EventDelta(t.Unix()-event.Prev.Timestamp)+" ago<br/>")
+	buffer = append(buffer, event.Prev.AsTime(location).Format(time.RFC850))
 	buffer = append(buffer, "</p>")
 
 	buffer = append(buffer, "<p>")

@@ -20,6 +20,11 @@ func NewEvent(ts int64, b bool) *Event {
 	return &e
 }
 
+func (e *Event) AsTime(location *time.Location) time.Time {
+	t := time.Unix(e.Timestamp, 0)
+	return t.In(location)
+}
+
 func (e *Event) String() string {
 	t := time.Unix(e.Timestamp, 0)
 	tstr := fmt.Sprintf("%v", t)
