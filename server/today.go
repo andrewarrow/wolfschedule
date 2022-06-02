@@ -17,8 +17,8 @@ import (
 
 func TodayIndex(c *gin.Context) {
 
-	t := c.DefaultQuery("t", "0")
-	tInt, _ := strconv.Atoi(t)
+	t := c.DefaultQuery("t", fmt.Sprintf("%d", time.Now().Unix()))
+	tInt, _ := strconv.ParseInt(t, 10, 64)
 
 	tz, _ := c.Cookie("tz")
 	if tz == "" {
@@ -38,12 +38,12 @@ type TimeZoneData struct {
 	Zone  string
 }
 
-func makeTodayHTML(offset int, tz string) string {
+func makeTodayHTML(current int64, tz string) string {
 	buffer := []string{}
 
 	location, _ := time.LoadLocation(tz)
-	t := time.Now().In(location)
-	t = t.Add(time.Hour * time.Duration(offset))
+	t := time.Unix(current, 0).In(location)
+	//t = t.Add(time.Hour * 24 * time.Duration(offset))
 
 	tmpl, err := template.ParseFiles("templates/tz.tmpl")
 	if err != nil {
@@ -85,11 +85,13 @@ func makeTodayHTML(offset int, tz string) string {
 	buffer = append(buffer, "</p>")
 
 	buffer = append(buffer, "<p>")
-	buffer = append(buffer, fmt.Sprintf("<a href=\"?t=%d\">backwards</a> | <a href=\"?t=%d\">forward</a>", offset-1, offset+1))
+	buffer = append(buffer, fmt.Sprintf("<a href=\"?t=%d\">backwards</a> | <a href=\"?t=%d\">forward</a>",
+		current-86400,
+		current+86400))
 	buffer = append(buffer, "</p>")
 	buffer = append(buffer, "<div class=\"good-links\">")
 
-	items := redis.QueryDay(offset)
+	items := redis.QueryDay(0)
 	prevCount := 0
 	for _, item := range items {
 		if item.Count != prevCount {
