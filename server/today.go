@@ -71,7 +71,7 @@ func makeTodayHTML(current int64, tz string) string {
 	}
 	buffer = append(buffer, "<p>")
 	buffer = append(buffer, moon.EventDelta(event.Timestamp-t.Unix())+"<br/>")
-	buffer = append(buffer, event.AsTime(location).Format(time.RFC850))
+	buffer = append(buffer, fmt.Sprintf("<a href=\"?t=%d\">%s</a>", event.Timestamp, event.AsTime(location).Format(time.RFC850)))
 	buffer = append(buffer, "</p>")
 
 	if event.FullMoon {
@@ -81,7 +81,7 @@ func makeTodayHTML(current int64, tz string) string {
 	}
 	buffer = append(buffer, "<p>")
 	buffer = append(buffer, moon.EventDelta(t.Unix()-event.Prev.Timestamp)+" ago<br/>")
-	buffer = append(buffer, event.Prev.AsTime(location).Format(time.RFC850))
+	buffer = append(buffer, fmt.Sprintf("<a href=\"?t=%d\">%s</a>", event.Prev.Timestamp, event.Prev.AsTime(location).Format(time.RFC850)))
 	buffer = append(buffer, "</p>")
 
 	buffer = append(buffer, "<p>")
