@@ -57,4 +57,5 @@ var zones = []string{"America/Anchorage",
 	"Indian/Cocos",
 	"Pacific/Fiji",
 	"Pacific/Guam",
-	"Pacific/Honolulu"}
+	"Pacific/Honolulu",
+	"UTC"}
