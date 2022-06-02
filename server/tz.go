@@ -1,5 +1,18 @@
 package server
 
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
+
+func TimeZonePost(c *gin.Context) {
+	tz := c.PostForm("tz")
+	c.SetCookie("tz", tz, 3600*24*365*10, "/", "", false, true)
+	c.Redirect(http.StatusFound, "/today")
+	c.Abort()
+}
+
 var zones = []string{"America/Anchorage",
 	"America/Chicago",
 	"America/Denver",

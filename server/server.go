@@ -19,6 +19,7 @@ func Serve(port string) {
 	router.GET("/fortnight", FortnightIndex)
 	router.GET("/today", TodayIndex)
 	router.GET("/item/:title", ItemIndex)
+	router.POST("/tz", TimeZonePost)
 
 	// 12 months, 30 days, 3 week 10 days each
 	// http://dmheroes.co.uk/reference/atlantean-calendar.html

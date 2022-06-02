@@ -1,5 +1,5 @@
-<form>
-<select name="tz">
+<form method="POST" action="/tz" id="tz">
+<select name="tz" onchange="document.getElementById('tz').submit();">
 {{$zone := .Zone}}
 {{range $z := .Zones}}
 
