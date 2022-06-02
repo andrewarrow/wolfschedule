@@ -40,7 +40,8 @@ type TimeZoneData struct {
 func makeTodayHTML(offset int, tz string) string {
 	buffer := []string{}
 
-	t := time.Now()
+	location, _ := time.LoadLocation(tz)
+	t := time.Now().In(location)
 	t = t.Add(time.Hour)
 	t = t.Add(time.Hour * time.Duration(offset))
 
