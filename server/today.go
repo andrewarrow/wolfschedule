@@ -10,6 +10,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/andrewarrow/wolfschedule/moon"
 	"github.com/andrewarrow/wolfschedule/redis"
 	"github.com/gin-gonic/gin"
 )
@@ -42,7 +43,6 @@ func makeTodayHTML(offset int, tz string) string {
 
 	location, _ := time.LoadLocation(tz)
 	t := time.Now().In(location)
-	t = t.Add(time.Hour)
 	t = t.Add(time.Hour * time.Duration(offset))
 
 	tmpl, err := template.ParseFiles("templates/tz.tmpl")
@@ -62,6 +62,17 @@ func makeTodayHTML(offset int, tz string) string {
 	buffer = append(buffer, t.Format("Monday Jan 01, 2006"))
 	buffer = append(buffer, "</h1></p>")
 	buffer = append(buffer, "<p>"+string(b.Bytes())+"</p>")
+
+	event := moon.FindNextEvent(t.Unix())
+	if event.FullMoon {
+		buffer = append(buffer, "<p>FULL MOON in</p>")
+	} else {
+		buffer = append(buffer, "<p>NEW MOON in</p>")
+	}
+	buffer = append(buffer, "<p>")
+	buffer = append(buffer, event.Until(t.Unix()))
+	buffer = append(buffer, "</p>")
+
 	buffer = append(buffer, "<p>")
 	buffer = append(buffer, fmt.Sprintf("<a href=\"?t=%d\">backwards</a> | <a href=\"?t=%d\">forward</a>", offset-1, offset+1))
 	buffer = append(buffer, "</p>")
