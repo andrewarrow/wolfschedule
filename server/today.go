@@ -59,7 +59,7 @@ func makeTodayHTML(offset int, tz string) string {
 	}
 
 	buffer = append(buffer, "<p><h1>")
-	buffer = append(buffer, t.Format(time.UnixDate))
+	buffer = append(buffer, t.Format("Monday Jan 01, 2006"))
 	buffer = append(buffer, "</h1></p>")
 	buffer = append(buffer, "<p>"+string(b.Bytes())+"</p>")
 	buffer = append(buffer, "<p>")
