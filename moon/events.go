@@ -37,7 +37,9 @@ func (e *Event) String() string {
 func FindNextEvent(t int64) *Event {
 	for i, k := range timeList {
 		if k.Timestamp > t {
-			k.Prev = &timeList[i-1]
+			if i > 0 {
+				k.Prev = &timeList[i-1]
+			}
 			if len(timeList) > i+1 {
 				k.Next = &timeList[i+1]
 			}

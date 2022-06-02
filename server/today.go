@@ -64,6 +64,10 @@ func makeTodayHTML(current int64, tz string) string {
 	buffer = append(buffer, "<p>"+string(b.Bytes())+"</p>")
 
 	event := moon.FindNextEvent(t.Unix())
+	if event == nil || event.Prev == nil {
+		buffer = append(buffer, "<p><b>END</b></p>")
+		return strings.Join(buffer, "\n")
+	}
 	if event.FullMoon {
 		buffer = append(buffer, "<p><b>Next FULL MOON in</b></p>")
 	} else {
