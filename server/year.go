@@ -56,11 +56,12 @@ func makeYearHTML(year int, location *time.Location, events map[string]*moon.Eve
 			}
 			u := fmt.Sprintf("%v", jan1)
 			substring := u[0:10]
-			moon := ""
 			if events[substring] != nil {
-				moon = "moon"
+				buffer = append(buffer, fmt.Sprintf("<div class=\"col-2 themed-grid-col moon\"><a href=\"/?t=%d\">%d</a>\n%s</div>",
+					events[substring].Timestamp, jan1.Day(), dayFinal))
+			} else {
+				buffer = append(buffer, fmt.Sprintf("<div class=\"col-2 themed-grid-col\">%d\n%s</div>", jan1.Day(), dayFinal))
 			}
-			buffer = append(buffer, fmt.Sprintf("<div class=\"col-2 themed-grid-col %s\">%d\n%s</div>", moon, jan1.Day(), dayFinal))
 			count++
 			if count == 6 {
 				count = 0
