@@ -9,7 +9,7 @@ import (
 func TimeZonePost(c *gin.Context) {
 	tz := c.PostForm("tz")
 	c.SetCookie("tz", tz, 3600*24*365*10, "/", "", false, true)
-	c.Redirect(http.StatusFound, "/today")
+	c.Redirect(http.StatusFound, "/")
 	c.Abort()
 }
 
