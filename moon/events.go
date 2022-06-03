@@ -20,6 +20,11 @@ func NewEvent(ts int64, b bool) *Event {
 	return &e
 }
 
+func (e *Event) Clone() *Event {
+	clone := NewEvent(e.Timestamp, e.FullMoon)
+	return clone
+}
+
 func (e *Event) AsTime(location *time.Location) time.Time {
 	t := time.Unix(e.Timestamp, 0)
 	return t.In(location)
@@ -44,17 +49,30 @@ func (e *Event) NewOrFull() string {
 func FindNextEvent(t int64) *Event {
 	for i, k := range timeList {
 		if k.Timestamp > t {
+			e := k.Clone()
 			if i > 0 {
-				k.Prev = &timeList[i-1]
+				e.Prev = timeList[i-1].Clone()
 			}
 			if len(timeList) > i+1 {
-				k.Next = &timeList[i+1]
+				e.Next = timeList[i+1].Clone()
 			}
-			return &k
+			return e
 		}
 	}
 
 	return nil
+}
+
+func FindEventsForYear(year int) []*Event {
+	list := []*Event{}
+	for _, k := range timeList {
+		t := time.Unix(k.Timestamp, 0)
+		if t.Year() == year {
+			list = append(list, k.Clone())
+		}
+	}
+
+	return list
 }
 
 func EventDelta(t int64) string {
