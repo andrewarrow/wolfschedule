@@ -10,9 +10,7 @@ import (
 
 func MonthIndex(c *gin.Context) {
 
-	TimesMutex.Lock()
 	body := template.HTML(makeMonthHTML())
-	TimesMutex.Unlock()
 
 	c.HTML(http.StatusOK, "index.tmpl", gin.H{
 		"flash": "",

@@ -63,12 +63,17 @@ func FindNextEvent(t int64) *Event {
 	return nil
 }
 
-func FindEventsForYear(year int) []*Event {
+func FindEventsForYear(year int, location *time.Location) []*Event {
 	list := []*Event{}
+	on := false
 	for _, k := range timeList {
 		t := time.Unix(k.Timestamp, 0)
+		t = t.In(location)
 		if t.Year() == year {
+			on = true
 			list = append(list, k.Clone())
+		} else if on {
+			return list
 		}
 	}
 

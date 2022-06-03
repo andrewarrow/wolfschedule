@@ -13,7 +13,8 @@ func TestFindNextEvent(t *testing.T) {
 }
 
 func TestFindEventsForYear(t *testing.T) {
-	list := FindEventsForYear(2022)
+	location, _ := time.LoadLocation("UTC")
+	list := FindEventsForYear(2022, location)
 	for _, item := range list {
 		fmt.Println(item.Timestamp)
 	}
