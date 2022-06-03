@@ -46,8 +46,12 @@ func makeFortnightHTML(current int64) string {
 
 	for {
 		formatted := time.Unix(start, 0).In(location).Format(formatStr)
-		if formatted == prev || formatted == theEvent || formatted == next {
-			buffer = append(buffer, fmt.Sprintf("<div class=\"item\"><a href=\"?t=%d\"><b>%s</b></a></div>", start, formatted))
+		if formatted == prev {
+			buffer = append(buffer, fmt.Sprintf("<div class=\"item\"><a href=\"?t=%d\"><b>%s</b></a></div>", event.Prev.Timestamp-1, formatted))
+		} else if formatted == theEvent {
+			buffer = append(buffer, fmt.Sprintf("<div class=\"item\"><a href=\"?t=%d\"><b>%s</b></a></div>", event.Timestamp, formatted))
+		} else if formatted == next {
+			buffer = append(buffer, fmt.Sprintf("<div class=\"item\"><a href=\"?t=%d\"><b>%s</b></a></div>", event.Next.Timestamp, formatted))
 		} else if formatted == now {
 			buffer = append(buffer, "<div class=\"item today\">"+formatted+"</div>")
 		} else {
