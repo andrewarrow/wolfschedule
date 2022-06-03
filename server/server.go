@@ -14,12 +14,13 @@ func Serve(port string) {
 
 	prefix := ""
 	router.Static("/assets", prefix+"assets")
-	router.GET("/", WelcomeIndex)
+	router.GET("/", TodayIndex)
 	router.GET("/month", MonthIndex)
 	router.GET("/fortnight", FortnightIndex)
-	router.GET("/today", TodayIndex)
+	router.GET("/year", YearIndex)
 	router.GET("/item/:title", ItemIndex)
 	router.POST("/tz", TimeZonePost)
+	router.NoRoute(NotFoundIndex)
 
 	// 12 months, 30 days, 3 week 10 days each
 	// http://dmheroes.co.uk/reference/atlantean-calendar.html

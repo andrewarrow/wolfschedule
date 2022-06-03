@@ -26,7 +26,7 @@ func SetupYear() {
 	Month = EventDate.Month()
 }
 
-func WelcomeIndex(c *gin.Context) {
+func YearIndex(c *gin.Context) {
 
 	TimesMutex.Lock()
 	SetupYear()
