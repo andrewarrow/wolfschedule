@@ -5,14 +5,17 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
-	"net/url"
 	"strings"
 	"time"
 
 	"github.com/andrewarrow/wolfschedule/moon"
-	"github.com/andrewarrow/wolfschedule/redis"
 	"github.com/gin-gonic/gin"
 )
+
+type TimeZoneData struct {
+	Zones []string
+	Zone  string
+}
 
 func TodayIndex(c *gin.Context) {
 
@@ -24,11 +27,6 @@ func TodayIndex(c *gin.Context) {
 		"flash": "",
 		"body":  body,
 	})
-}
-
-type TimeZoneData struct {
-	Zones []string
-	Zone  string
 }
 
 func makeTodayHTML(current int64, tz string) string {
@@ -86,18 +84,6 @@ func makeTodayHTML(current int64, tz string) string {
 		current-86400,
 		current+86400))
 	buffer = append(buffer, "</p>")
-	buffer = append(buffer, "<div class=\"good-links\">")
-
-	items := redis.QueryDay(0)
-	prevCount := 0
-	for _, item := range items {
-		if item.Count != prevCount {
-			buffer = append(buffer, fmt.Sprintf("<h2>%d</h2>", item.Count))
-		}
-		buffer = append(buffer, fmt.Sprintf("<div class=\"item\"><a href=\"/item/%s\">%s</a></div>", url.QueryEscape(item.Title), item.Title))
-		prevCount = item.Count
-	}
-	buffer = append(buffer, "</div>")
 
 	return strings.Join(buffer, "\n")
 }

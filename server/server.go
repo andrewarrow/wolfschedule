@@ -20,6 +20,7 @@ func Serve(port string) {
 	router.GET("/year", YearIndex)
 	router.GET("/item/:title", ItemIndex)
 	router.POST("/tz", TimeZonePost)
+	router.POST("/news", NewsIndex)
 	router.NoRoute(NotFoundIndex)
 
 	// 12 months, 30 days, 3 week 10 days each
