@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"regexp"
 	"strings"
 	"time"
 	"unicode"
@@ -16,21 +17,23 @@ func main() {
 	common := map[string]bool{}
 	common["and"] = true
 	common["the"] = true
-	common["to"] = true
-	common["go"] = true
-	common["in"] = true
-	common["as"] = true
 	common["has"] = true
-	common["he"] = true
 	common["she"] = true
-	common["i"] = true
-	common["an"] = true
-	common["is"] = true
 	common["not"] = true
 	common["didn't"] = true
 	common["that"] = true
 	common["this"] = true
-	common["be"] = true
+	common["it's"] = true
+	common["for"] = true
+	common["what"] = true
+	common["was"] = true
+	common["are"] = true
+	common["how"] = true
+	common["why"] = true
+	common["want"] = true
+	common["our"] = true
+	reg, _ := regexp.Compile("[^a-z]+")
+
 	m := map[string]bool{}
 	for item, _ := range list {
 		tokens := strings.Split(item, " ")
@@ -39,6 +42,10 @@ func main() {
 				continue
 			}
 			lower := strings.ToLower(t)
+			lower = reg.ReplaceAllString(lower, "")
+			if len(lower) < 3 {
+				continue
+			}
 			if common[lower] {
 				continue
 			}
