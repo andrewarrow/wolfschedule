@@ -32,6 +32,16 @@ func main() {
 	common["why"] = true
 	common["want"] = true
 	common["our"] = true
+	common["had"] = true
+	common["onto"] = true
+	common["new"] = true
+	common["end"] = true
+	common["with"] = true
+	common["its"] = true
+	common["will"] = true
+	common["been"] = true
+	common["near"] = true
+	common["from"] = true
 	reg, _ := regexp.Compile("[^a-z]+")
 
 	m := map[string]bool{}
