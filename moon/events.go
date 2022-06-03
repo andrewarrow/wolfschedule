@@ -63,21 +63,23 @@ func FindNextEvent(t int64) *Event {
 	return nil
 }
 
-func FindEventsForYear(year int, location *time.Location) []*Event {
-	list := []*Event{}
+func FindEventsForYear(year int, location *time.Location) map[string]*Event {
+	m := map[string]*Event{}
 	on := false
 	for _, k := range timeList {
 		t := time.Unix(k.Timestamp, 0)
 		t = t.In(location)
 		if t.Year() == year {
 			on = true
-			list = append(list, k.Clone())
+			u := fmt.Sprintf("%v", t)
+			substring := u[0:10]
+			m[substring] = k.Clone()
 		} else if on {
-			return list
+			return m
 		}
 	}
 
-	return list
+	return m
 }
 
 func EventDelta(t int64) string {

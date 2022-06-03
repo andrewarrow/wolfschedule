@@ -28,7 +28,7 @@ func YearIndex(c *gin.Context) {
 	})
 }
 
-func makeYearHTML(year int, location *time.Location, events []*moon.Event) string {
+func makeYearHTML(year int, location *time.Location, events map[string]*moon.Event) string {
 	jan1 := time.Date(year, time.Month(1), 1, 0, 0, 0, 0, location)
 	month := jan1.Month()
 
@@ -54,12 +54,12 @@ func makeYearHTML(year int, location *time.Location, events []*moon.Event) strin
 			if printDay != "" {
 				dayFinal = fmt.Sprintf("<div class=\"day-of-week\">%s</div>", printDay)
 			}
-			//u := fmt.Sprintf("%v", jan1)
-			//substring := u[0:10]
+			u := fmt.Sprintf("%v", jan1)
+			substring := u[0:10]
 			moon := ""
-			//if Times[substring] > 0 {
-			//	moon = "moon"
-			//}
+			if events[substring] != nil {
+				moon = "moon"
+			}
 			buffer = append(buffer, fmt.Sprintf("<div class=\"col-2 themed-grid-col %s\">%d\n%s</div>", moon, jan1.Day(), dayFinal))
 			count++
 			if count == 6 {
