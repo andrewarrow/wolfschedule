@@ -1,8 +1,10 @@
 package server
 
 import (
+	"fmt"
 	"html/template"
 	"net/http"
+	"strconv"
 	"strings"
 	"time"
 
@@ -12,7 +14,9 @@ import (
 
 func FortnightIndex(c *gin.Context) {
 
-	body := template.HTML(makeFortnightHTML())
+	t := c.DefaultQuery("t", fmt.Sprintf("%d", time.Now().Unix()))
+	tInt, _ := strconv.ParseInt(t, 10, 64)
+	body := template.HTML(makeFortnightHTML(tInt))
 
 	c.HTML(http.StatusOK, "index.tmpl", gin.H{
 		"flash": "",
@@ -20,21 +24,22 @@ func FortnightIndex(c *gin.Context) {
 	})
 }
 
-func makeFortnightHTML() string {
+func makeFortnightHTML(current int64) string {
 	buffer := []string{}
 
 	location, _ := time.LoadLocation("UTC")
-	t := time.Now()
+	t := time.Unix(current, 0)
 	event := moon.FindNextEvent(t.Unix())
 	if event == nil || event.Prev == nil || event.Next == nil {
 		buffer = append(buffer, "<p><b>END</b></p>")
 		return strings.Join(buffer, "\n")
 	}
 
-	buffer = append(buffer, "<p><br/>")
+	buffer = append(buffer, "<p>")
 
 	start := event.Prev.Timestamp
 	formatStr := "Monday 2006-01-02"
+	now := t.In(location).Format(formatStr)
 	prev := event.Prev.AsTime(location).Format(formatStr)
 	theEvent := event.AsTime(location).Format(formatStr)
 	next := event.Next.AsTime(location).Format(formatStr)
@@ -42,9 +47,11 @@ func makeFortnightHTML() string {
 	for {
 		formatted := time.Unix(start, 0).In(location).Format(formatStr)
 		if formatted == prev || formatted == theEvent || formatted == next {
-			buffer = append(buffer, "<b>"+formatted+"</b><br/>")
+			buffer = append(buffer, fmt.Sprintf("<div class=\"item\"><a href=\"?t=%d\"><b>%s</b></a></div>", start, formatted))
+		} else if formatted == now {
+			buffer = append(buffer, "<div class=\"item today\">"+formatted+"</div>")
 		} else {
-			buffer = append(buffer, formatted+"<br/>")
+			buffer = append(buffer, "<div class=\"item\">"+formatted+"</div>")
 		}
 		if start > event.Next.Timestamp {
 			break
