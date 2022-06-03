@@ -34,6 +34,13 @@ func (e *Event) String() string {
 	return fmt.Sprintf("NEW %s", tstr)
 }
 
+func (e *Event) NewOrFull() string {
+	if e.FullMoon {
+		return "FULL"
+	}
+	return "NEW"
+}
+
 func FindNextEvent(t int64) *Event {
 	for i, k := range timeList {
 		if k.Timestamp > t {

@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
-	"strconv"
 	"strings"
 	"time"
 
@@ -14,9 +13,8 @@ import (
 
 func FortnightIndex(c *gin.Context) {
 
-	t := c.DefaultQuery("t", fmt.Sprintf("%d", time.Now().Unix()))
-	tInt, _ := strconv.ParseInt(t, 10, 64)
-	body := template.HTML(makeFortnightHTML(tInt))
+	tInt, tz := TimeAndZone(c)
+	body := template.HTML(makeFortnightHTML(tInt, tz))
 
 	c.HTML(http.StatusOK, "index.tmpl", gin.H{
 		"flash": "",
@@ -24,10 +22,10 @@ func FortnightIndex(c *gin.Context) {
 	})
 }
 
-func makeFortnightHTML(current int64) string {
+func makeFortnightHTML(current int64, tz string) string {
 	buffer := []string{}
 
-	location, _ := time.LoadLocation("UTC")
+	location, _ := time.LoadLocation(tz)
 	t := time.Unix(current, 0)
 	event := moon.FindNextEvent(t.Unix())
 	if event == nil || event.Prev == nil || event.Next == nil {
@@ -47,11 +45,11 @@ func makeFortnightHTML(current int64) string {
 	for {
 		formatted := time.Unix(start, 0).In(location).Format(formatStr)
 		if formatted == prev {
-			buffer = append(buffer, fmt.Sprintf("<div class=\"item\"><a href=\"?t=%d\"><b>%s</b></a></div>", event.Prev.Timestamp-1, formatted))
+			buffer = append(buffer, fmt.Sprintf("<div class=\"item\"><a href=\"?t=%d\"><b>%s MOON %s</b></a></div>", event.Prev.Timestamp-1, event.Prev.NewOrFull(), formatted))
 		} else if formatted == theEvent {
-			buffer = append(buffer, fmt.Sprintf("<div class=\"item\"><a href=\"?t=%d\"><b>%s</b></a></div>", event.Timestamp, formatted))
+			buffer = append(buffer, fmt.Sprintf("<div class=\"item\"><a href=\"?t=%d\"><b>%s MOON %s</b></a></div>", event.Timestamp, event.NewOrFull(), formatted))
 		} else if formatted == next {
-			buffer = append(buffer, fmt.Sprintf("<div class=\"item\"><a href=\"?t=%d\"><b>%s</b></a></div>", event.Next.Timestamp, formatted))
+			buffer = append(buffer, fmt.Sprintf("<div class=\"item\"><a href=\"?t=%d\"><b>%s MOON %s</b></a></div>", event.Next.Timestamp, event.Next.NewOrFull(), formatted))
 		} else if formatted == now {
 			buffer = append(buffer, "<div class=\"item today\">"+formatted+"</div>")
 		} else {

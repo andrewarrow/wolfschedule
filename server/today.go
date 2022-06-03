@@ -6,7 +6,6 @@ import (
 	"html/template"
 	"net/http"
 	"net/url"
-	"strconv"
 	"strings"
 	"time"
 
@@ -17,13 +16,7 @@ import (
 
 func TodayIndex(c *gin.Context) {
 
-	t := c.DefaultQuery("t", fmt.Sprintf("%d", time.Now().Unix()))
-	tInt, _ := strconv.ParseInt(t, 10, 64)
-
-	tz, _ := c.Cookie("tz")
-	if tz == "" {
-		tz = "Antarctica/Troll"
-	}
+	tInt, tz := TimeAndZone(c)
 
 	body := template.HTML(makeTodayHTML(tInt, tz))
 
