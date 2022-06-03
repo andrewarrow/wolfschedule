@@ -1,15 +1,56 @@
 package main
 
 import (
+	"fmt"
 	"io/ioutil"
 	"strings"
 	"time"
+	"unicode"
 
 	"github.com/andrewarrow/wolfschedule/redis"
 	"golang.org/x/net/html"
 )
 
 func main() {
+	list := handleItems("raw.html")
+	common := map[string]bool{}
+	common["and"] = true
+	common["the"] = true
+	common["to"] = true
+	common["go"] = true
+	common["in"] = true
+	common["as"] = true
+	common["has"] = true
+	common["he"] = true
+	common["she"] = true
+	common["i"] = true
+	common["an"] = true
+	common["is"] = true
+	common["not"] = true
+	common["didn't"] = true
+	common["that"] = true
+	common["this"] = true
+	common["be"] = true
+	m := map[string]bool{}
+	for item, _ := range list {
+		tokens := strings.Split(item, " ")
+		for _, t := range tokens {
+			if !unicode.IsLetter(rune(t[0])) {
+				continue
+			}
+			lower := strings.ToLower(t)
+			if common[lower] {
+				continue
+			}
+			m[lower] = true
+		}
+	}
+	for k, _ := range m {
+		fmt.Printf("%s ", k)
+	}
+	fmt.Println("")
+}
+func main2() {
 	list := handleItems("/home/aa/phantomjs/bin/raw.html")
 	for item, href := range list {
 		redis.InsertItem(time.Now().Unix(), item, href)
