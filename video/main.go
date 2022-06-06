@@ -21,6 +21,6 @@ func main() {
 	} else if command == "test" {
 		dir := os.Args[2]
 		name := os.Args[3]
-		DrawOnFrame(345, dir, name)
+		DrawOnFrame(time.Now(), 345, dir, name)
 	}
 }

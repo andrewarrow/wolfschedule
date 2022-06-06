@@ -6,6 +6,7 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+	"time"
 
 	"github.com/fogleman/gg"
 )
@@ -14,14 +15,15 @@ func ProcessDirectory(dir string) {
 	files, _ := ioutil.ReadDir(dir)
 	for _, file := range files {
 		name := file.Name()
-		fmt.Println(name)
+		modifiedtime := file.ModTime()
+		fmt.Println(name, modifiedtime)
 		tokens := strings.Split(name, "_")
 		if tokens[0] != "IMG" {
 			continue
 		}
 		parts := strings.Split(tokens[1], ".")
 		ScaleOrig(dir, name, parts[0])
-		ExtractFrames(dir, parts[0])
+		ExtractFrames(dir, parts[0], modifiedtime)
 		ExtractAudio(dir, parts[0])
 		AssembleFromFrames(dir, parts[0])
 		AddBackSound(dir, parts[0])
@@ -43,7 +45,7 @@ func ScaleOrig(dir, name, part string) {
 	fmt.Println(name, string(output))
 }
 
-func ExtractFrames(dir, part string) {
+func ExtractFrames(dir, part string, modtime time.Time) {
 	cmd := exec.Command("/usr/local/bin/ffmpeg", "-i", "source.mov", "-vf", "fps=29.97", "img%07d.png")
 	cmd.Dir = fmt.Sprintf("%s/DONE_%s", dir, part)
 	output, e := cmd.CombinedOutput()
@@ -53,17 +55,21 @@ func ExtractFrames(dir, part string) {
 	}
 	fmt.Println(part, string(output))
 	files, _ := ioutil.ReadDir(cmd.Dir)
+	sum := 0
 	for i, file := range files {
 		name := file.Name()
 		if !strings.HasPrefix(name, "img0") {
 			continue
 		}
 		fmt.Println(name)
-		DrawOnFrame(i, cmd.Dir, name)
+		DrawOnFrame(modtime, sum, cmd.Dir, name)
+		if i%30 == 0 {
+			sum++
+		}
 	}
 }
 
-func DrawOnFrame(i int, dir, name string) {
+func DrawOnFrame(modtime time.Time, i int, dir, name string) {
 	dc := gg.NewContext(880, 720)
 	dc.SetRGB(1, 1, 1)
 	dc.Clear()
@@ -94,7 +100,9 @@ func DrawOnFrame(i int, dir, name string) {
 	dc.Fill()
 
 	dc.LoadFontFace("arial.ttf", 72)
-	dc.DrawStringAnchored(fmt.Sprintf("%d", i), 300, 600, 0.5, 0.5)
+
+	t := modtime.Add(time.Second * time.Duration(i))
+	dc.DrawStringAnchored(fmt.Sprintf("%v", t), 300, 600, 0.5, 0.5)
 
 	dc.SavePNG(path)
 }
