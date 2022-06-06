@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
 	"os/exec"
 	"strings"
 )
@@ -16,8 +17,11 @@ func ProcessDirectory(dir string) {
 		if tokens[0] != "IMG" {
 			continue
 		}
+		parts := strings.Split(tokens[1], ".")
+		outputDir := fmt.Sprintf("%s/DONE_%s", dir, parts[0])
+		os.Mkdir(outputDir, 0755)
+		outputFilename := fmt.Sprintf("DONE_%s/source.mov", parts[0])
 		details := "scale=w=880:h=720:force_original_aspect_ratio=1,pad=880:720:(ow-iw):(oh-ih)"
-		outputFilename := fmt.Sprintf("DONE_%s", tokens[1])
 		cmd := exec.Command("/usr/local/bin/ffmpeg", "-i", name, "-vf", details, outputFilename)
 		cmd.Dir = dir
 		output, e := cmd.CombinedOutput()
