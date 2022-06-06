@@ -20,6 +20,9 @@ func ProcessDirectory(dir string) {
 		parts := strings.Split(tokens[1], ".")
 		ScaleOrig(dir, name, parts[0])
 		ExtractFrames(dir, parts[0])
+		ExtractAudio(dir, parts[0])
+		AssembleFromFrames(dir, parts[0])
+		AddBackSound(dir, parts[0])
 	}
 }
 
@@ -40,6 +43,40 @@ func ScaleOrig(dir, name, part string) {
 
 func ExtractFrames(dir, part string) {
 	cmd := exec.Command("/usr/local/bin/ffmpeg", "-i", "source.mov", "-vf", "fps=29.97", "img%07d.png")
+	cmd.Dir = fmt.Sprintf("%s/DONE_%s", dir, part)
+	output, e := cmd.CombinedOutput()
+	if e != nil {
+		fmt.Println(part, e)
+		return
+	}
+	fmt.Println(part, string(output))
+}
+
+func ExtractAudio(dir, part string) {
+	cmd := exec.Command("/usr/local/bin/ffmpeg", "-i", "source.mov", "audio.mp3")
+	cmd.Dir = fmt.Sprintf("%s/DONE_%s", dir, part)
+	output, e := cmd.CombinedOutput()
+	if e != nil {
+		fmt.Println(part, e)
+		return
+	}
+	fmt.Println(part, string(output))
+}
+
+func AssembleFromFrames(dir, part string) {
+	cmd := exec.Command("/usr/local/bin/ffmpeg", "-framerate", "29.97", "-pattern_type", "glob", "-i", "*.png", "-c:v", "libx264",
+		"-pix_fmt", "yuv420p", "temp.mov")
+	cmd.Dir = fmt.Sprintf("%s/DONE_%s", dir, part)
+	output, e := cmd.CombinedOutput()
+	if e != nil {
+		fmt.Println(part, e)
+		return
+	}
+	fmt.Println(part, string(output))
+}
+
+func AddBackSound(dir, part string) {
+	cmd := exec.Command("/usr/local/bin/ffmpeg", "-i", "temp.mov", "-i", "sound.mp3", "-c", "copy", "-map", "0:v:0", "-map", "1:a:0", "sound.mov")
 	cmd.Dir = fmt.Sprintf("%s/DONE_%s", dir, part)
 	output, e := cmd.CombinedOutput()
 	if e != nil {
