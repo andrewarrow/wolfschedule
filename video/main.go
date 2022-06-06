@@ -18,6 +18,9 @@ func main() {
 	if command == "process" {
 		dir := os.Args[2]
 		ProcessDirectory(dir)
-	} else if command == "move" {
+	} else if command == "test" {
+		dir := os.Args[2]
+		name := os.Args[3]
+		DrawOnFrame(345, dir, name)
 	}
 }

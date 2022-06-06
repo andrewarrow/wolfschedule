@@ -53,25 +53,27 @@ func ExtractFrames(dir, part string) {
 	}
 	fmt.Println(part, string(output))
 	files, _ := ioutil.ReadDir(cmd.Dir)
-	for _, file := range files {
+	for i, file := range files {
 		name := file.Name()
 		if !strings.HasPrefix(name, "img0") {
 			continue
 		}
 		fmt.Println(name)
-		DrawOnFrame(cmd.Dir, name)
+		DrawOnFrame(i, cmd.Dir, name)
 	}
 }
 
-func DrawOnFrame(dir, name string) {
+func DrawOnFrame(i int, dir, name string) {
 	dc := gg.NewContext(880, 720)
 	dc.SetRGB(1, 1, 1)
 	dc.Clear()
-	dc.SetRGB(0, 0, 0)
 
 	path := fmt.Sprintf("%s/%s", dir, name)
-	existing, _ := gg.LoadPNG(path)
-	logo, _ := gg.LoadPNG("logo.png")
+	fmt.Println(path)
+	existing, e := gg.LoadPNG(path)
+	fmt.Println(e)
+	logo, e := gg.LoadPNG("logo.png")
+	fmt.Println(e)
 
 	pattern := gg.NewSurfacePattern(existing, gg.RepeatNone)
 	dc.MoveTo(0, 0)
@@ -90,6 +92,9 @@ func DrawOnFrame(dir, name string) {
 	dc.LineTo(0, 0)
 	dc.SetFillStyle(pattern)
 	dc.Fill()
+
+	dc.LoadFontFace("arial.ttf", 72)
+	dc.DrawStringAnchored(fmt.Sprintf("%d", i), 300, 600, 0.5, 0.5)
 
 	dc.SavePNG(path)
 }
