@@ -72,7 +72,8 @@ func DrawOnFrame(dir, name string) {
 	path := fmt.Sprintf("%s/%s", dir, name)
 	existing, _ := gg.LoadPNG(path)
 	logo, _ := gg.LoadPNG("logo.png")
-	pattern := gg.NewSurfacePattern(existing, gg.RepeatBoth)
+
+	pattern := gg.NewSurfacePattern(existing, gg.RepeatNone)
 	dc.MoveTo(0, 0)
 	dc.LineTo(880, 0)
 	dc.LineTo(880, 720)
@@ -81,8 +82,6 @@ func DrawOnFrame(dir, name string) {
 	dc.ClosePath()
 	dc.SetFillStyle(pattern)
 	dc.Fill()
-
-	// 484 476
 	pattern = gg.NewSurfacePattern(logo, gg.RepeatNone)
 	dc.MoveTo(0, 0)
 	dc.LineTo(880, 0)
