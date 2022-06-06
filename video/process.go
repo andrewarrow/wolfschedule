@@ -6,6 +6,8 @@ import (
 	"os"
 	"os/exec"
 	"strings"
+
+	"github.com/fogleman/gg"
 )
 
 func ProcessDirectory(dir string) {
@@ -50,6 +52,37 @@ func ExtractFrames(dir, part string) {
 		return
 	}
 	fmt.Println(part, string(output))
+	files, _ := ioutil.ReadDir(cmd.Dir)
+	for _, file := range files {
+		name := file.Name()
+		if !strings.HasPrefix(name, "img0") {
+			continue
+		}
+		fmt.Println(name)
+		DrawOnFrame(cmd.Dir, name)
+	}
+}
+
+func DrawOnFrame(dir, name string) {
+	dc := gg.NewContext(880, 720)
+	dc.SetRGB(1, 1, 1)
+	dc.Clear()
+	dc.SetRGB(0, 0, 0)
+
+	path := fmt.Sprint("%s/%s", dir, name)
+	existing, _ := gg.LoadPNG(path)
+	logo, _ := gg.LoadPNG("logo.png")
+	pattern := gg.NewSurfacePattern(existing, gg.RepeatBoth)
+	dc.MoveTo(0, 0)
+	dc.SetFillStyle(pattern)
+	dc.Fill()
+
+	pattern = gg.NewSurfacePattern(logo, gg.RepeatBoth)
+	dc.MoveTo(10, 10)
+	dc.SetFillStyle(pattern)
+	dc.Fill()
+
+	dc.SavePNG(path)
 }
 
 func ExtractAudio(dir, part string) {
