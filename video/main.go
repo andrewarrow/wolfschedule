@@ -16,6 +16,8 @@ func main() {
 	command := os.Args[1]
 
 	if command == "process" {
+		dir := os.Args[2]
+		ProcessDirectory(dir)
 	} else if command == "move" {
 	}
 }
