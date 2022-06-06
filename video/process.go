@@ -99,10 +99,10 @@ func DrawOnFrame(modtime time.Time, i int, dir, name string) {
 	dc.SetFillStyle(pattern)
 	dc.Fill()
 
-	dc.LoadFontFace("arial.ttf", 72)
+	dc.LoadFontFace("arial.ttf", 24)
 
 	t := modtime.Add(time.Second * time.Duration(i))
-	dc.DrawStringAnchored(fmt.Sprintf("%v", t), 300, 600, 0.5, 0.5)
+	dc.DrawStringAnchored(t.Format(time.RFC850), 235, 520, 0.5, 0.5)
 
 	dc.SavePNG(path)
 }
