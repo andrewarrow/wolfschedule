@@ -76,7 +76,7 @@ func AssembleFromFrames(dir, part string) {
 }
 
 func AddBackSound(dir, part string) {
-	cmd := exec.Command("/usr/local/bin/ffmpeg", "-i", "temp.mov", "-i", "sound.mp3", "-c", "copy", "-map", "0:v:0", "-map", "1:a:0", "sound.mov")
+	cmd := exec.Command("/usr/local/bin/ffmpeg", "-i", "temp.mov", "-i", "audio.mp3", "-c", "copy", "-map", "0:v:0", "-map", "1:a:0", "sound.mov")
 	cmd.Dir = fmt.Sprintf("%s/DONE_%s", dir, part)
 	output, e := cmd.CombinedOutput()
 	if e != nil {
