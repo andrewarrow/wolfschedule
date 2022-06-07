@@ -145,3 +145,8 @@ func AddBackSound(dir, part string) {
 // ffmpeg -i DONE_2367.MOV -vf fps=29.97 img%05d.png
 //  ffmpeg -framerate 29.97 -pattern_type glob -i '*.png' -c:v libx264 -pix_fmt yuv420p out.mp4
 // ffmpeg -i out.mp4 -i DONE_2367.mp3 -c copy -map 0:v:0 -map 1:a:0 sound.mov
+
+//file '/Users/aa/Desktop/meditation/DONE_2367/sound.mov'
+//file '/Users/aa/wolfschedule/beeps/b2.mov'
+//file '/Users/aa/Desktop/meditation/DONE_2368/sound.mov'
+//  ffmpeg -f concat -safe 0 -i mylist.txt -c copy output.mov

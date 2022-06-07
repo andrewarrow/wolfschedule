@@ -79,11 +79,10 @@ func makeTodayHTML(current int64, tz string) string {
 	buffer = append(buffer, fmt.Sprintf("<a href=\"?t=%d\">%s</a>", event.Prev.Timestamp, event.Prev.AsTime(location).Format(time.RFC850)))
 	buffer = append(buffer, "</p>")
 
-	buffer = append(buffer, "<p>")
-	buffer = append(buffer, fmt.Sprintf("<a href=\"?t=%d\">backwards</a> | <a href=\"?t=%d\">forward</a>",
-		current-86400,
-		current+86400))
-	buffer = append(buffer, "</p>")
+	tmpl, _ = template.ParseFiles("templates/chart.tmpl")
+	b = bytes.NewBuffer([]byte{})
+	tmpl.Execute(b, nil)
+	buffer = append(buffer, "<div>"+string(b.Bytes())+"</div>")
 
 	return strings.Join(buffer, "\n")
 }
