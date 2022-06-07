@@ -63,6 +63,25 @@ func FindNextEvent(t int64) *Event {
 	return nil
 }
 
+type ChartData struct {
+	Deltas []int
+	Labels []string
+}
+
+func FindEventsForChart() ChartData {
+	cd := ChartData{}
+	for i := len(timeList) - 1; i > 1; i-- {
+		delta := int(timeList[i].Timestamp - timeList[i-1].Timestamp)
+		cd.Deltas = append([]int{delta / 60}, cd.Deltas...)
+		t := time.Unix(timeList[i].Timestamp, 0)
+		u := fmt.Sprintf("%v", t)
+		substring := u[0:10]
+		cd.Labels = append([]string{substring}, cd.Labels...)
+	}
+
+	return cd
+}
+
 func FindEventsForYear(year int, location *time.Location) map[string]*Event {
 	m := map[string]*Event{}
 	on := false

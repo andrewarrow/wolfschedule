@@ -7,9 +7,9 @@
 <script>
 
 const data = {
-  labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+  labels: [{{range .Labels}}{{.}},{{end}}],
   datasets: [{
-    label: 'My First Dataset',
+    label: 'Time Delta Between Moons',
     data: [{{range .Data}}{{.}},{{end}}],
     fill: false,
     borderColor: 'rgb(75, 192, 192)',

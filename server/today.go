@@ -17,7 +17,8 @@ type TimeZoneData struct {
 	Zone  string
 }
 type ChartData struct {
-	Data []int
+	Data   []int
+	Labels []string
 }
 
 func TodayIndex(c *gin.Context) {
@@ -84,8 +85,8 @@ func makeTodayHTML(current int64, tz string) string {
 
 	tmpl, _ = template.ParseFiles("templates/chart.tmpl")
 	b = bytes.NewBuffer([]byte{})
-	data := []int{5, 10, 25, 100, 999}
-	tmpl.Execute(b, ChartData{data})
+	cd := moon.FindEventsForChart()
+	tmpl.Execute(b, ChartData{cd.Deltas, cd.Labels})
 	buffer = append(buffer, "<div>"+string(b.Bytes())+"</div>")
 
 	return strings.Join(buffer, "\n")
