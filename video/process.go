@@ -34,7 +34,7 @@ func ScaleOrig(dir, name, part string) {
 	outputDir := fmt.Sprintf("%s/DONE_%s", dir, part)
 	os.Mkdir(outputDir, 0755)
 	outputFilename := fmt.Sprintf("DONE_%s/source.mov", part)
-	details := "scale=w=880:h=720:force_original_aspect_ratio=1,pad=880:720:(ow-iw):(oh-ih)"
+	details := "scale=w=1020:h=576:force_original_aspect_ratio=1,pad=1020:576:(ow-iw):(oh-ih)"
 	cmd := exec.Command("/usr/local/bin/ffmpeg", "-i", name, "-vf", details, outputFilename)
 	cmd.Dir = dir
 	output, e := cmd.CombinedOutput()
@@ -70,7 +70,7 @@ func ExtractFrames(dir, part string, modtime time.Time) {
 }
 
 func DrawOnFrame(modtime time.Time, i int, dir, name string) {
-	dc := gg.NewContext(880, 720)
+	dc := gg.NewContext(1020, 576)
 	dc.SetRGB(1, 1, 1)
 	dc.Clear()
 
@@ -83,18 +83,18 @@ func DrawOnFrame(modtime time.Time, i int, dir, name string) {
 
 	pattern := gg.NewSurfacePattern(existing, gg.RepeatNone)
 	dc.MoveTo(0, 0)
-	dc.LineTo(880, 0)
-	dc.LineTo(880, 720)
-	dc.LineTo(0, 720)
+	dc.LineTo(1020, 0)
+	dc.LineTo(1020, 576)
+	dc.LineTo(0, 576)
 	dc.LineTo(0, 0)
 	dc.ClosePath()
 	dc.SetFillStyle(pattern)
 	dc.Fill()
 	pattern = gg.NewSurfacePattern(logo, gg.RepeatNone)
 	dc.MoveTo(0, 0)
-	dc.LineTo(880, 0)
-	dc.LineTo(880, 720)
-	dc.LineTo(0, 720)
+	dc.LineTo(1020, 0)
+	dc.LineTo(1020, 576)
+	dc.LineTo(0, 576)
 	dc.LineTo(0, 0)
 	dc.SetFillStyle(pattern)
 	dc.Fill()
@@ -102,7 +102,7 @@ func DrawOnFrame(modtime time.Time, i int, dir, name string) {
 	dc.LoadFontFace("arial.ttf", 24)
 
 	t := modtime.Add(time.Second * time.Duration(i))
-	dc.DrawStringAnchored(t.Format(time.RFC850), 235, 520, 0.5, 0.5)
+	dc.DrawStringAnchored(t.Format(time.RFC850), 310, 520, 0.5, 0.5)
 
 	dc.SavePNG(path)
 }
