@@ -8,6 +8,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/andrewarrow/wolfschedule/moon"
 	"github.com/fogleman/gg"
 )
 
@@ -102,6 +103,11 @@ func DrawOnFrame(modtime time.Time, i int, dir, name string) {
 	dc.LoadFontFace("arial.ttf", 24)
 
 	t := modtime.Add(time.Second * time.Duration(i))
+	event := moon.FindNextEvent(t.Unix())
+	str := fmt.Sprintf("Next %s MOON in", event.NewOrFull())
+	dc.DrawStringAnchored(str, 310, 430, 0.5, 0.5)
+	deltaString := moon.EventDelta(event.Timestamp - t.Unix())
+	dc.DrawStringAnchored(deltaString, 310, 460, 0.5, 0.5)
 	dc.DrawStringAnchored(t.Format(time.RFC850), 310, 520, 0.5, 0.5)
 
 	dc.SavePNG(path)
