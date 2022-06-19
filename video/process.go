@@ -14,6 +14,7 @@ import (
 
 func ProcessDirectory(dir string) {
 	files, _ := ioutil.ReadDir(dir)
+	finalList := []string{}
 	for _, file := range files {
 		name := file.Name()
 		modifiedtime := file.ModTime()
@@ -23,12 +24,16 @@ func ProcessDirectory(dir string) {
 			continue
 		}
 		parts := strings.Split(tokens[1], ".")
-		ScaleOrig(dir, name, parts[0])
-		ExtractFrames(dir, parts[0], modifiedtime)
-		ExtractAudio(dir, parts[0])
-		AssembleFromFrames(dir, parts[0])
-		AddBackSound(dir, parts[0])
+		thing := parts[0]
+		ScaleOrig(dir, name, thing)
+		ExtractFrames(dir, thing, modifiedtime)
+		ExtractAudio(dir, thing)
+		AssembleFromFrames(dir, thing)
+		AddBackSound(dir, thing)
+		item := fmt.Sprintf("file '/Users/aa/Desktop/blog/DONE_%s/sound.mov'", thing)
+		finalList = append(finalList, item)
 	}
+	ioutil.WriteFile(dir+"/final.list", []byte(strings.Join(finalList, "\n")), 0644)
 }
 
 func ScaleOrig(dir, name, part string) {
