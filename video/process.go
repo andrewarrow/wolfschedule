@@ -34,6 +34,8 @@ func ProcessDirectory(dir string) {
 		finalList = append(finalList, item)
 	}
 	ioutil.WriteFile(dir+"/final.list", []byte(strings.Join(finalList, "\n")), 0644)
+	command := "ffmpeg -f concat -safe 0 -i /Users/aa/Desktop/blog/final.list -c copy foo.mov"
+	fmt.Printf("\n\n%s\n\n", command)
 }
 
 func ScaleOrig(dir, name, part string) {
